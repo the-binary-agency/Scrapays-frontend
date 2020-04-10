@@ -1,0 +1,158 @@
+<div class="dashboard-body pt-5 p-1 p-md-5">
+
+<div class="col-12 hh1 text-center">User Profile</div>
+    <div class="card p-md-5 bg-light mb-5">
+        <div class="card-body">
+            <form [formGroup]="Form" (ngSubmit)="updateProfile(Form.value)">
+                <div class="row">
+                    <div class="col-md-6 col-12 mb-md-5 mb-3 text-center">
+                        <img src="assets/images/icons/user-icon.png" class="w-40" alt="User Icon">
+                    </div>
+                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh1 d-flex align-items-center justify-content-center">
+                        UUID: {{ User.id }} 
+                    </div>
+                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
+                        FirstName: &nbsp;&nbsp; <span class="text-muted" *ngIf="!edit">{{ User.firstName }}</span>
+                        <input class="form-control" formControlName="firstName" [(ngModel)]="User.firstName" *ngIf="edit"/>
+                        <div class="validation-errors small">
+                                <ng-container
+                                    *ngFor="let validation of validation_messages.firstName"
+                                >
+                                    <div
+                                    class="error-message alert alert-danger"
+                                    *ngIf="
+                                        Form.get('firstName').hasError(
+                                        validation.type
+                                        ) &&
+                                        (Form.get('firstName').dirty ||
+                                        Form.get('firstName').touched)
+                                    "
+                                    >
+                                    <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                                    <span class="text-danger">{{
+                                        validation.message
+                                    }}</span>
+                                    </div>
+                                </ng-container>
+                                </div>
+                    </div>
+                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
+                        LastName: &nbsp;&nbsp; <span class="text-muted" *ngIf="!edit">{{ User.lastName }}</span>
+                        <input class="form-control" formControlName="lastName" [(ngModel)]="User.lastName" *ngIf="edit"/>
+                        <div class="validation-errors small">
+                                <ng-container
+                                    *ngFor="let validation of validation_messages.lastName"
+                                >
+                                    <div
+                                    class="error-message alert alert-danger"
+                                    *ngIf="
+                                        Form.get('lastName').hasError(
+                                        validation.type
+                                        ) &&
+                                        (Form.get('lastName').dirty ||
+                                        Form.get('lastName').touched)
+                                    "
+                                    >
+                                    <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                                    <span class="text-danger">{{
+                                        validation.message
+                                    }}</span>
+                                    </div>
+                                </ng-container>
+                                </div>
+                    </div>
+                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
+                        Phone Number: &nbsp;&nbsp; <span class="text-muted" *ngIf="!edit">{{ User.phone }}</span>
+                        <input class="form-control" formControlName="phone" [(ngModel)]="User.phone" *ngIf="edit"/>
+                        <div class="validation-errors small">
+                                <ng-container
+                                    *ngFor="let validation of validation_messages.phone"
+                                >
+                                    <div
+                                    class="error-message alert alert-danger"
+                                    *ngIf="
+                                        Form.get('phone').hasError(
+                                        validation.type
+                                        ) &&
+                                        (Form.get('phone').dirty ||
+                                        Form.get('phone').touched)
+                                    "
+                                    >
+                                    <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                                    <span class="text-danger">{{
+                                        validation.message
+                                    }}</span>
+                                    </div>
+                                </ng-container>
+                                </div>
+                    </div>
+                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
+                        Email: &nbsp;&nbsp; <span class="text-muted" *ngIf="!edit">{{ User.email }}</span>
+                        <input class="form-control" formControlName="email" [(ngModel)]="User.email" *ngIf="edit"/>
+                        <div class="validation-errors small">
+                                <ng-container
+                                    *ngFor="let validation of validation_messages.email"
+                                >
+                                    <div
+                                    class="error-message alert alert-danger"
+                                    *ngIf="
+                                        Form.get('email').hasError(
+                                        validation.type
+                                        ) &&
+                                        (Form.get('email').dirty ||
+                                        Form.get('email').touched)
+                                    "
+                                    >
+                                    <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                                    <span class="text-danger">{{
+                                        validation.message
+                                    }}</span>
+                                    </div>
+                                </ng-container>
+                                </div>
+                    </div>
+                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
+                        Role: &nbsp;&nbsp; <span class="text-muted">{{ User.role }}</span>
+                    </div>
+                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
+                        Time Registered: &nbsp;&nbsp; <br> <span class="text-muted">{{ User.created_at }}</span>
+                    </div>
+                </div>
+                
+                <!-- <div class="text-right">
+                    <button type="button" class="btn btn-primary px-4" (click)="edit = true" *ngIf="!edit">Edit</button> &nbsp;
+                    <button type="button" class="btn btn-primary px-4" (click)="edit = false" *ngIf="edit">Cancel Edit</button> &nbsp;
+                    <button type="submit" class="btn btn-success px-4" *ngIf="edit">Save</button>
+                </div> -->
+            </form>
+        </div>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ modalTitle }}</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{ modalBody }}</p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+
+<ngx-loading [show]="loading"></ngx-loading>

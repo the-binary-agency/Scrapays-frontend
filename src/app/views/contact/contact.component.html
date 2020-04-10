@@ -1,0 +1,149 @@
+<div id="banner-area">
+	<img src="assets/images/banner/contact-us.jpg" alt="" />
+	<div class="parallax-overlay"></div>
+	<!-- Subpage title start -->
+	<div class="banner-title-content">
+		<div class="text-center">
+			<h2>Contact Us</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb justify-content-center">
+					<li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+					<li class="breadcrumb-item text-white" aria-current="page">Contact Us</li>
+				</ol>
+			</nav>
+		</div>
+	</div><!-- Subpage title end -->
+</div><!-- Banner area end -->
+
+<!-- Main container start -->
+<section id="main-container">
+	<div class="container">
+
+		<div class="gap-40"></div>
+
+		<div class="row">
+			<div class="col-md-7">
+				<form id="contact-form" [formGroup]="Form" (ngSubmit)="sendContactMessage(Form.value)" novalidate>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Name</label>
+								<input class="form-control" name="name" id="name" placeholder="" type="text" formControlName="name">
+                                 <div class="validation-errors">
+                                    <ng-container
+                                    *ngFor="let validation of validation_messages.name"
+                                    >
+                                    <div
+                                        class="error-message alert alert-danger"
+                                        *ngIf="
+                                        Form.get('name').hasError(validation.type) &&
+                                        (Form.get('name').dirty ||
+                                            Form.get('name').touched)
+                                        "
+                                    >
+                                        <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                                        <span class="text-danger">{{ validation.message }}</span>
+                                    </div>
+                                    </ng-container>
+                                </div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Email</label>
+								<input class="form-control" name="email" id="email" placeholder="" type="email" formControlName="email">
+                                 <div class="validation-errors">
+                                    <ng-container
+                                    *ngFor="let validation of validation_messages.email"
+                                    >
+                                    <div
+                                        class="error-message alert alert-danger"
+                                        *ngIf="
+                                        Form.get('email').hasError(validation.type) &&
+                                        (Form.get('email').dirty ||
+                                            Form.get('email').touched)
+                                        "
+                                    >
+                                        <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                                        <span class="text-danger">{{ validation.message }}</span>
+                                    </div>
+                                    </ng-container>
+                                </div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Subject</label>
+								<input class="form-control" name="subject" id="subject" placeholder="" formControlName="subject">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Message</label>
+						<textarea class="form-control" name="message" id="message" placeholder="" rows="10" formControlName="message"></textarea>
+                        <div class="validation-errors">
+                                    <ng-container
+                                    *ngFor="let validation of validation_messages.message"
+                                    >
+                                    <div
+                                        class="error-message alert alert-danger"
+                                        *ngIf="
+                                        Form.get('message').hasError(validation.type) &&
+                                        (Form.get('message').dirty ||
+                                            Form.get('message').touched)
+                                        "
+                                    >
+                                        <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                                        <span class="text-danger">{{ validation.message }}</span>
+                                    </div>
+                                    </ng-container>
+                                </div>
+					</div>
+					<div class="text-right"><br>
+						<button class="btn btn-primary solid blank" type="submit" [disabled]="!Form.valid">Send Message</button>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-5">
+				<div class="contact-info">
+					<h3>Contact Details</h3>
+					<!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eget erat magna. Pellentesque justo
+						ante</p> -->
+					<!-- <br> -->
+					<!-- <p><i class="fa fa-home info"></i> 1102 Saint Marys, Junction City, KS </p> -->
+					<p><i class="fa fa-phone info"></i> +234 (0) 8104323995 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +234 (0) 816 367 8475 </p>
+					<p><i class="fa fa-envelope-o info"></i><a href="mailto:hello@scrapays.com">hello@scrapays.com</a></p>
+					<p ><i class="fa fa-globe info"></i> <a routerLink="/">www.scrapays.com</a></p >
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--/ container end -->
+</section>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ modalTitle }}</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{ modalBody }}</p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+<ngx-loading [show]="loading"></ngx-loading>

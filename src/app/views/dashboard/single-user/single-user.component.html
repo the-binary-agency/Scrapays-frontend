@@ -1,0 +1,52 @@
+<div class="dashboard-body pt-5 p-1 p-md-5">
+
+<div class="col-12 hh1 text-center">User Profile</div>
+<div class="card p-md-5 bg-light mb-5">
+  <div class="card-body">
+   <div class="row">
+  <div class="col-md-6 col-12 mb-md-5 mb-3 text-center">
+      <img src="assets/images/icons/user-icon.png" class="w-40" alt="User Icon">
+  </div>
+  <div class="col-md-6 col-12 mb-md-5 mb-3 hh1 d-flex align-items-center justify-content-center">
+    UUID: {{ User.id }} 
+  </div>
+  <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
+    FirstName: &nbsp;&nbsp; <span class="text-muted">{{ User.firstName }}</span>
+  </div>
+  <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
+    LastName: &nbsp;&nbsp; <span class="text-muted">{{ User.lastName }}</span>
+  </div>
+  <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
+    Phone Number: &nbsp;&nbsp; <span class="text-muted">{{ User.phone }}</span>
+  </div>
+  <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
+    Email: &nbsp;&nbsp; <span class="text-muted">{{ User.email }}</span>
+  </div>
+  <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
+    Role: &nbsp;&nbsp; <span class="text-muted">{{ User.role }}</span>
+  </div>
+  <div class="col-md-6 col-12 mb-md-5 mb-3 hh2" *ngIf="User.type">
+    Type: &nbsp;&nbsp; <span class="text-muted">{{ User.type }}</span>
+  </div>
+  <div class="col-md-6 col-12 mb-md-5 mb-3 hh2" *ngIf="User.address">
+    Address: &nbsp;&nbsp; <span class="text-muted">{{ User.address }}</span>
+  </div>
+  <div class="col-md-6 col-12 mb-md-5 mb-3 hh2" *ngIf="User.collectionCoverageZone">
+    Collection Coverage Zone: &nbsp;&nbsp; <span class="text-muted">{{ User.collectionCoverageZone }}</span>
+  </div>
+  <div class="col-md-6 col-12 mb-md-5 mb-3 hh2" *ngIf="User.specificLocationAddress">
+    Specific Location Address: &nbsp;&nbsp; <span class="text-muted">{{ User.specificLocationAddress }}</span>
+  </div>
+  <div class="col-md-6 col-12 mb-md-5 mb-3 hh2" *ngIf="User.RCNo">
+    RC Number: &nbsp;&nbsp; <span class="text-muted">{{ User.RCNo }}</span>
+  </div>
+  <div class="col-md-6 col-12 mb-md-5 mb-3 hh2" *ngIf="User.TIN">
+    TIN: &nbsp;&nbsp; <span class="text-muted">{{ User.TIN }}</span>
+  </div>
+  <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
+    Time Registered: &nbsp;&nbsp; <br> <span class="text-muted">{{ User.created_at }}</span>
+  </div>
+</div>
+  </div>
+</div>
+</div>

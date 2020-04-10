@@ -1,0 +1,110 @@
+
+<div class="dashboard-body pt-5 p-1 p-md-5">
+<table class="table table-responsive-sm table-hover table-outline mb-0">
+            <thead class="thead-light">
+              <tr>
+                <th class="text-bold h1">Table</th>
+                <th class="text-bold h1">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-bold h2">
+                  First Name
+                </td>
+                <td class="text-bold h3">
+                  {{ Scrap.firstName }}
+                </td>
+              </tr >
+
+                <tr>
+                <td class="text-bold h2">
+                 Last Name
+                </td>
+                <td class="text-bold h3">
+                  {{ Scrap.lastName }}
+                </td>
+                </tr>
+
+                <tr>
+                <td class="text-bold h2">
+                  Phone Number
+                </td>
+                <td class="text-bold h3">
+                  {{ Scrap.phone }}
+                </td>
+                </tr>
+
+                <tr>
+                <td class="text-bold h2">
+                  Email
+                </td>
+                <td class="text-bold h3">
+                  {{ Scrap.email }}
+                </td>
+                </tr>
+                <tr>
+                <td class="text-bold h2">
+                  Items &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td class="text-bold p-0 p-md-1">
+                <div class="row" *ngFor="let item of Items; let i = index">
+                <div class="col-12 h3 bg-light">Item <span *ngIf="itemCount > 1">{{ i + 1 }}</span> </div>
+                  <div class="col-12 h3">
+                  Image(s)
+                  </div>
+                  <div class="col-12 pt-md-3">
+                     <div id="isotope" class="isotope row h-100">
+                      <div class="col-12 col-md-4 web-design isotope-item mb-2 mb-md-0"  *ngFor="let image of item.materialImages">
+                        <div class="grid">
+                          <figure class="m-0 effect-oscar">
+                            <img src="{{ URL }}/storage/material_Images/{{ image }}" alt="Material Images">
+                            <figcaption class="d-flex align-items-center justify-content-center">
+                              <a type="button" class="view icon-pentagon" data-rel="prettyPhoto" (click)="openModal(image)"><i
+                                  class="fa fa-expand"></i></a>
+                            </figcaption>
+                          </figure>
+                        </div>
+                      </div><!-- Isotope item end -->
+                      </div>
+                  </div>
+                  <div class="col-12 h3 py-md-3">
+                  Description
+                  </div>
+                  <div class="col-12 pb-md-3">
+                    <textarea rows="5" disabled class="w-100 non-res-textarea" > {{ item.description }} </textarea>
+                  </div>
+                </div>
+
+                </td>
+                </tr>
+
+                <tr>
+                <td class="text-bold h2">
+                 Material Location
+                </td>
+                <td class="text-bold h3">
+                  {{ Scrap.materialLocation }}
+                </td>
+                </tr>
+            </tbody>
+          </table>
+
+<ng-template #content let-modal>
+ <div class="modal-header">
+        <h4 class="modal-title">Full Size Material Images</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+				<img src="{{ URL }}/storage/material_Images/{{ imageToBeExpanded }}" alt="Expanded Material Image" class="w-100">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+      </div>
+    </ng-template>
+
+</div>
