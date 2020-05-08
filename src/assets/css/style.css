@@ -651,7 +651,7 @@ blockquote {
 .navbar-nav .nav-link {
   text-transform: none;
   font-weight: bold;
-  padding: 20px 15px 18px !important;
+  padding: 20px 15px 18px;
   transition: .2s ease;
   font-size: 14px;
 }
@@ -1190,7 +1190,7 @@ blockquote {
   background-repeat: no-repeat;
   background-position: center center;
 }
-.card{
+.ca{
   height: inherit !important;
 }
 .card-img{
@@ -1273,24 +1273,6 @@ blockquote {
 }
 .w-auto{
   width: fit-content;
-}
-.w-30{
-  width: 30%;
-}
-.w-40{
-  width: 40%;
-}
-.w-50{
-  width: 50%;
-}
-.w-70{
-  width: 70%;
-}
-.w-80{
-  width: 80%;
-}
-.w-90{
-  width: 90%;
 }
 .qoute:before {
   content: '\f10d';

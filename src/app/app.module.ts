@@ -19,7 +19,6 @@ import { RxReactiveFormsModule } from "@rxweb/reactive-form-validators";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from './tools/modal/modal.component';
 import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
-import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { RequestResetPasswordComponent } from './views/request-reset-password/request-reset-password.component';
 import { ResponseResetPasswordComponent } from './views/response-reset-password/response-reset-password.component';
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
@@ -29,7 +28,7 @@ import { UsersComponent } from './views/dashboard/users/users.component';
 import { SingleUserComponent } from './views/dashboard/single-user/single-user.component';
 import { ListedScrapComponent } from './views/dashboard/listed-scrap/listed-scrap.component';
 import { SingleListedScrapComponent } from './views/dashboard/single-listed-scrap/single-listed-scrap.component';
-import { AdminLoginComponent } from './views/dashboard/admin-login/admin-login.component';
+import { AdminLoginComponent } from './views/admin-login/admin-login.component';
 import { ContactComponent } from './views/contact/contact.component';
 import { MessagesComponent } from './views/dashboard/messages/messages.component';
 import { ProducerDashboardComponent } from './views/dashboard/producer/producer-dashboard/producer-dashboard.component';
@@ -39,6 +38,7 @@ import { AdminProfileComponent } from './views/profile/admin-profile/admin-profi
 import { UserProfileComponent } from './views/profile/user-profile/user-profile.component';
 import { VendorProfileComponent } from './views/profile/vendor-profile/vendor-profile.component';
 import { CollectorProfileComponent } from './views/profile/collector-profile/collector-profile.component';
+import { AdminComponent } from './views/dashboard/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +54,6 @@ import { CollectorProfileComponent } from './views/profile/collector-profile/col
     SignupComponent,
     DndDirective,
     ModalComponent,
-    DashboardComponent,
     RequestResetPasswordComponent,
     ResponseResetPasswordComponent,
     PageNotFoundComponent,
@@ -72,7 +71,8 @@ import { CollectorProfileComponent } from './views/profile/collector-profile/col
     AdminProfileComponent,
     UserProfileComponent,
     VendorProfileComponent,
-    CollectorProfileComponent
+    CollectorProfileComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

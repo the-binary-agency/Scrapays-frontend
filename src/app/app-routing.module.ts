@@ -7,7 +7,6 @@ import { CollectorsComponent } from './views/collectors/collectors.component';
 import { ListingComponent } from './views/listing/listing.component';
 import { LoginComponent } from './views/login/login.component';
 import { SignupComponent } from './views/signup/signup.component';
-import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { BeforeLoginService } from './services/before-login.service';
 import { RequestResetPasswordComponent } from './views/request-reset-password/request-reset-password.component';
 import { ResponseResetPasswordComponent } from './views/response-reset-password/response-reset-password.component';
@@ -18,7 +17,6 @@ import { SingleUserComponent } from './views/dashboard/single-user/single-user.c
 import { IsAdminService } from './services/is-admin.service';
 import { ListedScrapComponent } from './views/dashboard/listed-scrap/listed-scrap.component';
 import { SingleListedScrapComponent } from './views/dashboard/single-listed-scrap/single-listed-scrap.component';
-import { AdminLoginComponent } from './views/dashboard/admin-login/admin-login.component';
 import { ContactComponent } from './views/contact/contact.component';
 import { MessagesComponent } from './views/dashboard/messages/messages.component';
 import { ProducerDashboardComponent } from './views/dashboard/producer/producer-dashboard/producer-dashboard.component';
@@ -32,6 +30,8 @@ import { UserProfileComponent } from './views/profile/user-profile/user-profile.
 import { NotAdminService } from './services/not-admin.service';
 import { VendorProfileComponent } from './views/profile/vendor-profile/vendor-profile.component';
 import { CollectorProfileComponent } from './views/profile/collector-profile/collector-profile.component';
+import { AdminLoginComponent } from './views/admin-login/admin-login.component';
+import { AdminComponent } from './views/dashboard/admin/admin.component';
  
 
 
@@ -60,11 +60,6 @@ const routes: Routes = [
     canActivate: [BeforeLoginService]
   },
   {
-    path: "dashboard",
-    component: DashboardComponent,
-    canActivate: [AfterLoginService]
-  },
-  {
     path: "dashboard/users",
     component: UsersComponent,
     canActivate: [AfterLoginService, IsAdminService]
@@ -77,6 +72,11 @@ const routes: Routes = [
   {
     path: "dashboard/users/:id",
     component: SingleUserComponent,
+    canActivate: [AfterLoginService, IsAdminService]
+  },
+  {
+    path: "dashboard",
+    component: AdminComponent,
     canActivate: [AfterLoginService, IsAdminService]
   },
   {

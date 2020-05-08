@@ -12,7 +12,7 @@ import { AdminService } from 'src/app/services/admin.service';
   styleUrls: ['./admin-login.component.css']
 })
 export class AdminLoginComponent implements OnInit {
-   @ViewChild('content') private content;
+ @ViewChild('content') private content;
   loading: boolean;
 
   constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router, private Admin: AdminService) {
@@ -64,7 +64,7 @@ handleResponse(data){
   this.Token.handle(data.access_token);
   this.Auth.changeAuthStatus( true );
   this.loading = false;
-  this.router.navigateByUrl('/dashboard/listedScrap');
+  this.router.navigateByUrl('/dashboard');
 }
 
 handleError(error){
@@ -77,5 +77,4 @@ handleError(error){
   openModal(content) {
     this.modal.open(content, { centered: true });
   }
-
 }

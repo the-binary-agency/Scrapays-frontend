@@ -1,0 +1,152 @@
+<div class="row mt-5 pt-md-5">
+    <div class="col-12 col-md-7">
+        <span class="font-weight-bold h1 ml-4">Users</span>
+        <div class="row">
+            <div class="col-12 col-md-4 mb-2 mb-md-0">
+                <div class="card shadow h-100">
+                    <div class="card-body">
+                        <div class="card-title text-center">
+                            <img src="assets/images/icons/user-1.png" alt="user icon">
+                        </div>
+                        <div class="card-text">
+                            <p class="font-weight-bold">Producers</p>
+                            <span class="text-muted small">Last Updated 28 April 2020</span><br>
+                            <span class="badge bg-orange text-light">300 Users</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 mb-2 mb-md-0">
+                <div class="card shadow h-100">
+                    <div class="card-body">
+                        <div class="card-title text-center">
+                            <img src="assets/images/icons/user-1.png" alt="user icon">
+                        </div>
+                        <div class="card-text">
+                            <p class="font-weight-bold">Vendors</p>
+                            <span class="text-muted small">Last Updated 28 April 2020</span><br>
+                            <span class="badge bg-orange text-light">300 Users</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 mb-2 mb-md-0">
+                <div class="card shadow h-100">
+                    <div class="card-body">
+                        <div class="card-title text-center">
+                            <img src="assets/images/icons/user-1.png" alt="user icon">
+                        </div>
+                        <div class="card-text">
+                            <p class="font-weight-bold">Collectors</p>
+                            <span class="text-muted small">Last Updated 28 April 2020</span><br>
+                            <span class="badge bg-orange text-light">300 Users</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-5 pl-md-0">
+        <span class="font-weight-bold h1 ml-4">Website Analytics</span>
+        <div class="card shadow rounded-0">
+            <div class="card-body px-0 pt-4 pb-custom">
+                <div class="row text-center">
+                    <div class="col-12 col-md-4 pr-md-0">
+                        <img src="assets/images/icons/men-1.png" alt="users icon"  class="users-icon"><br>
+                        <span class="font-weight-bold">33,123</span><br>
+                        <span class="text-muted small bb-grey">Total No. Of Visitors</span>        
+                        <img src="assets/images/icons/black-user-icon.png" alt="user icon">
+                        <img src="assets/images/icons/black-user-icon.png" alt="user icon">
+                        <img src="assets/images/icons/black-user-icon.png" alt="user icon">
+                        <img src="assets/images/icons/black-user-icon.png" alt="user icon">
+                    </div>
+                    <div class="col-12 col-md-4 px-md-0">
+                        <img src="assets/images/icons/map-icon.png" alt="map icon" class="w-100"><br>
+                        <span class="text-muted small bb-grey">Visitors Geolocation</span>
+                        <span class="text-muted small">Nigeria, USA, Belgium</span>           
+                    </div>
+                    <div class="col-12 col-md-4 d-flex align-items-center">
+                         <img src="assets/images/icons/analytics.png" alt="analytics icon" class="w-100">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row my-4">
+    <div class="col-12 col-md-5">
+        <div class="card  h-100 rounded-0 shadow-sm">
+            <div class="card-body">
+                <h4 class="card-title">
+                    <span class="font-weight-bold">Listing Report</span>  
+                    <select class="custom-select w-auto float-right">
+                    <option value="1" selected>Monthly</option>
+                    <option value="2">Weekly</option>
+                    <option value="3">Yearly</option>
+                    </select>                 
+                    <span class="float-right text-blue mt-1 mr-1">Show:</span>
+                </h4>
+                <div class="card-text">
+                    <div class="chart-wrapper">
+                        <canvas baseChart class="chart"
+                        [datasets]="lineChartData"
+                        [labels]="lineChartLabels"
+                        [options]="lineChartOptions"
+                        [colors]="lineChartColours"
+                        [legend]="lineChartLegend"
+                        [chartType]="lineChartType"
+                        (chartHover)="chartHovered($event)"
+                        (chartClick)="chartClicked($event)" style="height:100%px !important;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4 pl-md-0">
+        <div class="card  h-100 rounded-0 shadow-sm">
+            <div class="card-header bg-white">
+                <span class="mt-1">Listing Request</span>
+                <select class="custom-select w-auto float-right">
+                    <option value="1" selected>This Month</option>
+                    <option value="2">This Week </option>
+                    <option value="3">This Year </option>
+                </select>                 
+                <span class="float-right text-blue mt-1 mr-1">Show:</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="card-text">
+                    <div class="chart-wrapper">
+                        <canvas baseChart
+                            [data]="doughnutChartData"
+                            [labels]="doughnutChartLabels"
+                            [colors]="doughnutChartColors"
+                            [options]="doughnutChartOptions"
+                            [chartType]="doughnutChartType"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-3">
+        <div class="card  h-100 rounded-0 shadow-sm">
+            <div class="card-header bg-white">
+                <span class="mt-2">Revenue</span>
+                <select class="custom-select w-auto float-right">
+                    <option value="1" selected>This Month</option>
+                    <option value="2">This Week </option>
+                    <option value="3">This Year </option>
+                </select>                 
+                <span class="float-right text-blue mt-1 mr-1"></span>
+            </div>
+            <div class="card-body p-0">
+                <div class="card-text pl-4">
+                    Total Revenue Generated <br><br>
+                    <span class="badge bg-orange text-light h5">₦ 300,000,000</span><br><br>
+                    Total Tonnage recovered <br><br>
+                    <span class="badge bg-orange text-light h5">₦ 300,000,000</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -315,4 +315,27 @@ jQuery(function ($) {
 
   $('#back-to-top').tooltip('hide');
 
+
+  /* ----------------------------------------------------------- */
+  /*  Listing header
+  /* ----------------------------------------------------------- */
+
+
+var images = ["home-scrap-carousel-6.jpg", "home-scrap-carousel-3.jpg", "home-scrap-carousel-7.jpg", "home-scrap-carousel-1.jpg", "home-scrap-carousel-2.jpg", "home-scrap-carousel-4.jpg", "home-scrap-carousel-5.jpg"];
+    $(function () {
+        var i = 0;
+        $("#dvImage").css("background-image", "url(assets/images/carousels/" + images[i] + ")");
+        setInterval(function () {
+            i++;
+            if (i == images.length) {
+                i = 0;
+            }
+            $("#dvImage").fadeOut("slow", function () {
+                $(this).css("background-image", "url(assets/images/carousels/" + images[i] + ")");
+                $(this).fadeIn("slow");
+            });
+        }, 5000);
+    });
+
+
 });

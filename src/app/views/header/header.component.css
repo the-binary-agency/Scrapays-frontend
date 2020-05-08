@@ -1,0 +1,39 @@
+.profile-icon{
+    height: 40px;
+    width: auto;
+}
+.profile-drop-down{
+    padding-top: 0.85rem !important;
+}
+.fa.badge{
+    display: flow-root;
+    width: fit-content;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+}
+.fa.badge:after{
+    content: attr(data-count);
+    position: absolute;
+    background: red;
+    top: 0;
+    left: 24px;
+    padding: 3px;
+    text-align: center;
+    line-height: 1rem;
+    font-size: 1rem;
+    border-radius: 100%;
+    color: white;
+    border: 1px solid red;
+}
+@media(min-width: 992px){
+    .hr-border:after{
+        content: "";
+        position: absolute;
+        bottom: 10%;
+        right: 215px;
+        background: black;
+        height: 80%;
+        width: 2px; 
+    }
+}
