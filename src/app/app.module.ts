@@ -39,6 +39,9 @@ import { UserProfileComponent } from './views/profile/user-profile/user-profile.
 import { VendorProfileComponent } from './views/profile/vendor-profile/vendor-profile.component';
 import { CollectorProfileComponent } from './views/profile/collector-profile/collector-profile.component';
 import { AdminComponent } from './views/dashboard/admin/admin.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatModule } from './ext-module/mat.module';
+import { SidenavComponent } from './views/sidenav/sidenav.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +75,8 @@ import { AdminComponent } from './views/dashboard/admin/admin.component';
     UserProfileComponent,
     VendorProfileComponent,
     CollectorProfileComponent,
-    AdminComponent
+    AdminComponent,
+    SidenavComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +92,9 @@ import { AdminComponent } from './views/dashboard/admin/admin.component';
       backdropBorderRadius: '4px',
       primaryColour: '#FF7900', 
       secondaryColour: '#049B41',              
-    })
+    }),
+    BrowserAnimationsModule,
+    MatModule
   ],
   providers: [ModalComponent],
   bootstrap: [AppComponent]

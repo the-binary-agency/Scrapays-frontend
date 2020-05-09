@@ -1,22 +1,83 @@
-<div class="dashboard-body pt-5 p-1 p-md-5">
-  <div class="card">
+<div class="dashboard-body pt-5 p-1 p-md-4">
+
+<div class="row">
+  <div class="col-12 mb-5">
+    <span class="h3 text-primary ml-2 bb-blue">Overview</span>
+  </div>
+<div class="col-12 col-md-7">
+
+ <div class="row h-100">
+ 
+   <div class="col-12 col-md-4 px-0 px-md-2 mb-4">
+     <div class="card h-100 bg-orange text-white rounded-card">
       <div class="card-body">
-        <div class="row">
-          <div class="col-12 col-sm-5">
-            <h4 class="card-title mb-0">Name: {{ User.firstName }} &nbsp; {{ User.lastName  }}</h4>
-            <div class="small text-muted">Address: </div>
-          </div><!--/.col-->
-          <div class="coll-12 col-sm-7 text-left text-md-right">
-          Total Disposed <br class="d-md-none"> Tonnage: <span class="h3 text-bold">{{ totalTonnage }}</span> Tons
-            <!-- <div class="btn-group btn-group-toggle float-right mr-3" data-toggle="buttons">
-              <label class="btn btn-outline-secondary" [(ngModel)]="radioModel" btnRadio="Day" id="option1">Day</label>
-              <label class="btn btn-outline-secondary" [(ngModel)]="radioModel" btnRadio="Month" id="option2">Month</label>
-              <label class="btn btn-outline-secondary" [(ngModel)]="radioModel" btnRadio="Year" id="option3">Year</label>
-            </div> -->
-          </div><!--/.col-->
-        </div><!--/.row-->
-        <div class="col-12 hh1 text-center">Disposal History</div>
-          <div class="chart-wrapper">
+        <div class="card-title">
+          <img src="assets/images/icons/weight-icon.png" alt="weight icon">
+        </div>
+          <span class="display-4">
+            {{ totalTonnage }}
+          </span>
+          Tons <br>
+          Total tonnage disposed
+      </div>
+    </div>
+  </div>
+
+<div class="col-12 col-md-8 px-0 px-md-4 mb-4">
+  <div class="card h-100 rounded-card inset-card">
+    <div class="card-body px-0 px-md-4">
+      <div class="row">
+      <div class="col-12 text-center">
+        <div class="card-title">Total tonnage disposed per material class</div>
+      </div>
+        <div class="col-6 d-flex mb-5">
+          <img src="assets/images/icons/metal-icon.png" alt="metal icon">
+          <span class="ml-2 ml-md-4 font-weight-bold">
+            Metal <br>
+            {{ (Scrap.metal + Scrap.aluminium)/907 }}kg
+          </span>
+        </div>
+        <div class="col-6 d-flex mb-5">
+           <img src="assets/images/icons/bottles-icon.png" alt="plastic icon">
+          <span class="ml-2 ml-md-4 font-weight-bold">
+            Plastic <br>
+            {{ (Scrap.plastic)/907 }}kg
+          </span>
+        </div>
+        <div class="col-6 d-flex">
+           <img src="assets/images/icons/paper-icon.png" alt="paper icon">
+          <span class="ml-2 ml-md-4 font-weight-bold">
+            Paper <br>
+            {{ (Scrap.paper)/907 }}kg
+          </span>
+        </div>
+        <div class="col-6 d-flex">
+           <img src="assets/images/icons/can-icon.png" alt="others icon">
+          <span class="ml-2 ml-md-4 font-weight-bold">
+            Others <br>
+            {{ (Scrap.others)/907 }}kg
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="col-12 px-0 px-md-4 mb-4">
+  <div class="card shadow-sm h-100">
+     <div class="card-header bg-white">
+      <span class="font-weight-bold mt-3">Disposal <br class="d-block d-md-none"> History</span>
+
+      <select class="custom-select custom-select-sm w-auto float-right border-0">
+          <option value="1" selected> Monthly </option>
+          <option value="2"> Weekly </option>
+          <option value="3"> Yearly </option>
+      </select>                 
+      <span class="float-right text-blue mt-1 mr-1">Show:</span>
+     </div>
+    <div class="card-body">
+     <div class="chart-wrapper">
             <canvas baseChart class="chart"
             [datasets]="lineChartData"
             [labels]="lineChartLabels"
@@ -27,61 +88,75 @@
             (chartHover)="chartHovered($event)"
             (chartClick)="chartClicked($event)" style="height:100%px !important;"></canvas>
           </div>
-      <div class="card-footer">
-        <div class="row text-center">
-          <div class="col-sm-12 col-md mb-sm-2 mb-0">
-            <div class="text-muted">Metal</div>
-            <strong> {{ round( (Scrap.metal/totalTonnage)*100 ) }}%</strong>
-             <ngb-progressbar type="success" value="{{ round( (Scrap.metal/totalTonnage)*100 ) }}" height=".5rem"></ngb-progressbar>
-          </div>
-          <div class="col-sm-12 col-md mb-sm-2 mb-0">
-            <div class="text-muted">Aluminium</div>
-             <strong> {{ round( (Scrap.aluminium/totalTonnage)*100 ) }}%</strong>
-             <ngb-progressbar type="success" value="{{ round( (Scrap.aluminium/totalTonnage)*100 ) }}" height=".5rem"></ngb-progressbar>
-          </div>
-          <div class="col-sm-12 col-md mb-sm-2 mb-0">
-            <div class="text-muted">Plastic</div>
-             <strong> {{ round( (Scrap.plastic/totalTonnage)*100 ) }}%</strong>
-             <ngb-progressbar type="success" value="{{ round( (Scrap.plastic/totalTonnage)*100 ) }}" height=".5rem"></ngb-progressbar>
-          </div>
-          <div class="col-sm-12 col-md mb-sm-2 mb-0">
-            <div class="text-muted">Paper</div>
-             <strong> {{ round( (Scrap.paper/totalTonnage)*100 ) }}%</strong>
-             <ngb-progressbar type="success" value="{{ round( (Scrap.paper/totalTonnage)*100 ) }}" height=".5rem"></ngb-progressbar>
-          </div>
-          <div class="col-sm-12 col-md mb-sm-2 mb-0">
-            <div class="text-muted">Others</div>
-            <strong> {{ round( (Scrap.others/totalTonnage)*100 ) }}%</strong>
-             <ngb-progressbar type="success" value="{{ round( (Scrap.others/totalTonnage)*100 ) }}" height=".5rem"></ngb-progressbar>
-          </div>
+    </div>
+  </div>
+</div>
+
+ </div>
+
+</div>
+<div class="col-12 col-md-5 px-2 px-md-4 mb-4">
+  <div class="card h-100 bg-orange text-white rounded-card">
+    <div class="card-header bg-transparent">
+      Wallet
+    </div>
+    <div class="card-body">
+     <div class="row mb-5">
+       <div class="h5 bb-white">
+        Total Earnings 
+       </div>
+         <div class="h4 w-100">
+          ₦ 50,000
+         </div>
+     </div>
+     <div class="row mb-5">
+      <div class="w-100 d-flex">
+         <div class="h5 bb-white">
+           Earnings
+         </div>
+          <div class="space-filler"></div>
+          <span class=" small mt-1 mr-1">Show:</span>
+          <select class="custom-select custom-select-sm w-auto border-0 bg-orange">
+              <option value="1" selected>This Month</option>
+              <option value="2">This Week </option>
+              <option value="3">This Year </option>
+          </select>
+      </div>          
+        <div class="h4 w-100">
+          ₦ 10,000
         </div>
+     </div>
+     <div class="row">
+         
+       <div class="row w-100 mb-5">
+         <a class="text-white h4 pl-0" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+          <i class="fa fa-chevron-right" aria-hidden="true"></i>
+          Recharge
+        </a>
+      <div class="collapse w-100" id="collapseExample">
+        <button type="button" class="btn bg-green btn-lg text-white ml-4">Recharge</button>
       </div>
-    </div>
-  </div>
+       </div>
+
+       <div class="row w-100 mb-5">
+         <a class="text-white h4 pl-0" data-toggle="collapse" href="#transferFunds" role="button" aria-expanded="false" aria-controls="transferFunds">
+          <i class="fa fa-chevron-right" aria-hidden="true"></i>
+          Transfer Funds
+        </a>
+      <div class="collapse w-100" id="transferFunds">
+          <button type="button" class="btn bg-green btn-lg text-white ml-4">Transfer</button>
+      </div>
+       </div>
 
 
-    <div class="card mt-5">
-    </div>
-
-<div class="col-12 text-center mt-5 hh1">(Coming Soon)</div>
-    <div class="card mb-5 p-0">
-      <div class="card-body p-0 p-md-5">
-        <div class="row mb-5 d-flex justify-content-between">
-            <h1 class="card-title mb-0 hh1 float-left">Wallet Balance</h1>
-            <div class="">
-              <img class="naira-icon" src="assets/images/icons/naira.svg"><span class="hh1 text-bold">0</span>
-            </div>
-        </div>
-      <div class="card-footer p-0">
-            <button class="btn btn-primary btn-min-block solid float-left mb-3" disabled="true">Recharge</button>
-            <button class="btn btn-primary btn-min-block solid float-right mb-3" disabled="true">Transfer Funds</button>
-    </div>
-  </div>
-
-<div class="col-12 text-center mt-5 hh1">(Coming Soon)</div>
-  <div class="col-12 text-center text-bold hh1">Transaction History</div>
-
- <table class="table table-responsive-sm table-hover table-outline mb-0">
+       <div class="row w-100 mb-5">
+         <a class="text-white h4 pl-0" data-toggle="collapse" href="#fundsWidthHistory" role="button" aria-expanded="false" aria-controls="fundsWidthHistory">
+          <i class="fa fa-chevron-right" aria-hidden="true"></i>
+          Funds Withdrawal History
+        </a>
+      <div class="collapse" id="fundsWidthHistory">
+        
+          <table class="table table-responsive-sm table-hover table-outline mb-0">
             <thead class="thead-light">
               <tr>
                 <th>Date and Time</th>
@@ -89,7 +164,7 @@
                 <th class="text-right">Amount</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="bg-light">
             <!-- <tr *ngIf="Users.length == 0">
             <td></td>
             <td>No Registered Users</td>
@@ -105,24 +180,19 @@
                  Withdrawal
                 </td>
                 <td class="text-right">
-                  + <img class="transaction-icon" src="assets/images/icons/naira.svg"><span class="text-bold">0</span>
+                  + ₦<span class="text-bold">0</span>
                 </td>
               </tr>
             </tbody>
-          </table><br><br>
+          </table>
+        
+      </div>
+       </div>
+
+     </div>
+    </div>
+  </div>
+</div>
 </div>
 
-<!-- <ng-template #content let-modal>
-      <div class="modal-header">
-        <h4 class="modal-title"><p>{{ modalTitle }}</p></h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>{{ modalBody }}</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
-      </div>
-</ng-template> -->
+</div>

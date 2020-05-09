@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TokenService } from 'src/app/services/token.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-producer-dashboard',
@@ -8,8 +9,9 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./producer-dashboard.component.css']
 })
 export class ProducerDashboardComponent implements OnInit {
- constructor ( private token: TokenService, private auth: AuthService ) { }
+  constructor ( private token: TokenService, private auth: AuthService ) { }
   
+  panelOpenState = false;
   month: any;
   year: any;
   User: any = {
