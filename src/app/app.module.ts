@@ -3,47 +3,50 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
-import { HomeComponent } from './views/home/home.component';
-import { HeaderComponent } from './views/header/header.component';
-import { FooterComponent } from './views/footer/footer.component';
-import { ProducersComponent } from './views/producers/producers.component';
-import { VendorsComponent } from './views/vendors/vendors.component';
-import { CollectorsComponent } from './views/collectors/collectors.component';
-import { ListingComponent } from './views/listing/listing.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HomeComponent } from './views/Public/home/home.component';
+import { HeaderComponent } from './Constants/header/header.component';
+import { FooterComponent } from './Constants/footer/footer.component';
+import { ProducersComponent } from './views/Public/producers/producers.component';
+import { VendorsComponent } from './views/Public/vendors/vendors.component';
+import { CollectorsComponent } from './views/Public/collectors/collectors.component';
+import { ListingComponent } from './views/Public/listing/listing.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoginComponent } from './views/login/login.component';
-import { SignupComponent } from './views/signup/signup.component';
+import { LoginComponent } from './views/Auth/login/login.component';
+import { SignupComponent } from './views/Auth/signup/signup.component';
 import { DndDirective } from './directives/dnd.directive';
 import { RxReactiveFormsModule } from "@rxweb/reactive-form-validators";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ModalComponent } from './tools/modal/modal.component';
 import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
-import { RequestResetPasswordComponent } from './views/request-reset-password/request-reset-password.component';
-import { ResponseResetPasswordComponent } from './views/response-reset-password/response-reset-password.component';
-import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
+import { RequestResetPasswordComponent } from './views/Auth/request-reset-password/request-reset-password.component';
+import { ResponseResetPasswordComponent } from './views/Auth/response-reset-password/response-reset-password.component';
+import { PageNotFoundComponent } from './views/Public/page-not-found/page-not-found.component';
 import { ChartsModule } from 'ng2-charts';
-import { SideNavComponent } from './views/side-nav/side-nav.component';
-import { UsersComponent } from './views/dashboard/users/users.component';
-import { SingleUserComponent } from './views/dashboard/single-user/single-user.component';
-import { ListedScrapComponent } from './views/dashboard/listed-scrap/listed-scrap.component';
-import { SingleListedScrapComponent } from './views/dashboard/single-listed-scrap/single-listed-scrap.component';
-import { AdminLoginComponent } from './views/admin-login/admin-login.component';
-import { ContactComponent } from './views/contact/contact.component';
-import { MessagesComponent } from './views/dashboard/messages/messages.component';
-import { ProducerDashboardComponent } from './views/dashboard/producer/producer-dashboard/producer-dashboard.component';
-import { CollectorDashboardComponent } from './views/dashboard/collector/collector-dashboard/collector-dashboard.component';
-import { VendorDashboardComponent } from './views/dashboard/vendor/vendor-dashboard/vendor-dashboard.component';
-import { AdminProfileComponent } from './views/profile/admin-profile/admin-profile.component';
-import { UserProfileComponent } from './views/profile/user-profile/user-profile.component';
-import { VendorProfileComponent } from './views/profile/vendor-profile/vendor-profile.component';
-import { CollectorProfileComponent } from './views/profile/collector-profile/collector-profile.component';
-import { AdminComponent } from './views/dashboard/admin/admin.component';
+import { UsersComponent } from './views/Private/admin/users/users.component';
+import { SingleUserComponent } from './views/Private/admin/single-user/single-user.component';
+import { ListedScrapComponent } from './views/Private/admin/listed-scrap/listed-scrap.component';
+import { SingleListedScrapComponent } from './views/Private/admin/single-listed-scrap/single-listed-scrap.component';
+import { AdminLoginComponent } from './views/Private/admin/admin-login/admin-login.component';
+import { ContactComponent } from './views/Public/contact/contact.component';
+import { MessagesComponent } from './views/Private/admin/messages/messages.component';
+import { ProducerDashboardComponent } from './views/Private/producer/producer-dashboard/producer-dashboard.component';
+import { CollectorDashboardComponent } from './views/Private/collector/collector-dashboard/collector-dashboard.component';
+import { VendorDashboardComponent } from './views/Private/vendor/vendor-dashboard/vendor-dashboard.component';
+import { AdminProfileComponent } from './views/Private/admin/admin-profile/admin-profile.component';
+import { UserProfileComponent } from './views/Private/producer/producer-profile/user-profile.component';
+import { VendorProfileComponent } from './views/Private/vendor/vendor-profile/vendor-profile.component';
+import { CollectorProfileComponent } from './views/Private/collector/collector-profile/collector-profile.component';
+import { AdminComponent } from './views/Private/admin/admin-dashboard/admin.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatModule } from './ext-module/mat.module';
-import { SidenavComponent } from './views/sidenav/sidenav.component';
+import { SidenavComponent } from './Constants/sidenav/sidenav.component';
+import { TokenInterceptor } from './services/auth/token.interceptor';
+import { EnterprisesComponent } from './views/Public/enterprises/enterprises.component';
+import { DateAgoPipe } from './pipes/date-ago.pipe';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
-@NgModule({
+@NgModule( {
   declarations: [
     AppComponent,
     HomeComponent,
@@ -56,11 +59,9 @@ import { SidenavComponent } from './views/sidenav/sidenav.component';
     LoginComponent,
     SignupComponent,
     DndDirective,
-    ModalComponent,
     RequestResetPasswordComponent,
     ResponseResetPasswordComponent,
     PageNotFoundComponent,
-    SideNavComponent,
     UsersComponent,
     SingleUserComponent,
     ListedScrapComponent,
@@ -76,7 +77,9 @@ import { SidenavComponent } from './views/sidenav/sidenav.component';
     VendorProfileComponent,
     CollectorProfileComponent,
     AdminComponent,
-    SidenavComponent
+    SidenavComponent,
+    EnterprisesComponent,
+    DateAgoPipe
   ],
   imports: [
     BrowserModule,
@@ -90,13 +93,22 @@ import { SidenavComponent } from './views/sidenav/sidenav.component';
     NgxLoadingModule.forRoot( {
       animationType: ngxLoadingAnimationTypes.wanderingCubes,
       backdropBorderRadius: '4px',
-      primaryColour: '#FF7900', 
-      secondaryColour: '#049B41',              
-    }),
+      primaryColour: '#FF7900',
+      secondaryColour: '#049B41',
+    } ),
     BrowserAnimationsModule,
-    MatModule
+    MatModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [ModalComponent],
+  providers: [
+    HeaderComponent,
+    SidenavComponent,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

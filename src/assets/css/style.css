@@ -363,7 +363,7 @@ blockquote {
   /* background: url(../images/parallax/parallax2.jpg) no-repeat; */
 }
 .wc-img{
-  background: url(../images/wc-img.jpg) no-repeat;
+  background: url(../images/wc-img.png) no-repeat;
 }
 
 .parallax3 {
@@ -1110,7 +1110,7 @@ blockquote {
 }
 .producer-row{
   width: 100%;
-  background-image: url(../images/wastep-bg.jpg);
+  background-image: url(../images/wastep-bg.png);
   background-size: 40% 100%;
   background-repeat: no-repeat;
   background-position: right;
@@ -1122,7 +1122,7 @@ blockquote {
 }
 .vendor-row{
   width: 100%;
-  background-image: url(../images/vendor-bg.jpg);
+  background-image: url(../images/vendor-bg.png);
   background-size: 40% 100%;
   background-repeat: no-repeat;
 }
@@ -1146,32 +1146,39 @@ blockquote {
   margin-bottom: 20%;
 }
 .wlcm-sec{
-  background-image: url(../images/wlcm-img.jpg);
+  background-image: url(../images/wlcm-img.png);
   background-size: auto 100% !important;
   background-repeat: no-repeat;
   background-position: center center;
 }
 .list-wlcm-sec{
-  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(../images/carousels/home-scrap-carousel-6.jpg);
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(../images/carousels/home-scrap-carousel-6.png);
   background-size: cover !important;
   background-repeat: no-repeat;
   background-position: center center;
 }
 .vendors-wlcm-sec{
-  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(../images/last-wlcm-bg.jpg);
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(../images/last-wlcm-bg.png);
   background-size: auto 100% !important;
   background-repeat: no-repeat;
   background-position: center center;
 }
 .collectors-wlcm-sec{
-  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(../images/waste-collectors-hero.jpg);
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(../images/waste-collectors-hero.png);
+  background-size: cover  !important;
+  /* background-size: 100% 100% !important; */
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.enterprises-wlcm-sec{
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(../images/enterprises-bg-img.png);
   background-size: cover  !important;
   /* background-size: 100% 100% !important; */
   background-repeat: no-repeat;
   background-position: center center;
 }
 .wlcm-sec2{
-  background-image: url(../images/producer-wlcm-bg.jpg);
+  background-image: url(../images/producer-wlcm-bg.png);
   background-size: auto 100% !important;
   background-repeat: no-repeat;
   background-position: center center;
@@ -1227,7 +1234,7 @@ blockquote {
   margin-left: 0px !important;
 }
 .vendor-hero{
-  background: url(../images/last-wlcm-bg.jpg) 50% 50% / cover no-repeat;
+  background: url(../images/last-wlcm-bg.png) 50% 50% / cover no-repeat;
   /* background-size: contain !important;
   background-repeat: no-repeat;
   background-position: center center; */
@@ -1240,13 +1247,13 @@ blockquote {
   padding-left: 5%;
   padding-top: 5%;
   padding-bottom: 5%;
-  background-image: url(../images/host-brown-bg.jpg);
+  background-image: url(../images/host-brown-bg.png);
   background-size: 100% 100%;
 }
 .host-body{
   padding-top: 10%;
   padding-bottom: 10%;
-  background-image: url(../images/host-grey-bg.jpg);
+  background-image: url(../images/host-grey-bg.png);
   background-size: 100% 100%;
 }
 .host-body-content{
@@ -1290,7 +1297,7 @@ blockquote {
     color: #FF7900;
 }
 .collectors-hero{
-  background-image: url(../images/tractor-bg.jpg);
+  background-image: url(../images/tractor-bg.png);
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center center;
@@ -1313,7 +1320,7 @@ blockquote {
   height: 20vmax;
 }
 .collector-sec{
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../images/wc-img.jpg) !important;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../images/wc-img.png) !important;
   background-size: auto 100% !important;
   background-repeat: no-repeat !important;
   background-position: center center !important;
@@ -1410,11 +1417,11 @@ blockquote {
   height: auto;
 }
 .estimate-row{
-  background-image: url(../images/estimate-bg.jpg);
+  background-image: url(../images/estimate-bg.png);
     background-size: 100% 100%;
 }
 .earn-row{
-  background-image: url(../images/earn-bg.jpg);
+  background-image: url(../images/earn-bg.png);
   background-repeat: no-repeat;
   background-position: center center;
 }
@@ -2507,7 +2514,7 @@ figure.effect-oscar:hover img {
 ================================================== */
 .footer {
   padding: 60px 0 100px;
-  background: #2e2e2e url(../images/footer-bg.jpg) no-repeat center 0;
+  /* background: #2e2e2e url(../images/footer-bg.png) no-repeat center 0; */
   background-size: cover;
   color: black;
   font-size: 14px;
@@ -3194,7 +3201,7 @@ ul.arrow li:before {
 
 .hero-section {
   height: 100%;
-  /* background-image: url(../images/landing/main-bg.jpg); */
+  /* background-image: url(../images/landing/main-bg.png); */
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;

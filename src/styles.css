@@ -87,3 +87,9 @@
 }
 html, body { height: 100%; }
 body { margin: 0; }
+.h-90{
+  height: 90%;
+}
+.h-84{
+  height: 84%;
+}

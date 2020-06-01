@@ -21,11 +21,20 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "node_modules/@coreui/coreui/scss/_charts.scss",
-              "src/styles.css"
+              "src/assets/plugins/bootstrap/bootstrap.min.css", 
+              "src/assets/plugins/fontawesome/font-awesome.min.css", 
+              "src/assets/plugins/animate.css", 
+              "src/assets/plugins/owl/owl.carousel.css", 
+              "src/assets/plugins/owl/owl.theme.css", 
+              "src/assets/plugins/flex-slider/flexslider.css", 
+              "src/assets/plugins/cd-hero/cd-hero.css", 
+              "src/assets/css/presets/preset3.css" ,
+              "src/assets/css/style.css"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -63,7 +72,9 @@
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json"
             }
           }
         },
@@ -93,7 +104,8 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "src/styles.css"

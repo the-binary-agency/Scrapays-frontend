@@ -321,7 +321,7 @@ jQuery(function ($) {
   /* ----------------------------------------------------------- */
 
 
-var images = ["home-scrap-carousel-6.jpg", "home-scrap-carousel-3.jpg", "home-scrap-carousel-7.jpg", "home-scrap-carousel-1.jpg", "home-scrap-carousel-2.jpg", "home-scrap-carousel-4.jpg", "home-scrap-carousel-5.jpg"];
+var images = ["home-scrap-carousel-6.png", "home-scrap-carousel-3.png", "home-scrap-carousel-7.png", "home-scrap-carousel-1.png", "home-scrap-carousel-2.png", "home-scrap-carousel-4.png", "home-scrap-carousel-5.png"];
     $(function () {
         var i = 0;
         $("#dvImage").css("background-image", "url(assets/images/carousels/" + images[i] + ")");

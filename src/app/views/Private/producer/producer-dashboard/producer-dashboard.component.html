@@ -1,0 +1,250 @@
+<div class="dashboard-body pt-5 p-1 p-md-4">
+
+<div class="row">
+  <div class="col-12 mb-5">
+    <span class="h3 text-primary ml-2 bb-blue">Overview</span>
+    <button type="button" class="btn btn-primary solid float-md-right mr-md-5" (click)="automate = !automate">Click  here to automate your recovery process with scrapays </button>
+  </div>
+
+<div class="col-12 col-md-6 order-md-2 pl-md-0">
+
+ <div class="row h-100">
+ 
+   <div class="col-12 col-md-4 px-0 px-md-2 mb-4">
+     <div class="card h-100 bg-orange text-white rounded-card">
+      <div class="card-body">
+        <div class="card-title">
+          <img src="assets/images/icons/weight-icon.png" alt="weight icon">
+        </div>
+          <span class="display-4">
+            {{ totalTonnage }}
+          </span>
+          Tons <br>
+          Total tonnage disposed
+      </div>
+    </div>
+  </div>
+
+<div class="col-12 col-md-8 px-0 px-md-4 mb-4">
+  <div class="card h-100 rounded-card inset-card">
+    <div class="card-body px-0 px-md-4">
+      <div class="row">
+      <div class="col-12 text-center">
+        <div class="card-title">Total tonnage disposed per material class</div>
+      </div>
+        <div class="col-6 d-flex mb-5">
+          <img src="assets/images/icons/metal-icon.png" alt="metal icon">
+          <span class="ml-2 ml-md-4 font-weight-bold">
+            Metal <br>
+            {{ (Scrap.metal + Scrap.aluminium)/907 }}kg
+          </span>
+        </div>
+        <div class="col-6 d-flex mb-5">
+           <img src="assets/images/icons/bottles-icon.png" alt="plastic icon">
+          <span class="ml-2 ml-md-4 font-weight-bold">
+            Plastic <br>
+            {{ (Scrap.plastic)/907 }}kg
+          </span>
+        </div>
+        <div class="col-6 d-flex">
+           <img src="assets/images/icons/paper-icon.png" alt="paper icon">
+          <span class="ml-2 ml-md-4 font-weight-bold">
+            Paper <br>
+            {{ (Scrap.paper)/907 }}kg
+          </span>
+        </div>
+        <div class="col-6 d-flex">
+           <img src="assets/images/icons/can-icon.png" alt="others icon">
+          <span class="ml-2 ml-md-4 font-weight-bold">
+            Others <br>
+            {{ (Scrap.others)/907 }}kg
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="col-12 px-0 px-md-4 mb-4">
+  <div class="card shadow-sm h-100">
+     <div class="card-header bg-white">
+      <span class="font-weight-bold mt-3">Disposal <br class="d-block d-md-none"> History</span>
+
+      <select class="custom-select custom-select-sm w-auto float-right border-0">
+          <option value="1" selected> Monthly </option>
+          <option value="2"> Weekly </option>
+          <option value="3"> Yearly </option>
+      </select>                 
+      <span class="float-right text-blue mt-1 mr-1">Show:</span>
+     </div>
+    <div class="card-body">
+     <div class="chart-wrapper">
+            <canvas baseChart class="chart"
+            [datasets]="lineChartData"
+            [labels]="lineChartLabels"
+            [options]="lineChartOptions"
+            [colors]="lineChartColours"
+            [legend]="lineChartLegend"
+            [chartType]="lineChartType"
+            (chartHover)="chartHovered($event)"
+            (chartClick)="chartClicked($event)" style="height:100%px !important;"></canvas>
+          </div>
+    </div>
+  </div>
+</div>
+
+ </div>
+
+</div>
+
+<!-- Last Column -->
+<div class="col-12 col-md-3 px-2 px-md-0 mb-4 order-md-3">
+  <div class="card h-100 bg-orange text-white rounded-card">
+    <div class="card-header bg-transparent">
+      Wallet
+    </div>
+    <div class="card-body">
+     <div class="row mb-5">
+       <div class="h5 bb-white">
+        Total Earnings 
+       </div>
+         <div class="h4 w-100">
+          ₦ 0
+         </div>
+     </div>
+     <div class="row mb-5">
+      <div class="w-100 d-flex">
+         <div class="h5 bb-white">
+           Earnings
+         </div>
+          <div class="space-filler"></div>
+          <span class=" small mt-1 mr-1">Show:</span>
+          <select class="custom-select custom-select-sm w-auto border-0 bg-orange">
+              <option value="1" selected>This Month</option>
+              <option value="2">This Week </option>
+              <option value="3">This Year </option>
+          </select>
+      </div>          
+        <div class="h4 w-100">
+          ₦ 0
+        </div>
+     </div>
+     <div class="row">
+         
+       <div class="row w-100 mb-5">
+         <a class="text-white h4 pl-0" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+          <i class="fa fa-chevron-right" aria-hidden="true"></i>
+          Recharge
+        </a>
+      <div class="collapse w-100" id="collapseExample">
+        <button type="button" class="btn bg-green btn-lg text-white ml-4">Recharge</button>
+      </div>
+       </div>
+
+       <div class="row w-100 mb-5">
+         <a class="text-white h4 pl-0" data-toggle="collapse" href="#transferFunds" role="button" aria-expanded="false" aria-controls="transferFunds">
+          <i class="fa fa-chevron-right" aria-hidden="true"></i>
+          Transfer Funds
+        </a>
+      <div class="collapse w-100" id="transferFunds">
+          <button type="button" class="btn bg-green btn-lg text-white ml-4">Transfer</button>
+      </div>
+       </div>
+
+       <div class="row w-100 mb-5" *ngIf="User.type == 'Business'">
+         <a class="text-white h4 pl-0" data-toggle="collapse" href="#barterOptions" role="button" aria-expanded="false" aria-controls="barterOptions">
+          <i class="fa fa-chevron-right" aria-hidden="true"></i>
+          Barter Option
+        </a>
+      <div class="collapse w-100" id="barterOptions">
+          <button type="button" class="btn bg-white sc-orange btn-lg ml-4">Activate</button>
+          <button type="button" class="btn bg-white sc-orange btn-lg ml-4">Deactivate</button>
+      </div>
+       </div>
+
+       <div class="row w-100 mb-5">
+         <a class="text-white h4 pl-0" data-toggle="collapse" href="#fundsWidthHistory" role="button" aria-expanded="false" aria-controls="fundsWidthHistory">
+          <i class="fa fa-chevron-right" aria-hidden="true"></i>
+          Funds Withdrawal History
+        </a>
+      <div class="collapse" id="fundsWidthHistory">
+        
+          <table class="table table-responsive-sm table-hover table-outline mb-0">
+            <thead class="thead-light">
+              <tr>
+                <th>Date and Time</th>
+                <th>Transaction Type</th>
+                <th class="text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody class="bg-light">
+            <!-- <tr *ngIf="Users.length == 0">
+            <td></td>
+            <td>No Registered Users</td>
+            </tr> -->
+              <tr>
+                <td>
+                  <div>10-4-2020</div>
+                  <div class="small text-muted">
+                    8: 00 am
+                  </div>
+                </td>
+                <td>
+                 Withdrawal
+                </td>
+                <td class="text-right">
+                  + ₦<span class="text-bold">0</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        
+      </div>
+       </div>
+
+     </div>
+    </div>
+  </div>
+</div>
+
+<!-- First Column -->
+  <div class="col-12 col-md-3 order-md-1">
+    <form [formGroup]="Form" (ngSubmit)="onSubmit(Form.value)" novalidate class="position-relative px-1">
+     <div class="position-absolute" [ngClass]="{cover: !automate}"></div>
+     <div class="form-group">
+        <label>Choose Material Type</label>
+        <select class="form-control" [(ngModel)]="materialType" (change)="test()" formControlName="materialType">
+          <option value="aluminium">Aluminium</option>
+          <option value="metal">Metal</option>
+          <option value="paper">Paper</option>
+          <option value="plastic">Plastic</option>
+          <option value="others">Others</option>
+        </select>
+    </div>
+      <div class="form-group">
+        <label for="">Volume Of Material</label>
+        <input type="number" formControlName="materialVolume"  class="form-control" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="">Revenue Generated</label>
+        <input type="number" formControlName="generatedRevenue"  class="form-control" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="">Upload Receipt</label>
+        <input type="file" formControlName="receipt"  class="d-none" #fileInput accept="image/*" (change)="onFileInput($event)">
+        <button type="button" name="" id="" class="btn btn-primary btn-lg btn-block" (click)="fileInput.click()">
+        <i class="fa fa-picture-o float-left" aria-hidden="true"></i>
+        {{ receipt }}
+        <i class="fa fa-plus float-right" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="form-group text-right">
+       <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+</div>

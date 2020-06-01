@@ -1,0 +1,8 @@
+mat-sidenav{
+    padding-top: 78px;
+    width: 250px;
+}
+.list-item-active{
+    color: #FF7900;
+    font-weight: bold;
+}

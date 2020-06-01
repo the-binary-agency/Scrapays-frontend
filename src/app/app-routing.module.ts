@@ -1,37 +1,37 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './views/home/home.component';
-import { ProducersComponent } from './views/producers/producers.component';
-import { VendorsComponent } from './views/vendors/vendors.component';
-import { CollectorsComponent } from './views/collectors/collectors.component';
-import { ListingComponent } from './views/listing/listing.component';
-import { LoginComponent } from './views/login/login.component';
-import { SignupComponent } from './views/signup/signup.component';
-import { BeforeLoginService } from './services/before-login.service';
-import { RequestResetPasswordComponent } from './views/request-reset-password/request-reset-password.component';
-import { ResponseResetPasswordComponent } from './views/response-reset-password/response-reset-password.component';
-import { AfterLoginService } from './services/after-login.service';
-import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
-import { UsersComponent } from './views/dashboard/users/users.component';
-import { SingleUserComponent } from './views/dashboard/single-user/single-user.component';
-import { IsAdminService } from './services/is-admin.service';
-import { ListedScrapComponent } from './views/dashboard/listed-scrap/listed-scrap.component';
-import { SingleListedScrapComponent } from './views/dashboard/single-listed-scrap/single-listed-scrap.component';
-import { ContactComponent } from './views/contact/contact.component';
-import { MessagesComponent } from './views/dashboard/messages/messages.component';
-import { ProducerDashboardComponent } from './views/dashboard/producer/producer-dashboard/producer-dashboard.component';
-import { VendorDashboardComponent } from './views/dashboard/vendor/vendor-dashboard/vendor-dashboard.component';
-import { CollectorDashboardComponent } from './views/dashboard/collector/collector-dashboard/collector-dashboard.component';
-import { IsProducerService } from './services/is-producer.service';
-import { IsVendorService } from './services/is-vendor.service';
-import { IsCollectorService } from './services/is-collector.service';
-import { AdminProfileComponent } from './views/profile/admin-profile/admin-profile.component';
-import { UserProfileComponent } from './views/profile/user-profile/user-profile.component';
-import { NotAdminService } from './services/not-admin.service';
-import { VendorProfileComponent } from './views/profile/vendor-profile/vendor-profile.component';
-import { CollectorProfileComponent } from './views/profile/collector-profile/collector-profile.component';
-import { AdminLoginComponent } from './views/admin-login/admin-login.component';
-import { AdminComponent } from './views/dashboard/admin/admin.component';
+import { HomeComponent } from './views/Public/home/home.component';
+import { ProducersComponent } from './views/Public/producers/producers.component';
+import { VendorsComponent } from './views/Public/vendors/vendors.component';
+import { CollectorsComponent } from './views/Public/collectors/collectors.component';
+import { ListingComponent } from './views/Public/listing/listing.component';
+import { LoginComponent } from './views/Auth/login/login.component';
+import { SignupComponent } from './views/Auth/signup/signup.component';
+import { BeforeLoginService } from './services/auth/before-login.service';
+import { RequestResetPasswordComponent } from './views/Auth/request-reset-password/request-reset-password.component';
+import { ResponseResetPasswordComponent } from './views/Auth/response-reset-password/response-reset-password.component';
+import { AfterLoginService } from './services/auth/after-login.service';
+import { PageNotFoundComponent } from './views/Public/page-not-found/page-not-found.component';
+import { UsersComponent } from './views/Private/admin/users/users.component';
+import { SingleUserComponent } from './views/Private/admin/single-user/single-user.component';
+import { IsAdminService } from './services/auth/is-admin.service';
+import { ListedScrapComponent } from './views/Private/admin/listed-scrap/listed-scrap.component';
+import { SingleListedScrapComponent } from './views/Private/admin/single-listed-scrap/single-listed-scrap.component';
+import { ContactComponent } from './views/Public/contact/contact.component';
+import { MessagesComponent } from './views/Private/admin/messages/messages.component';
+import { ProducerDashboardComponent } from './views/Private/producer/producer-dashboard/producer-dashboard.component';
+import { VendorDashboardComponent } from './views/Private/vendor/vendor-dashboard/vendor-dashboard.component';
+import { CollectorDashboardComponent } from './views/Private/collector/collector-dashboard/collector-dashboard.component';
+import { IsProducerService } from './services/auth/is-producer.service';
+import { IsVendorService } from './services/auth/is-vendor.service';
+import { IsCollectorService } from './services/auth/is-collector.service';
+import { AdminProfileComponent } from './views/Private/admin/admin-profile/admin-profile.component';
+import { UserProfileComponent } from './views/Private/producer/producer-profile/user-profile.component';
+import { VendorProfileComponent } from './views/Private/vendor/vendor-profile/vendor-profile.component';
+import { CollectorProfileComponent } from './views/Private/collector/collector-profile/collector-profile.component';
+import { AdminLoginComponent } from './views/Private/admin/admin-login/admin-login.component';
+import { AdminComponent } from './views/Private/admin/admin-dashboard/admin.component';
+import { EnterprisesComponent } from './views/Public/enterprises/enterprises.component';
  
 
 
@@ -39,7 +39,8 @@ const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "home" },
   { path: "home", component: HomeComponent },
   { path: "producers", component: ProducersComponent },
-  { path: "producers/:segment", component: ProducersComponent },
+  { path: "individuals", component: ProducersComponent },
+  { path: "enterprises", component: EnterprisesComponent },
   { path: "vendors", component: VendorsComponent },
   { path: "collectors", component: CollectorsComponent },
   { path: "listing", component: ListingComponent },
@@ -75,7 +76,7 @@ const routes: Routes = [
     canActivate: [AfterLoginService, IsAdminService]
   },
   {
-    path: "dashboard",
+    path: "dashboard/admin",
     component: AdminComponent,
     canActivate: [AfterLoginService, IsAdminService]
   },
