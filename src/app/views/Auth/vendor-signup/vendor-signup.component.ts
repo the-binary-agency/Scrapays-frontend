@@ -7,23 +7,49 @@ import { Router } from '@angular/router';
 import { LoginComponent } from '../login/login.component';
 
 @Component({
-  selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  selector: 'app-vendor-signup',
+  templateUrl: './vendor-signup.component.html',
+  styleUrls: ['./vendor-signup.component.css']
 })
-export class SignupComponent implements OnInit {
-  @ViewChild( 'content' ) private content;
-   loading: boolean;
+export class VendorSignupComponent implements OnInit {
+@ViewChild( 'content' ) private content;
 
-  constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router, private loginPage: LoginComponent) {
-   }
-
+  constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router, private loginPage: LoginComponent) {}
+  
+  
+  loading: boolean;
+  public error = {password: ''};
+  public VendorForm: FormGroup;
   modalTitle: any;
   modalBody: any;
 
+  vendor_validation_messages = {
+    'firstName': [
+      { type: 'required', message: 'A First Name is required.' }
+    ],
+    'lastName': [
+      { type: 'required', message: 'A Last Name is required.' }
+    ],
+    'email': [
+      { type: 'required', message: 'An email is required.' },
+      { type: 'pattern', message: 'Please enter a valid email' }
+    ],
+    'phone': [
+      { type: 'required', message: 'A Phone Number is required.' },
+      { type: 'pattern', message: 'Please enter a valid Phone Number.' }
+    ],
+    'password': [
+      { type: 'required', message: 'A Password is required.' },
+      { type: 'minlength', message: 'Minimum of 6 characters' },
+    ]
+  };
 
-  initForm(){
-    this.Form = this.formBuilder.group({
+  ngOnInit(): void {
+     this.initForm();
+  }
+
+  initForm() {
+     this.VendorForm = this.formBuilder.group({
       firstName: new FormControl('', Validators.compose([
         Validators.maxLength(30),
         Validators.pattern('[a-zA-Z ]*'),
@@ -48,60 +74,28 @@ export class SignupComponent implements OnInit {
   });
   }
 
-
-  ngOnInit(): void {
-    this.initForm();
-  }
-
-
-  public error = {password: ''};
-  public Form: FormGroup;
-  validation_messages = {
-    'firstName': [
-      { type: 'required', message: 'A First Name is required.' }
-    ],
-    'lastName': [
-      { type: 'required', message: 'A Last Name is required.' }
-    ],
-    'email': [
-      { type: 'required', message: 'An email is required.' },
-      { type: 'pattern', message: 'Please enter a valid email' }
-    ],
-    'phone': [
-      { type: 'required', message: 'A Phone Number is required.' },
-      { type: 'pattern', message: 'Please enter a valid Phone Number.' }
-    ],
-    'password': [
-      { type: 'required', message: 'A Password is required.' },
-      { type: 'minlength', message: 'Minimum of 6 characters' },
-    ]
-  };
-
-
-  register( Form ) {
+  registerVendor( Form ) {
     this.loading = true;
     const formdata = new FormData();
     formdata.append( 'firstName', Form.firstName );
     formdata.append( 'lastName', Form.lastName );
     formdata.append( 'email', Form.email );
     formdata.append( 'phone', Form.phone );
-    formdata.append( 'type', 'Individual' );
-    formdata.append( 'role', 'Producer' );
-    formdata.append( 'recoveryAutomated', 'false' );
+    formdata.append( 'role', 'Collector' );
     formdata.append( 'password', Form.password );
     formdata.append( 'password_confirmation', Form.password_confirmation );
 
   this.Auth.register(formdata).subscribe(
     data => {
-      this.handleResponse( data );
+      this.handleResponse(data);
     },
     error => {
       this.handleError(error);
     }
   );
-  }
+}
 
-handleResponse(data){
+  handleResponse(data){
   this.loading = false;
   this.modalTitle = "Success";
   this.modalBody = data.data;
@@ -133,8 +127,8 @@ handleResponse(data){
   
   goToDashboard() {
     var form = {
-        phone: this.Form.value.phone,
-        password: this.Form.value.password
+        phone: this.VendorForm.value.phone,
+        password: this.VendorForm.value.password
       }
       this.loginPage.loginWithPhone( form );
   }

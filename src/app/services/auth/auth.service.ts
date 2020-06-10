@@ -138,4 +138,12 @@ URL = this.env.backendUrl + '/api/auth'
     return this.http.post( `${ this.URL }/setMaterialPrices/${id}`, form);
   }
 
+  requestPickup( form ) {
+    return this.http.post( `${ this.URL }/requestPickup`, form);
+  }
+
+  automatePickup( form ) {
+    return this.http.post( `${ this.URL }/automatePickup`, form);
+  }
+
 }

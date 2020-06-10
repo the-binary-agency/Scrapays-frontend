@@ -12,54 +12,46 @@
 </head>
 
 <body class="custom-container">
-  			<app-root></app-root>
+  <app-root></app-root>
 
+  <!-- Facebook Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window,document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '517042432517686'); 
+  fbq('track', 'PageView');
+  </script>
+  <noscript>
+  <img height="1" width="1" 
+  src="https://www.facebook.com/tr?id=517042432517686&ev=PageView
+  &noscript=1"/>
+  </noscript>
+  <!-- End Facebook Pixel Code -->
+  
+  <!-- Segent -->
+  <!-- <script>
+  !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var t=analytics.methods[e];analytics[t]=analytics.factory(t)}analytics.load=function(e,t){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="https://cdn.segment.com/analytics.js/v1/"+e+"/analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);analytics._loadOptions=t};analytics.SNIPPET_VERSION="4.1.0";
+  analytics.load("6G0fjlkP76lOR8c49sezDJORTj3ePnl2");
+  analytics.page();
+  }}();
+</script> -->
+  <!-- End Segment -->
 
-    <!-- jQuery -->
-<script src="/assets/plugins/jQuery/jquery.min.js"></script>
-<!-- Bootstrap JS -->
-<script src="/assets/plugins/bootstrap/bootstrap.min.js"></script>
-<!-- Style Switcher -->
-<script type="text/javascript" src="/assets/plugins/style-switcher.js"></script>
-<!-- Owl Carousel -->
-<script type="text/javascript" src="/assets/plugins/owl/owl.carousel.js"></script>
-<!-- Bxslider -->
-<script type="text/javascript" src="/assets/plugins/flex-slider/jquery.flexslider.js"></script>
-<!-- CD Hero slider -->
-<script type="text/javascript" src="/assets/plugins/cd-hero/cd-hero.js"></script>
-<!-- Isotope -->
-<script type="text/javascript" src="/assets/plugins/isotope.js"></script>
-<script type="text/javascript" src="/assets/plugins/ini.isotope.js"></script>
-<!-- Wow Animation -->
-<script type="text/javascript" src="/assets/plugins/wow.min.js"></script>
-<!-- Eeasing -->
-<script type="text/javascript" src="/assets/plugins/jquery.easing.1.3.js"></script>
-<!-- Counter -->
-<script type="text/javascript" src="/assets/plugins/jquery.counterup.min.js"></script>
-<!-- Waypoints -->
-<script type="text/javascript" src="/assets/plugins/waypoints.min.js"></script>
-
-<!-- Main Script -->
-<script src="/assets/js/script.js"></script>
-
-<!-- Facebook Pixel Code -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145872995-1"></script>
 <script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window,document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
- fbq('init', '517042432517686'); 
-fbq('track', 'PageView');
-</script>
-<noscript>
- <img height="1" width="1" 
-src="https://www.facebook.com/tr?id=517042432517686&ev=PageView
-&noscript=1"/>
-</noscript>
-<!-- End Facebook Pixel Code -->
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-145872995-1');
+</script> -->
+<!-- End Gtag -->
 </body>
 </html>

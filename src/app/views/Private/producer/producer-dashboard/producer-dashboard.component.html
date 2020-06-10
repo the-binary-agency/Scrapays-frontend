@@ -1,12 +1,38 @@
-<div class="dashboard-body pt-5 p-1 p-md-4">
+<div class="dashboard-body pt-5 p-1 py-md-4 px-md-1">
 
 <div class="row">
+<div class="col-12">
+
+</div>
   <div class="col-12 mb-5">
+
+      <p class="text-right">
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" *ngIf="automated">
+          Request Pickup
+        </button>
+        <button type="button" class="btn btn-primary solid mr-md-5" (click)="automatePickup()" *ngIf="!automated">Click  here to automate your recovery process with scrapays
+        </button>
+      </p>
+
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+          <div class="form-check" *ngFor="let material of materials; let i = index">
+          <input class="regular-checkbox" type="checkbox" id="material-{{ i }}" (change)="onChangeMaterial($event.target.checked, material)">
+          <label for="material-{{ i }}" class="mb-0 mr-3 custom-label"></label>
+          <span class="text-capitalize">
+              {{material.name}}
+          </span>
+      </div> <br>
+
+        <button type="button" class="btn btn-primary" (click)="requestPickup()" [disabled]="requestMaterials.length == 0">Send Request</button>
+        </div>
+      </div>
+
     <span class="h3 text-primary ml-2 bb-blue">Overview</span>
-    <button type="button" class="btn btn-primary solid float-md-right mr-md-5" (click)="automate = !automate">Click  here to automate your recovery process with scrapays </button>
+
   </div>
 
-<div class="col-12 col-md-6 order-md-2 pl-md-0">
+<div class="col-12 col-md order-md-2 pl-md-0">
 
  <div class="row h-100">
  
@@ -211,7 +237,7 @@
 <!-- First Column -->
   <div class="col-12 col-md-3 order-md-1">
     <form [formGroup]="Form" (ngSubmit)="onSubmit(Form.value)" novalidate class="position-relative px-1">
-     <div class="position-absolute" [ngClass]="{cover: !automate}"></div>
+     <div class="position-absolute" [ngClass]="{cover: automated}"></div>
      <div class="form-group">
         <label>Choose Material Type</label>
         <select class="form-control" [(ngModel)]="materialType" (change)="test()" formControlName="materialType">
@@ -248,3 +274,19 @@
 </div>
 
 </div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">{{ modalTitle }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>{{ modalBody }}</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')"> Close </button>
+    </div>
+</ng-template>
+<ngx-loading [show]="loading"></ngx-loading>

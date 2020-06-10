@@ -4,6 +4,7 @@ import { SideMenuService } from 'src/app/services/general/side-menu.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { TokenService } from 'src/app/services/auth/token.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-sidenav',
@@ -12,13 +13,17 @@ import { TokenService } from 'src/app/services/auth/token.service';
 })
 export class SidenavComponent implements OnInit {
   @ViewChild( 'sidenav' ) public sidenav: MatSidenav;
+  @ViewChild( 'content' ) private content;
   public loggedIn: boolean;
   public Admin: boolean;
   public Producer: boolean;
   public Vendor: boolean;
   public Collector: boolean;
+  modalTitle: any;
+  modalBody: any;
+  loading = false;
 
-  constructor ( private sideNavService: SideMenuService, private router: Router,  private Auth: AuthService, private Token: TokenService ) {
+  constructor ( private sideNavService: SideMenuService, private router: Router,  private Auth: AuthService, private Token: TokenService,  private modal: NgbModal ) {
     this.changeSidenavMode();
    }
 
@@ -110,6 +115,22 @@ export class SidenavComponent implements OnInit {
     //   }
     // } )
     // return valid;
+  }
+
+  success( message ) {
+    this.loading = false;
+    this.modalTitle = 'Success';
+    this.modalBody = message;
+  }
+  
+  error( error ) {
+    this.loading = false;
+    this.modalTitle = 'Error';
+    this.modalBody = error;
+  }
+
+  openModal(content) {
+    this.modal.open(content, { centered: true });
   }
   
 }

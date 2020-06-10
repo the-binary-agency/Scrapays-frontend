@@ -3,7 +3,7 @@
 <!-- Header start -->
 <header id="header" class="fixed-top header4" role="banner">
 	<div class="header-container">
-		<nav class="navbar navbar-expand-lg navbar-light px-0 px-md-4 py-2">
+		<nav class="navbar navbar-expand-lg navbar-light px-0 px-md-4 py-2 custom-container">
 	 <button (click)="clickMenu()" class="btn mr-4" *ngIf="loggedIn">
 	 	<i class="fa fa-list fa-lg" aria-hidden="true"></i>
 	</button>
@@ -17,10 +17,10 @@
 			<div class="collapse navbar-collapse text-center" id="navigation">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
-						<a class="nav-link" routerLink="/individuals" data-toggle="collapse" data-target="#navigation">For Individuals</a>
+						<a class="nav-link" routerLink="/individuals" data-toggle="collapse" data-target="#navigation">Households</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" routerLink="/enterprises" data-toggle="collapse" data-target="#navigation"> For Enterprises</a>
+						<a class="nav-link" routerLink="/enterprises" data-toggle="collapse" data-target="#navigation">Enterprises</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" routerLink="/vendors" data-toggle="collapse" data-target="#navigation">Vendors</a>
@@ -38,7 +38,10 @@
 						</a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" routerLink="/login" data-toggle="collapse" data-target="#navigation">Login</a>
-							<a class="dropdown-item" routerLink="/signup" data-toggle="collapse" data-target="#navigation">SignUp</a>
+							<a class="dropdown-item" routerLink="/households/signup" data-toggle="collapse" data-target="#navigation"> Househlod Signup</a>
+							<a class="dropdown-item" routerLink="/enterprises/signup" data-toggle="collapse" data-target="#navigation"> Enterprise Signup</a>
+							<a class="dropdown-item" routerLink="/vendors/signup" data-toggle="collapse" data-target="#navigation"> Vendor Signup</a>
+							<a class="dropdown-item" routerLink="/collectors/signup" data-toggle="collapse" data-target="#navigation"> Collector Signup</a>
 						</div>
 					</li>
 

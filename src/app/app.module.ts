@@ -16,7 +16,7 @@ import { LoginComponent } from './views/Auth/login/login.component';
 import { SignupComponent } from './views/Auth/signup/signup.component';
 import { DndDirective } from './directives/dnd.directive';
 import { RxReactiveFormsModule } from "@rxweb/reactive-form-validators";
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 import { RequestResetPasswordComponent } from './views/Auth/request-reset-password/request-reset-password.component';
 import { ResponseResetPasswordComponent } from './views/Auth/response-reset-password/response-reset-password.component';
@@ -45,6 +45,10 @@ import { EnterprisesComponent } from './views/Public/enterprises/enterprises.com
 import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
+import { EnterpriseSignupComponent } from './views/Auth/enterprise-signup/enterprise-signup.component';
+import { VendorSignupComponent } from './views/Auth/vendor-signup/vendor-signup.component';
+import { CollectorSignupComponent } from './views/Auth/collector-signup/collector-signup.component';
 
 @NgModule( {
   declarations: [
@@ -79,7 +83,10 @@ import { environment } from '../environments/environment';
     AdminComponent,
     SidenavComponent,
     EnterprisesComponent,
-    DateAgoPipe
+    DateAgoPipe,
+    EnterpriseSignupComponent,
+    VendorSignupComponent,
+    CollectorSignupComponent
   ],
   imports: [
     BrowserModule,
@@ -87,7 +94,8 @@ import { environment } from '../environments/environment';
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
-    NgbModule,
+    NgbModalModule,
+    NgbAlertModule,
     RxReactiveFormsModule,
     ChartsModule,
     NgxLoadingModule.forRoot( {
@@ -98,11 +106,13 @@ import { environment } from '../environments/environment';
     } ),
     BrowserAnimationsModule,
     MatModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register( 'ngsw-worker.js', { enabled: environment.production } ),
+    LazyLoadImageModule
   ],
   providers: [
     HeaderComponent,
     SidenavComponent,
+    LoginComponent,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

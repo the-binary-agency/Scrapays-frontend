@@ -42,7 +42,20 @@
               ]
             },
             "scripts": [
-              "node_modules/chart.js/dist/Chart.min.js"
+              "node_modules/chart.js/dist/Chart.min.js",
+              "src/assets/plugins/jQuery/jquery.min.js",
+              "src/assets/plugins/bootstrap/bootstrap.min.js",
+              "src/assets/plugins/owl/owl.carousel.js",
+              "src/assets/plugins/owl/owl.carousel.js",
+              "src/assets/plugins/flex-slider/jquery.flexslider.js",
+              "src/assets/plugins/cd-hero/cd-hero.js",
+              "src/assets/plugins/isotope.js",
+              "src/assets/plugins/ini.isotope.js",
+              "src/assets/plugins/wow.min.js",
+              "src/assets/plugins/jquery.easing.1.3.js",
+              "src/assets/plugins/jquery.counterup.min.js",
+              "src/assets/plugins/waypoints.min.js",
+              "src/assets/js/script.js"
             ]
           },
           "configurations": {

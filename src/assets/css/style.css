@@ -1536,6 +1536,9 @@ blockquote {
     margin-bottom: 10px; 
     border-bottom: 1px solid blue; 
 }
+.signup-btns{
+  width: 181.09px;
+}
 
 .q-list-item{
   border: 2px solid #FBE6D2;

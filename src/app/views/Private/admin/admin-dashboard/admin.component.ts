@@ -32,13 +32,7 @@ export class AdminComponent implements OnInit {
     vendors: 0,
     collectors: 0
   }
-  materialPrices: any = {
-    metal: 0,
-    aluminium: 0,
-    paper: 0,
-    plastic: 0,
-    others: 0
-  }
+  materialPrices: any = [];
 
 //  lineChart
   public lineChartData: Array<any> = [
@@ -184,13 +178,5 @@ handleError( error ) {
     )
   }
 
-  getMaterialPrices() {
-    this.Auth.getMaterialPrices( this.token.phone ).subscribe(
-      data => {
-        this.materialPrices = data;
-      },
-      error => console.log(error)
-    )
-  }
 
 }

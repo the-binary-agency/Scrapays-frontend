@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TokenService } from 'src/app/services/auth/token.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { MatSidenav } from '@angular/material/sidenav';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SidenavComponent } from 'src/app/Constants/sidenav/sidenav.component';
 
 @Component({
   selector: 'app-producer-dashboard',
@@ -11,7 +11,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./producer-dashboard.component.css']
 })
 export class ProducerDashboardComponent implements OnInit {
-  constructor ( private token: TokenService, private auth: AuthService, private formBuilder: FormBuilder, private modal: NgbModal ) { }
+  @ViewChild( 'content' ) private content;
+
+  constructor ( private token: TokenService, private auth: AuthService, private formBuilder: FormBuilder, private modal: NgbModal, private sidenav: SidenavComponent) { }
   
   panelOpenState = false;
   month: any;
@@ -69,7 +71,18 @@ export class ProducerDashboardComponent implements OnInit {
   };
   materialType = 'aluminium';
   receipt: any = '';
-  automate = false;
+  automated = false;
+  materials = [
+    { name: 'metal' },
+    { name: 'paper' },
+    { name: 'aluminium' },
+    { name: 'plastic' },
+    { name: 'others' }
+  ];
+  requestMaterials = [];
+  modalTitle: any;
+  modalBody: any;
+   loading: boolean;
 
   ngOnInit(): void {
     this.getDate();
@@ -119,14 +132,16 @@ export class ProducerDashboardComponent implements OnInit {
         break;
     }
   }
-getUser() {
+  getUser() {
+    this.loading = true;
     this.auth.getUserWithTonnage( this.token.phone ).subscribe(
       (data : any) => {
         this.User = data.user;  
+        this.automated = data.user.recoveryAutomated;
         this.CollectedScrap = data.tonnage;
         this.processTonnage();
       },
-      error => console.log(error),
+      error => this.loading = false,
     );      
   }
 
@@ -150,7 +165,7 @@ getUser() {
         this.round( ( this.Scrap.plastic / this.totalTonnage ) * 100 ),
         this.round( ( this.Scrap.others / this.totalTonnage ) * 100 ) ], label: "Scrap"
     } ];
-    
+    this.loading = false;
   }
 
    round( value ) {
@@ -253,4 +268,62 @@ getUser() {
   onFileInput(event) {
     this.receipt = event.target.files[ 0 ].name;
   }
+
+  requestPickup() {
+    this.loading = true;
+    var today = new Date();
+    var dueDate = new Date();
+    var addDate = dueDate.setDate( dueDate.getDate() + 3 );
+    
+    var form = {
+      id: this.token.phone,
+      materials: this.requestMaterials,
+      schedule : today.toDateString() + ' to ' + dueDate.toDateString()
+    };
+    this.auth.requestPickup( form ).subscribe(
+      data => {
+        this.handleResponse( data );
+        this.requestMaterials = [];
+      },
+      error => console.log("ertyrertyt", error)
+    )
+  }
+
+  automatePickup() {
+    this.loading = true;
+    this.auth.automatePickup( {phone: this.token.phone } ).subscribe(
+      data => this.handleResponse( data ),
+      error => this.handleError( error )
+    )
+  }
+
+  onChangeMaterial( isChecked: boolean, material: any ) {
+    if( isChecked ) {
+        this.requestMaterials.push( material.name );
+      } else {
+        let index = this.requestMaterials.indexOf( material.name );
+        this.requestMaterials.splice( index, 1 );
+      }
+  }
+
+  handleResponse( data ) {
+    this.loading = false;
+    this.modalTitle = "Success";
+    this.modalBody = data.data;
+    this.getUser();
+    this.openModal( this.content );
+  }
+
+  handleError( error ) {
+    this.loading = false;
+    this.modalTitle = "Error";
+    this.modalBody = error.error;
+    this.openModal( this.content );
+  }
+
+  openModal(content) {
+    this.modal.open(content, { centered: true });
+  }
+
+
 }

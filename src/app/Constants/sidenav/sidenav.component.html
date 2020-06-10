@@ -33,6 +33,23 @@
 <mat-sidenav-content>
      <div class="body-inner">
         <router-outlet></router-outlet>
+
+        <ng-template #content let-modal>
+         <div class="modal-header">
+            <h4 class="modal-title">{{ modalTitle }}</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+            <div class="modal-body">
+               <p>{{ modalBody }}</p>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-light" (click)="modal.close('Close click')"> Close </button>
+            </div>
+         </ng-template>
+         <ngx-loading [show]="loading"></ngx-loading>
+         
         <app-footer></app-footer>
     </div>
 </mat-sidenav-content>

@@ -32,6 +32,9 @@ import { CollectorProfileComponent } from './views/Private/collector/collector-p
 import { AdminLoginComponent } from './views/Private/admin/admin-login/admin-login.component';
 import { AdminComponent } from './views/Private/admin/admin-dashboard/admin.component';
 import { EnterprisesComponent } from './views/Public/enterprises/enterprises.component';
+import { EnterpriseSignupComponent } from './views/Auth/enterprise-signup/enterprise-signup.component';
+import { VendorSignupComponent } from './views/Auth/vendor-signup/vendor-signup.component';
+import { CollectorSignupComponent } from './views/Auth/collector-signup/collector-signup.component';
  
 
 
@@ -56,8 +59,23 @@ const routes: Routes = [
     canActivate: [BeforeLoginService]
   },
   {
-    path: "signup",
+    path: "households/signup",
     component: SignupComponent,
+    canActivate: [BeforeLoginService]
+  },
+  {
+    path: "enterprises/signup",
+    component: EnterpriseSignupComponent,
+    canActivate: [BeforeLoginService]
+  },
+  {
+    path: "vendors/signup",
+    component: VendorSignupComponent,
+    canActivate: [BeforeLoginService]
+  },
+  {
+    path: "collectors/signup",
+    component: CollectorSignupComponent,
     canActivate: [BeforeLoginService]
   },
   {
