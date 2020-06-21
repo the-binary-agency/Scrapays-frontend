@@ -26,13 +26,15 @@ export class AdminComponent implements OnInit {
   modalTitle: string;
   modalBody: string;
   edit = false;
+  adding = false;
   lastUpdated: any;
   UserCount: any = {
     producers: 0,
     vendors: 0,
     collectors: 0
   }
-  materialPrices: any = [];
+  materialPrices: any[] = [];
+  newMaterial: any = [];
 
 //  lineChart
   public lineChartData: Array<any> = [
@@ -128,9 +130,10 @@ export class AdminComponent implements OnInit {
   });
   }
 
-  onSubmit( Form ) {
+  onSubmit( ) {
+    var form = this.processFormData();
     this.loading = true;
-    this.Auth.setMaterialPrices( this.token.phone, Form.value ).subscribe(
+    this.Auth.setMaterialPrices( this.token.phone, form).subscribe(
       data => this.handleSuccess( data ),
       error => this.handleError( error )
     )
@@ -141,6 +144,8 @@ export class AdminComponent implements OnInit {
       ( data: any ) => {
         if (data.prices) {
           this.materialPrices = data.prices;
+          this.newMaterial = [];
+          this.adding = false;
         }
       },
       error => console.log( error )
@@ -178,5 +183,42 @@ handleError( error ) {
     )
   }
 
+  onFileInput(ev: any, i: any){
+    let file = ev.target.files[0];
+    
+    this.materialPrices[ i ].image = file;
+  }
+
+  onNewFileInput(ev: any, i: any){
+    let file = ev.target.files[0];
+    this.newMaterial[ i ].image = file;
+  }
+  
+  addMaterial() {
+    this.adding = true;
+    var mat = {
+      name: 'New Material',
+      price: 0, 
+      image: ''
+    }
+    this.newMaterial.push( mat );
+  }
+
+  removeMaterial( i ) {
+    this.materialPrices.splice( i, 1 );
+  }
+
+  processFormData() {
+    const formData = new FormData();
+    for ( var i = 0; i < this.newMaterial.length; i++ ){
+        formData.append(`material_name[]`, this.newMaterial[i].name);
+        formData.append(`material_price[]`, this.newMaterial[i].price);
+        formData.append(`material_img[]`, this.newMaterial[i].image, 'material-' + ( i + 1 )  + '-' + this.newMaterial[i].image.name );
+    }
+
+    return formData;
+  }
+
+  isString(val): boolean { return typeof val === 'string'; }
 
 }

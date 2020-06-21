@@ -2,21 +2,24 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { TokenService } from 'src/app/services/auth/token.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { NgbModal, NgbPopoverConfig, NgbCalendar, NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbPopoverConfig, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { SidenavComponent } from 'src/app/Constants/sidenav/sidenav.component';
+import { NgbDateStruct, NgbCalendar, NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { EnvironmentService } from 'src/app/services/env/environment.service';
 
 @Component({
-  selector: 'app-producer-dashboard',
-  templateUrl: './producer-dashboard.component.html',
-  styleUrls: ['./producer-dashboard.component.css']
+  selector: 'app-enterprise-dashboard',
+  templateUrl: './enterprise-dashboard.component.html',
+  styleUrls: ['./enterprise-dashboard.component.css']
 })
-export class ProducerDashboardComponent implements OnInit {
+export class EnterpriseDashboardComponent implements OnInit {
   @ViewChild( 'content' ) private content;
   @ViewChild( 'scheduleModal' ) scheduleModal;
   @ViewChild( 'sellBulk' ) sellBulkModal;
+  @ViewChild('dp') dp: NgbDatepicker;
 
-    constructor ( private token: TokenService, private auth: AuthService, private formBuilder: FormBuilder, private modal: NgbModal, private sidenav: SidenavComponent, config: NgbPopoverConfig, private calendar: NgbCalendar, dateConfig: NgbDatepickerConfig, private env: EnvironmentService ) {
+
+  constructor ( private token: TokenService, private auth: AuthService, private formBuilder: FormBuilder, private modal: NgbModal, private sidenav: SidenavComponent, config: NgbPopoverConfig, private calendar: NgbCalendar, dateConfig: NgbDatepickerConfig, private env: EnvironmentService ) {
     var now = new Date();
     config.placement = 'bottom';
     dateConfig.minDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
@@ -40,7 +43,7 @@ export class ProducerDashboardComponent implements OnInit {
     aluminium:  0,
     plastic:  0,
     paper:  0,
-    others:  0,
+    'pet bottles':  0,
   }
   CollectedScrap: any = [];
   totalTonnage: number = 0;
@@ -78,20 +81,15 @@ export class ProducerDashboardComponent implements OnInit {
   ]
   };
   materialType = 'aluminium';
-  modalTitle: any;
-  modalBody: any;
-  loading: boolean;
+  receipt: any = '';
   automated = false;
-  materials = [
-    { name: 'Metal', img: 'metal-icon.png', price: '2500' },
-    { name: 'Aluminium', img: 'metal-icon.png', price: '2500' },
-    { name: 'Pet Bottles', img: 'bottles-icon.png', price: '2500' },
-    { name: 'Paper', img: 'paper-icon.png', price: '2500' },
-    { name: 'Plastic', img: 'can-icon.png', price: '2500' }
-  ];
+  materials: any[] = [ ];
   originalMaterials = [];
   displayedMaterials = [];
   requestMaterials = [ ];
+  modalTitle: any;
+  modalBody: any;
+  loading: boolean;
   model: NgbDateStruct;
   date: { year: number, month: number };
   times = [
@@ -117,7 +115,7 @@ export class ProducerDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.getDate();
     this.getUser();
-    this.getMaterials();
+    this.initForm();
     this.getPrices();
     this.getDisabledDates();
   }
@@ -164,7 +162,7 @@ export class ProducerDashboardComponent implements OnInit {
         break;
     }
   }
-    getUser() {
+  getUser() {
     this.loading = true;
     this.auth.getUserWithTonnage( this.token.phone ).subscribe(
       (data : any) => {
@@ -198,17 +196,6 @@ export class ProducerDashboardComponent implements OnInit {
         this.round( ( this.Scrap.others / this.totalTonnage ) * 100 ) ], label: "Scrap"
     } ];
     this.loading = false;
-  }
-
-  getMaterials() {
-    this.auth.getMaterialPrices( this.token.phone ).subscribe(
-      ( data: any ) => {
-        if ( data.length > 0 ) {
-          this.materials = data
-        }
-      },
-      error => console.log(error)
-    )
   }
 
   getDisabledDates() {
@@ -249,7 +236,7 @@ export class ProducerDashboardComponent implements OnInit {
     "Aluminium",
     "Paper",
     "Plastic",
-    "Others"
+    "Pet Bottles"
   ];
   public lineChartOptions: any = {
     animation: false,
@@ -309,16 +296,17 @@ export class ProducerDashboardComponent implements OnInit {
 
   }
 
-  onSelectMaterial( event: any ) {
-    var i = this.originalMaterials.indexOf( this.materialSelect );
-    this.originalMaterials.splice( i, 1 );
-    this.requestMaterials.push( this.materialSelect );
+  onSubmit(Form) {
+    console.log(Form);
+    
   }
 
-  onRemoveMaterial( material: any ) {
-    var i = this.requestMaterials.indexOf( material );
-    this.requestMaterials.splice( i, 1 );
-    this.originalMaterials.push( material );
+  test() {
+    console.log(this.materialType)
+  }
+
+  onFileInput(event) {
+    this.receipt = event.target.files[ 0 ];
   }
 
   automatePickup() {
@@ -329,13 +317,16 @@ export class ProducerDashboardComponent implements OnInit {
     )
   }
 
-  onChangeMaterial( isChecked: boolean, material: any ) {
-    if( isChecked ) {
-        this.requestMaterials.push( material.name );
-      } else {
-        let index = this.requestMaterials.indexOf( material.name );
-        this.requestMaterials.splice( index, 1 );
-      }
+  onSelectMaterial( event: any ) {
+    var i = this.originalMaterials.indexOf( this.materialSelect );
+    this.originalMaterials.splice( i, 1 );
+    this.requestMaterials.push( this.materialSelect );
+  }
+
+  onRemoveMaterial( material: any ) {
+    var i = this.requestMaterials.indexOf( material );
+    this.requestMaterials.splice( i, 1 );
+    this.originalMaterials.push( material );
   }
 
   handleResponse( data ) {

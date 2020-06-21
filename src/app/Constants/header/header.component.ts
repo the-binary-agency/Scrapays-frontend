@@ -14,7 +14,8 @@ import {debounceTime} from 'rxjs/operators';
 export class HeaderComponent implements OnInit {
   public loggedIn: boolean;
   public Admin: boolean;
-  public Producer: boolean;
+  public Household: boolean;
+  public Enterprise: boolean;
   public Vendor: boolean;
   public Collector: boolean;
   public _error = new Subject<string>();
@@ -56,7 +57,8 @@ export class HeaderComponent implements OnInit {
   processRoles() {
     this.Auth.authStatus.subscribe( value => this.loggedIn = value);
     this.Auth.adminStatus.subscribe( value => this.Admin = value );
-    this.Auth.producerStatus.subscribe( value => this.Producer = value );
+    this.Auth.householdStatus.subscribe( value => this.Household = value );
+    this.Auth.enterpriseStatus.subscribe( value => this.Enterprise = value );
     this.Auth.collectorStatus.subscribe( value => this.Collector = value );
     this.Auth.vendorStatus.subscribe( value => this.Vendor = value );
   }
@@ -66,7 +68,8 @@ export class HeaderComponent implements OnInit {
     this.Token.remove();
     this.Auth.changeAuthStatus(false);
     this.Auth.changeAdminStatus(false);
-    this.Auth.changeProducerStatus(false);
+    this.Auth.changeHouseholdStatus(false);
+    this.Auth.changeEnterpriseStatus(false);
     this.Auth.changeVendorStatus(false);
     this.Auth.changeCollectorStatus(false);
     this.router.navigateByUrl('/login');

@@ -6,23 +6,20 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
-  selector: 'app-user-profile',
-  templateUrl: './user-profile.component.html',
-  styleUrls: ['./user-profile.component.css']
+  selector: 'app-enterprise-profile',
+  templateUrl: './enterprise-profile.component.html',
+  styleUrls: ['./enterprise-profile.component.css']
 })
-export class UserProfileComponent implements OnInit {
+export class EnterpriseProfileComponent implements OnInit {
 @ViewChild( 'content' ) private content;
 
-  constructor(private auth: AuthService, private token: TokenService, private env: EnvironmentService, private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal) {
-    
-  }
+  constructor(private auth: AuthService, private token: TokenService, private env: EnvironmentService, private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal) { }
 
   ngOnInit(): void {
     this.initForm();
-    this.getSingleUser();
+     this.getSingleUser();
   }
 
-  avatar = 'assets/images/icons/user-icon.png';
   modalTitle: any;
   modalBody: any;
   loading: boolean;
@@ -30,7 +27,6 @@ export class UserProfileComponent implements OnInit {
   User: any = {};
   avatarImage: any;
   sex: string;
-  URL = this.env.backendUrl;
   public Form: FormGroup;
   validation_messages = {
     'firstName': [
@@ -70,6 +66,12 @@ export class UserProfileComponent implements OnInit {
       ])),
       phone: new FormControl('', Validators.compose([
         Validators.pattern('[0-9 ]*'),
+        Validators.required])),
+      companyName: new FormControl('', Validators.compose([
+        Validators.required])),
+      industry: new FormControl('', Validators.compose([
+        Validators.required])),
+      companySize: new FormControl('', Validators.compose([
         Validators.required]))
   });
   }
@@ -83,27 +85,28 @@ export class UserProfileComponent implements OnInit {
 
   updateProfile( form ) {
     this.loading = true;
-    var user = this.processForm( form );
-    console.log(user);
-    
-    this.auth.updateUser( this.User.id, user ).subscribe(
+    var user = this.processForm( form )
+    this.auth.updateUser( user.id, user ).subscribe(
       data => this.handleResponse( data ),
       error => this.handleError( error )
     )
   }
 
   processForm( Form ) {
-    const formData = new FormData();
-    formData.append('avatarImage', this.avatarImage);
-    formData.append('firstName', Form.firstName);
-    formData.append('lastName', Form.lastName);
-    formData.append('phone', Form.phone);
-    formData.append('email', Form.email);
-    formData.append( 'email', Form.email );
-    formData.append( 'sex', Form.sex );
-    formData.append( 'email', Form.email );
+    var formdata = {
+      id: this.User.id,
+      avatarImage: this.avatarImage,
+      firstName: Form.firstName,
+      lastName: Form.lastName,
+      phone: Form.phone,
+      email: Form.email,
+      companyName: Form.companyName,
+      companySize: Form.companySize,
+      industry: Form.industry,
+      sex: this.sex,
+    };
 
-    return formData;
+    return formdata;
   }
 
   handleResponse( data ) {
@@ -125,13 +128,9 @@ export class UserProfileComponent implements OnInit {
     this.modal.open(content, { centered: true });
   }
 
-  onFileInput( event ) {
-    let reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-    reader.onload = ( e: any ) => {
-      this.avatar = e.target.result;
-    }
+  onFileInput(event) {
     this.avatarImage = event.target.files[0];
   }
+
 
 }

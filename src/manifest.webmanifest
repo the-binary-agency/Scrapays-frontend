@@ -1,7 +1,7 @@
 {
-  "name": "Scrapays-angular",
-  "short_name": "Scrapays-angular",
-  "theme_color": "#1976d2",
+  "name": "Scrapays Dashboard",
+  "short_name": "Scrapays",
+  "theme_color": "#FF7900",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",

@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
-// import { RxwebValidators, ReactiveFormConfig } from '@rxweb/reactive-form-validators';
 import { ApiService } from 'src/app/services/auth/api.service';
 import { Listed_Scrap } from 'src/app/models/listed_scrap';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -66,6 +65,7 @@ export class ListingComponent implements OnInit {
 
   initForm(){
     this.Form = this.formBuilder.group({
+      businessName: new FormControl(''),
       firstName: new FormControl('', Validators.compose([
         Validators.maxLength(30),
         Validators.pattern('[a-zA-Z ]*'),
@@ -179,6 +179,7 @@ processForm() {
   const images = this.materialImages;
   const controls = this.FormAsArray.controls;
   const formData = new FormData();
+  formData.append('businessName', this.Form.get('businessName').value);
   formData.append('firstName', this.Form.get('firstName').value);
   formData.append('lastName', this.Form.get('lastName').value);
   formData.append('phone', this.Form.get('phone').value);
@@ -205,7 +206,7 @@ processForm() {
 
 handleSuccess() {
   this.modalTitle = "Success";
-  this.modalBody ="Scrap Listed Successfully.";
+  this.modalBody ="Thank you for listing your items with Scrapays. Our Closest Agent to the item location will give you a call to schedule a physical inspection to price your items.";
   this.loading = false;
   this.openModal( this.content );
   this.resetForm();

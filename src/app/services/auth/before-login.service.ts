@@ -17,8 +17,10 @@ export class BeforeLoginService implements CanActivate{
       this.router.navigateByUrl('/dashboard/listedScrap');
       this.header.changeErrorMessage( 'You\'re alraedy logged in.' );
        } else {
-            if ( this.Token.isProducer() ) {
-            this.router.navigateByUrl('/dashboard/producer');
+            if ( this.Token.isEnterprise() ) {
+            this.router.navigateByUrl('/dashboard/enterprise');
+          } else if ( this.Token.isHousehold() ) { 
+            this.router.navigateByUrl('/dashboard/household');              
           } else if ( this.Token.isVendor() ) { 
             this.router.navigateByUrl('/dashboard/vendor');
           } else if ( this.Token.isCollector() ) {

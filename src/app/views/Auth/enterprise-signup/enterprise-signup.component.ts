@@ -32,11 +32,17 @@ export class EnterpriseSignupComponent implements OnInit {
     ],
     'email': [
       { type: 'required', message: 'An email is required.' },
-      { type: 'pattern', message: 'Please enter a valid email' }
+      { type: 'pattern', message: 'Please enter a valid business email' }
     ],
     'phone': [
       { type: 'required', message: 'A Phone Number is required.' },
       { type: 'pattern', message: 'Please enter a valid Phone Number.' }
+    ],
+    'companyName': [
+      { type: 'required', message: 'A Company Name is required.' }
+    ],
+    'companySize': [
+      { type: 'required', message: 'A Company Size is required.' }
     ],
     'password': [
       { type: 'required', message: 'A Password is required.' },
@@ -65,6 +71,15 @@ export class EnterpriseSignupComponent implements OnInit {
       phone: new FormControl('', Validators.compose([
         Validators.pattern('[0-9 ]*'),
         Validators.required])),
+      companyName: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      companySize: new FormControl(null, Validators.compose([
+        Validators.required
+      ])),
+      role: new FormControl('Enterprise', Validators.compose([
+        Validators.required
+      ])),
       password: new FormControl('', Validators.compose([
         Validators.required,
         Validators.minLength(6)
@@ -76,24 +91,14 @@ export class EnterpriseSignupComponent implements OnInit {
 
   registerBusiness( Form ) {
     this.loading = true;
-    const formdata = new FormData();
-    formdata.append( 'firstName', Form.firstName );
-    formdata.append( 'lastName', Form.lastName );
-    formdata.append( 'email', Form.email );
-    formdata.append( 'phone', Form.phone );
-    formdata.append( 'type', 'Business' );
-    formdata.append( 'role', 'Producer' );
-    formdata.append( 'password', Form.password );
-    formdata.append( 'password_confirmation', Form.password_confirmation );
-
-  this.Auth.register(formdata).subscribe(
-    data => {
-      this.handleResponse(data);
-    },
-    error => {
-      this.handleError(error);
-    }
-  );
+    this.Auth.register( Form ).subscribe(
+      data => {
+        this.handleResponse(data);
+      },
+      error => {
+        this.handleError(error);
+      }
+    );
   }
 
   handleResponse(data){

@@ -4,19 +4,19 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HomeComponent } from './views/Public/home/home.component';
+// import { HomeComponent } from './views/Public/home/home.component';
+// import { ProducersComponent } from './views/Public/producers/producers.component';
+// import { VendorsComponent } from './views/Public/vendors/vendors.component';
+// import { CollectorsComponent } from './views/Public/collectors/collectors.component';
+// import { EnterprisesComponent } from './views/Public/enterprises/enterprises.component';
 import { HeaderComponent } from './Constants/header/header.component';
 import { FooterComponent } from './Constants/footer/footer.component';
-import { ProducersComponent } from './views/Public/producers/producers.component';
-import { VendorsComponent } from './views/Public/vendors/vendors.component';
-import { CollectorsComponent } from './views/Public/collectors/collectors.component';
 import { ListingComponent } from './views/Public/listing/listing.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './views/Auth/login/login.component';
 import { SignupComponent } from './views/Auth/signup/signup.component';
 import { DndDirective } from './directives/dnd.directive';
-import { RxReactiveFormsModule } from "@rxweb/reactive-form-validators";
-import { NgbModalModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule, NgbAlertModule, NgbPopoverModule, NgbPopoverConfig, NgbDatepickerModule, NgbInputDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 import { RequestResetPasswordComponent } from './views/Auth/request-reset-password/request-reset-password.component';
 import { ResponseResetPasswordComponent } from './views/Auth/response-reset-password/response-reset-password.component';
@@ -41,24 +41,25 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatModule } from './ext-module/mat.module';
 import { SidenavComponent } from './Constants/sidenav/sidenav.component';
 import { TokenInterceptor } from './services/auth/token.interceptor';
-import { EnterprisesComponent } from './views/Public/enterprises/enterprises.component';
 import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { EnterpriseSignupComponent } from './views/Auth/enterprise-signup/enterprise-signup.component';
 import { VendorSignupComponent } from './views/Auth/vendor-signup/vendor-signup.component';
 import { CollectorSignupComponent } from './views/Auth/collector-signup/collector-signup.component';
+import { EnterpriseDashboardComponent } from './views/Private/enterprise/enterprise-dashboard/enterprise-dashboard.component';
+import { EnterpriseProfileComponent } from './views/Private/enterprise/enterprise-profile/enterprise-profile.component';
 
 @NgModule( {
   declarations: [
     AppComponent,
-    HomeComponent,
+    // HomeComponent,
+    // ProducersComponent,
+    // VendorsComponent,
+    // CollectorsComponent,
+    // EnterprisesComponent,
     HeaderComponent,
     FooterComponent,
-    ProducersComponent,
-    VendorsComponent,
-    CollectorsComponent,
     ListingComponent,
     LoginComponent,
     SignupComponent,
@@ -82,11 +83,12 @@ import { CollectorSignupComponent } from './views/Auth/collector-signup/collecto
     CollectorProfileComponent,
     AdminComponent,
     SidenavComponent,
-    EnterprisesComponent,
     DateAgoPipe,
     EnterpriseSignupComponent,
     VendorSignupComponent,
-    CollectorSignupComponent
+    CollectorSignupComponent,
+    EnterpriseDashboardComponent,
+    EnterpriseProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -96,7 +98,8 @@ import { CollectorSignupComponent } from './views/Auth/collector-signup/collecto
     HttpClientModule,
     NgbModalModule,
     NgbAlertModule,
-    RxReactiveFormsModule,
+    NgbPopoverModule,
+    NgbDatepickerModule,
     ChartsModule,
     NgxLoadingModule.forRoot( {
       animationType: ngxLoadingAnimationTypes.wanderingCubes,
@@ -107,7 +110,7 @@ import { CollectorSignupComponent } from './views/Auth/collector-signup/collecto
     BrowserAnimationsModule,
     MatModule,
     ServiceWorkerModule.register( 'ngsw-worker.js', { enabled: environment.production } ),
-    LazyLoadImageModule
+    // NgxDatePickerModule
   ],
   providers: [
     HeaderComponent,
@@ -118,6 +121,8 @@ import { CollectorSignupComponent } from './views/Auth/collector-signup/collecto
       useClass: TokenInterceptor,
       multi: true
     },
+    NgbPopoverConfig,
+    NgbInputDatepickerConfig
   ],
   bootstrap: [AppComponent]
 })

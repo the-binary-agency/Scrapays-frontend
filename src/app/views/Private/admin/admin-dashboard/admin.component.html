@@ -155,67 +155,71 @@
 </div>
 
 <div class="card my-5 mx-3">
-      <form (ngSubmit)="onSubmit(Form)" [formGroup]="Form">
-        <div class="card-body">
+        <div class="card-body p-0 p-md-3">
           <div class="row">
           <div class="col-12 text-center h1">Material price per ton</div>
-            <div class="col-6">
+          <div class="col-12 small text-success">Material icons should have a dimsnsion of 36px by 36px  </div>
+            <div class="col-12 col-md-6" *ngFor="let material of materialPrices; let i = index">
                <div class="form-group">
-               <label for="metal" [ngClass]="{h3: !edit}">
-                Metal 
-                <span *ngIf="!edit">:&nbsp; {{ materialPrices.metal }}</span>
+               <label for="metal" [ngClass]="{h3: !edit}" class="text-capitalize">
+                {{ material.name }}
+                <span *ngIf="!edit">:&nbsp; {{ material.price }} </span>
                </label>
-                  <input type="number" class="form-control" name="metal"  placeholder="Metal" formControlName="metal" *ngIf="edit" [(ngModel)]="materialPrices.metal">
+                  <div class="row">
+                    <div class="col-7 p-0 px-md-3">
+                        <input type="text" class="form-control w-100" name="{{material.name + i }}"  placeholder="{{material.name}}" *ngIf="edit" [(ngModel)]="material.name">
+                        <input type="number" class="form-control" name="{{material.name + '_price' + i}}"  placeholder="Material price" *ngIf="edit" [(ngModel)]="material.price">
+                    </div>
+                    <div class="col-5" *ngIf="edit">
+                        <input #fileInput type="file" (change)="onFileInput($event, i)" class="d-none" name="{{material.name + ' image'}}"accept="image/*" />
+                        <button class="btn btn-primary solid" (click)="fileInput.click()" type="button" >Select Icon </button><br>
+                        <span class="small">{{ material.image.name }}</span>
+
+                        <button type="button" class="btn btn-clear text-danger"(click)="removeMaterial(i)">
+                            <i class="fa fa-times" aria-hidden="true"></i> Remove
+                        </button>
+                    </div>
+                  </div>
                 </div>
             </div>
-            <div class="col-6">
-              <div class="form-group">
-              <label for="metal" [ngClass]="{h3: !edit}">
-                Aluminium 
-                <span *ngIf="!edit">:&nbsp; {{ materialPrices.aluminium }}</span>
-              </label>
-                  <input type="number" class="form-control" name="aluminium"  placeholder="Aluminium" formControlName="aluminium" *ngIf="edit" [(ngModel)]="materialPrices.aluminium">
+
+                    <div class="col-12 text-right">
+                    <div class="form-group pt-md-4">
+                        <!-- <button type="button" class="btn btn-primary px-4" (click)="edit = true" *ngIf="!edit">Edit</button> &nbsp; -->
+                        <button type="button" class="btn btn-danger px-4 text-nowrap mb-3 mb-md-0" (click)="edit = false" *ngIf="edit">Cancel Edit</button> &nbsp;
+                        <button type="button" class="btn btn-primary px-4" *ngIf="edit">Save Materials</button>
+                    </div>
                 </div>
-              </div>
-            <div class="col-6">
-               <div class="form-group">
-               <label for="metal" [ngClass]="{h3: !edit}">
-                Paper 
-                <span *ngIf="!edit">:&nbsp; {{ materialPrices.paper }}</span>
-               </label>
-                  <input type="number" class="form-control" name="paper"  placeholder="Paper" formControlName="paper" *ngIf="edit" [(ngModel)]="materialPrices.paper">
-                </div>
-            </div>
-            <div class="col-6">
-              <div class="form-group">
-              <label for="metal" [ngClass]="{h3: !edit}">
-                Plastic 
-                <span *ngIf="!edit">:&nbsp; {{ materialPrices.plastic }}</span>
-              </label>
-                  <input type="number" class="form-control" name="plastic"  placeholder="Plastic" formControlName="plastic" *ngIf="edit" [(ngModel)]="materialPrices.plastic">
-                </div>
-              </div>
-            <div class="col-6">
-               <div class="form-group">
-               <label for="metal" [ngClass]="{h3: !edit}">
-                Others 
-                <span *ngIf="!edit">:&nbsp; {{ materialPrices.others }}</span>
-               </label>
-                  <input type="number" class="form-control" name="others"  placeholder="Others" formControlName="others" *ngIf="edit" [(ngModel)]="materialPrices.others">
-                </div>
-            </div>
-            <div class="col-6 text-right">
-              <div class="form-group pt-md-4">
-                <button type="button" class="btn btn-primary px-4" (click)="edit = true" *ngIf="!edit">Edit</button> &nbsp;
-                <button type="button" class="btn btn-danger px-4 text-nowrap" (click)="edit = false" *ngIf="edit">Cancel Edit</button> &nbsp;
-                <button type="submit" class="btn btn-primary px-4" [disabled]="!Form.valid" *ngIf="edit">Change</button>
-              </div>
-            </div>
        
+            <div class="col-12">
+                                   <p class="font-weight-bold">Add New Materials</p>
+                  <div class="row" *ngFor="let mat of newMaterial; let i = index">
+                    <div class="col-7 p-0 px-md-3">
+                        <input type="text" class="form-control w-100 mb-3" name="{{mat.name + i }}"  placeholder="{{mat.name}}" *ngIf="adding" [(ngModel)]="mat.name">
+                        <input type="number" class="form-control" name="{{mat.name + '_price' + i}}"  placeholder="mat price" *ngIf="adding" [(ngModel)]="mat.price">
+                    </div>
+                    <div class="col-5" *ngIf="adding">
+                        <input #newFile type="file" (change)="onNewFileInput($event, i)" class="d-none" name="{{mat.name + ' image'}}"accept="image/*" />
+                        <button class="btn btn-primary solid" (click)="newFile.click()" type="button" >Select Icon </button><br>
+                        <span class="small">{{ mat.image.name }}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-12 text-right">
+                <div class="form-group pt-md-4">
+                    <button type="button" class="btn btn-clear float-left" (click)="addMaterial()" >
+                        <i class="fa fa-plus" aria-hidden="true"></i> Add Material
+                    </button> &nbsp;
+
+                    <button type="button" class="btn btn-danger px-4 text-nowrap mb-3 mb-md-0" (click)="adding = false" *ngIf="adding">Cancel</button> &nbsp;
+                    <button type="button" class="btn btn-primary px-4" *ngIf="adding"  (click)="onSubmit()">Save New Material</button>
+                </div>
+                </div>
+
           </div><!--/.row-->
           
         </div>
-      </form>
           <ngx-loading [show]="loading"></ngx-loading>
     </div>
 

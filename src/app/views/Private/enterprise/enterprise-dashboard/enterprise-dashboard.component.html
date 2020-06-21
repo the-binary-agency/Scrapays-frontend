@@ -1,44 +1,47 @@
-<div class="dashboard-body pt-5 p-1 py-md-4 px-md-1">
+<div class="dashboard-body pt-5 p-1 pb-md-4 pt-md-0 px-md-1">
 
 <div class="row">
 <div class="col-12">
 
 </div>
-   <div class="col-12 mb-5 px-0">
+  <div class="col-12 mb-5 px-0">
       <div class="row">
         <div class="col-12 col-md-3">
             <span class="h3 text-primary ml-2 bb-blue">Overview</span>
         </div>
-        <!-- <div class="col-12 col-md-9 px-0">
+        <div class="col-12 col-md-9 px-0">
           <div class="alert automate-alert w-100 fake-btn sc-green text-center" role="alert" (click)="automatePickup()" *ngIf="!automated">
             <strong>Click  here to automate your recovery process with scrapays</strong>
           </div>
           <div class="alert unautomate-alert w-100 fake-btn sc-orange text-center" role="alert" (click)="automatePickup()" *ngIf="automated">
             <strong>Click  here to undo  the automation of your recovery process</strong>
           </div>
-        </div> -->
-                <button class="btn btn-primary solid" type="button" (click)="openSellBulkModal()">
-                  Sell your BULK scrap materials now 
-                </button>
+        </div>
       </div>
       <div class="col-12 col-md-9 offset-md-3 px-1 px-md-3">
-      <br><br>
+        <button class="btn btn-primary solid" type="button" (click)="openSellBulkModal()">
+          Sell your BULK scrap materials now 
+        </button><br><br>
 
-       <p class="text-center h3">
-        Dial <span class="sc-orange">*123*00#</span> to request pickup.
-       </p>
+        <button class="btn btn-primary solid" type="button" *ngIf="automated" (click)="openScheduleModal()">
+          Request Pickup
+        </button>
+
+        <button class="btn btn-primary ml-md-4" type="button" *ngIf="automated">
+          Cancel Pickup
+        </button>
        
       </div>
 
   </div>
 
-<div class="col-12 col-md-8 order-md-2 pl-md-0">
+<div class="col-12 col-md-6 order-md-2 pl-md-0">
 
- <div class="row h-100 p-md-4 p-2">
+ <div class="row h-100">
  
    <div class="col-12 col-md-4 px-0 px-md-2 mb-4">
-     <div class="card h-100 bg-orange text-white rounded-card">
-      <div class="card-body">
+     <div class="card h-100 bg-light-green text-white rounded-card">
+      <div class="card-body sc-green">
         <div class="card-title">
           <img src="assets/images/icons/weight-icon.png" alt="weight icon">
         </div>
@@ -53,7 +56,7 @@
 
 <div class="col-12 col-md-8 px-0 px-md-4 mb-4">
   <div class="card h-100 rounded-card">
-    <div class="card-body px-0 pl-md-3 pr-md-2">
+    <div class="card-body px-0 px-md-4">
       <div class="row">
       <div class="col-12 text-center px-0">
         <div class="card-title row">
@@ -80,7 +83,7 @@
       </div>
       <div class="row">
          <div class="col-6 d-flex pb-2 border-right border-bottom" *ngFor="let display of displayedMaterials">
-           <img src="{{ URL }}/storage/material_list_images/{{ display.image }}" alt="metal icon">
+            <img src="{{ URL }}/storage/material_list_images/{{ display.image }}" alt="metal icon">
           <span class="ml-2 ml-md-4 font-weight-bold text-capitalize">
             {{ display.name }} <br>
             {{ getDisplayedPrice( display.name ) }}kg
@@ -126,8 +129,8 @@
 </div>
 
 <!-- Last Column -->
-<div class="col-12 col-md-4 px-3 mb-4 order-md-3">
-  <div class="card h-100 bg-orange text-white rounded-card">
+<div class="col-12 col-md-3 px-2 px-md-0 mb-4 order-md-3">
+  <div class="card h-100 bg-green text-white rounded-card">
     <div class="card-header bg-transparent">
       Wallet
     </div>
@@ -141,13 +144,13 @@
          </div>
      </div>
      <div class="row mb-5">
-      <div class="w-100">
+      <div class="w-100 d-flex">
          <div class="h5 bb-white">
            Earnings
          </div>
           <div class="space-filler"></div>
           <span class=" small mt-1 mr-1">Show:</span>
-          <select class="custom-select custom-select-sm w-auto border-0 bg-orange float-right">
+          <select class="custom-select custom-select-sm w-auto border-0 bg-green">
               <option value="1" selected>This Month</option>
               <option value="2">This Week </option>
               <option value="3">This Year </option>
@@ -158,16 +161,6 @@
         </div>
      </div>
      <div class="row">
-         
-       <div class="row w-100 mb-5">
-         <a class="text-white h4 pl-0" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-          <i class="fa fa-chevron-right" aria-hidden="true"></i>
-          Recharge
-        </a>
-      <div class="collapse w-100" id="collapseExample">
-        <button type="button" class="btn bg-green btn-lg text-white ml-4">Recharge</button>
-      </div>
-       </div>
 
        <div class="row w-100 mb-5">
          <a class="text-white h4 pl-0" data-toggle="collapse" href="#transferFunds" role="button" aria-expanded="false" aria-controls="transferFunds">
@@ -179,16 +172,16 @@
       </div>
        </div>
 
-       <!-- <div class="row w-100 mb-5" *ngIf="User.type == 'Business'">
+       <div class="row w-100 mb-5">
          <a class="text-white h4 pl-0" data-toggle="collapse" href="#barterOptions" role="button" aria-expanded="false" aria-controls="barterOptions">
           <i class="fa fa-chevron-right" aria-hidden="true"></i>
           Barter Option
         </a>
-      <div class="collapse w-100" id="barterOptions">
-          <button type="button" class="btn bg-white sc-orange btn-lg ml-4">Activate</button>
-          <button type="button" class="btn bg-white sc-orange btn-lg ml-4">Deactivate</button>
+      <div class="collapse w-100 text-nowrap" id="barterOptions">
+          <button type="button" class="btn bg-white sc-orange btn ml-4">Activate</button>
+          <button type="button" class="btn bg-white sc-orange btn ml-4">Deactivate</button>
       </div>
-       </div> -->
+       </div>
 
        <div class="row w-100 mb-5">
          <a class="text-white h4 pl-0" data-toggle="collapse" href="#fundsWidthHistory" role="button" aria-expanded="false" aria-controls="fundsWidthHistory">
@@ -206,10 +199,6 @@
               </tr>
             </thead>
             <tbody class="bg-light">
-            <!-- <tr *ngIf="Users.length == 0">
-            <td></td>
-            <td>No Registered Users</td>
-            </tr> -->
               <tr>
                 <td>
                   <div>10-4-2020</div>
@@ -234,6 +223,45 @@
     </div>
   </div>
 </div>
+
+<!-- First Column -->
+  <div class="col-12 col-md-3 order-md-1 px-md-0">
+      <div class="position-relative">
+        <div class="position-absolute" [ngClass]="{cover: automated}"></div>
+        <form [formGroup]="Form" (ngSubmit)="onSubmit(Form.value)" novalidate class="px-1 p-md-3">
+          <div class="form-group">
+              <label>Choose Material Type</label>
+              <select class="form-control" [(ngModel)]="materialType" (change)="test()" formControlName="materialType">
+                <option value="aluminium">Aluminium</option>
+                <option value="metal">Metal</option>
+                <option value="paper">Paper</option>
+                <option value="plastic">Plastic</option>
+                <option value="others">Others</option>
+              </select>
+          </div>
+            <div class="form-group">
+              <label for="">Volume Of Material</label>
+              <input type="number" formControlName="materialVolume"  class="form-control" placeholder="">
+            </div>
+            <div class="form-group">
+              <label for="">Revenue Generated</label>
+              <input type="number" formControlName="generatedRevenue"  class="form-control" placeholder="">
+            </div>
+            <div class="form-group">
+              <label for="">Upload Receipt</label>
+              <input type="file" formControlName="receipt"  class="d-none" #fileInput accept="image/*" (change)="onFileInput($event)">
+              <button type="button" name="" id="" class="form-control fake-btn" (click)="fileInput.click()">
+              <i class="fa fa-picture-o float-left" aria-hidden="true"></i>
+              {{ receipt }}
+              <i class="fa fa-plus float-right" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="form-group text-right">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+      </div>
+  </div>
 
 </div>
 

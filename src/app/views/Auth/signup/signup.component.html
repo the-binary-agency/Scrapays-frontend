@@ -1,154 +1,157 @@
-<main class="main d-flex align-items-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-10 mx-0 px-0 px-md-2 mx-md-auto">
-                <div class="card mx-0 mx-md-4">
-                    <div class="card-body p-2 p-md-4 text-center">
-                        <h1>Register as an Household</h1>
-                        <div class="form-check form-check-inline w-md-70">
-                            <form [formGroup]="Form" (ngSubmit)="register(Form.value)" class="w-100">
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-user-o" aria-hidden="true"></i></span>
-                      </div>
-                      <input class="form-control" placeholder="First Name" formControlName="firstName" />
-                    </div>
+<div class="row mt-3 pt-4">
+    <div class="col-12 col-md-6 pl-md-5 bg-white">
+        <div class="w-100 h1 sc-orange my-3 ml-md-5"> Household Signup </div>
+        <form [formGroup]="BusinessForm" (ngSubmit)="registerBusiness(BusinessForm.value)" class="mx-md-5">
+            <div class="row">
+                <div class="col-12 pl-0 signup-sec-header">Contact Details</div>
+                <div class="col-6 pl-0">
+                    <input class="form-control" placeholder="First Name" formControlName="firstName" />
                     <div class="validation-errors">
-                      <ng-container *ngFor="let validation of validation_messages.firstName">
-                        <div class="error-message alert alert-danger" *ngIf="
-                            Form.get('firstName').hasError(validation.type) &&
-                            (Form.get('firstName').dirty ||
-                              Form.get('firstName').touched)
-                          ">
-                          <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message
-                          }}</span>
-                        </div>
-                      </ng-container>
-                    </div>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-user-o" aria-hidden="true"></i></span>
-                      </div>
-                      <input class="form-control" placeholder="Last Name" formControlName="lastName" />
-                    </div>
-                    <div class="validation-errors">
-                      <ng-container *ngFor="let validation of validation_messages.lastName">
-                        <div class="error-message alert alert-danger" *ngIf="
-                            Form.get('lastName').hasError(validation.type) &&
-                            (Form.get('lastName').dirty ||
-                              Form.get('lastName').touched)
-                          ">
-                          <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message
-                          }}</span>
-                        </div>
-                      </ng-container>
-                    </div>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-at" aria-hidden="true"></i></span>
-                      </div>
-                      <input type="email" class="form-control" placeholder="Email" formControlName="email" />
-                    </div>
-                    <div class="validation-errors">
-                      <ng-container *ngFor="let validation of validation_messages.email">
-                        <div class="error-message alert alert-danger" *ngIf="
-                            Form.get('email').hasError(validation.type) &&
-                            (Form.get('email').dirty ||
-                              Form.get('email').touched)
-                          ">
-                          <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message
-                          }}</span>
-                        </div>
-                      </ng-container>
-                    </div>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-phone"></i></span>
-                      </div>
-                      <input type="tel" class="form-control" placeholder="Phone Number" autocomplete="phone"
-                        formControlName="phone" />
-                    </div>
-                    <div class="validation-errors">
-                      <ng-container *ngFor="let validation of validation_messages.phone">
-                        <div class="error-message alert alert-danger" *ngIf="
-                            Form.get('phone').hasError(validation.type) &&
-                            (Form.get('phone').dirty ||
-                              Form.get('phone').touched)
-                          ">
-                          <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message
-                          }}</span>
-                        </div>
-                      </ng-container>
-                    </div>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-lock"></i></span>
-                      </div>
-                      <input type="password" class="form-control" placeholder="Password" autocomplete="new-password"
-                        formControlName="password" />
-                    </div>
-                    <div class="validation-errors">
-                      <ng-container *ngFor="let validation of validation_messages.password">
-                        <div class="error-message alert alert-danger" *ngIf="
-                            Form.get('password').hasError(validation.type) &&
-                            (Form.get('password').dirty ||
-                              Form.get('password').touched)
-                          ">
-                          <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message
-                          }}</span>
-                        </div>
-                      </ng-container>
-                    </div>
-                    <div class="validation-errors" *ngIf="error.password != ''">
-                      <ng-container>
-                        <div class="error-message alert alert-danger">
-                          <i class="fa fa-info-circle text-danger"></i> &nbsp; <span
-                            class="text-danger">{{ error.password }}</span>
-                        </div>
-                      </ng-container>
-                    </div>
-                    <div class="input-group mb-4">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-lock"></i></span>
-                      </div>
-                      <input type="password" class="form-control" placeholder="Confirm password"
-                        autocomplete="new-password" formControlName="password_confirmation" />
-                    </div>
-                    <button type="submit" class="btn btn-block bg-orange" [disabled]="!Form.valid"> Create Account
-                    </button>
-                  </form>
-                        </div>
-                    </div>
-                    <div class="card-footer p-4 pt-0">
-                        <div class="row">
-                            <div class="col-12 text-center mb-3">
-                                <em>Already have an account, &nbsp;<a routerLink="/login">Login</a></em><br />
-                                <!-- OR -->
+                        <ng-container *ngFor="let validation of validation_messages.firstName">
+                            <div class="error-message alert alert-danger" *ngIf="
+                                    BusinessForm.get('firstName').hasError(
+                                        validation.type
+                                    ) &&
+                                    (BusinessForm.get('firstName').dirty ||
+                                        BusinessForm.get('firstName').touched)
+                                    ">
+                                <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message
+                                    }}</span>
                             </div>
-                            <!-- <div class="col-4 pl-0 pl-md-2 d-flex justify-content-center">
-                <button class="btn btn-google grow" type="button">
-                  <i class="fa fa-google"></i>&nbsp;&nbsp;<span>Google</span>
-                </button>
-              </div>
-              <div class="col-4 pr-0 pr-md-2 d-flex justify-content-center">
-                <button class="btn btn-facebook grow" type="button">
-                  <i class="fa fa-facebook"></i>&nbsp;&nbsp;<span
-                    >facebook</span
-                  >
-                </button>
-              </div>
-              <div class="col-4 pl-0 pl-md-2 d-flex justify-content-center">
-                <button class="btn btn-twitter grow" type="button">
-                  <i class="fa fa-twitter"></i>&nbsp;&nbsp;<span>twitter</span>
-                </button>
-              </div> -->
-                        </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-6 pr-0">
+                    <input class="form-control" placeholder="Last Name" formControlName="lastName" />
+                    <div class="validation-errors">
+                        <ng-container *ngFor="let validation of validation_messages.lastName">
+                            <div class="error-message alert alert-danger" *ngIf="
+                            BusinessForm.get('lastName').hasError(
+                              validation.type
+                            ) &&
+                            (BusinessForm.get('lastName').dirty ||
+                              BusinessForm.get('lastName').touched)
+                          ">
+                                <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message
+                          }}</span>
+                            </div>
+                        </ng-container>
                     </div>
                 </div>
             </div>
+            <div class="row mt-3">
+                <input type="email" class="form-control" placeholder="email" formControlName="email" />
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.email">
+                        <div class="error-message alert alert-danger" *ngIf="
+                            BusinessForm.get('email').hasError(
+                              validation.type
+                            ) &&
+                            (BusinessForm.get('email').dirty ||
+                              BusinessForm.get('email').touched)
+                          ">
+                            <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message
+                          }}</span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <input type="tel" class="form-control" placeholder="Phone Number" autocomplete="phone"
+                    formControlName="phone" />
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.phone">
+                        <div class="error-message alert alert-danger" *ngIf="
+                            BusinessForm.get('phone').hasError(
+                              validation.type
+                            ) &&
+                            (BusinessForm.get('phone').dirty ||
+                              BusinessForm.get('phone').touched)
+                          ">
+                            <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message
+                          }}</span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="form-group w-100 mb-0">
+                    <label class="signup-sec-header">Location where requests will be made from</label>
+                    <textarea formControlName="requestAddress" class="form-control" rows="3"></textarea>
+                     <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.requestAddress">
+                        <div class="error-message alert alert-danger" *ngIf="
+                            BusinessForm.get('requestAddress').hasError(
+                              validation.type
+                            ) &&
+                            (BusinessForm.get('requestAddress').dirty ||
+                              BusinessForm.get('requestAddress').touched)
+                          ">
+                            <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message
+                          }}</span>
+                        </div>
+                    </ng-container>
+                </div>
+                </div>
+                <div class="input-group mb-0 mt-3">
+                    <input type="text" class="form-control" placeholder="Invite Code (optional)"
+                        formControlName="inviteCode" />
+                </div>
+                <div class="input-group mb-0 mt-3">
+                    <input type="password" class="form-control" placeholder="Password" autocomplete="new-password"
+                        formControlName="password" />
+                </div>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.password">
+                        <div class="error-message alert alert-danger" *ngIf="
+                            BusinessForm.get('password').hasError(
+                              validation.type
+                            ) &&
+                            (BusinessForm.get('password').dirty ||
+                              BusinessForm.get('password').touched)
+                          ">
+                            <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message
+                          }}</span>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="validation-errors" *ngIf="error.password != ''">
+                    <ng-container>
+                        <div class="error-message alert alert-danger">
+                            <i class="fa fa-info-circle text-danger"></i> &nbsp; <span
+                                class="text-danger">{{ error.password }}</span>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="input-group mb-0 mt-3">
+                    <input type="password" class="form-control" placeholder="Confirm password"
+                        autocomplete="new-password" formControlName="password_confirmation" />
+                </div>
+            </div>
+            <div class="w-100 text-right my-5">
+                <button type="submit" class="btn btn-primary bg-orange" [disabled]="!BusinessForm.valid"> Sign Up </button>
+            </div>
+        </form>
+    </div>
+    <div class="col-12 col-md-6 d-flex align-items-center household-img-bg text-white">
+        <div>
+            <ul class="fa-ul">
+                <li class="signup-rows"> Make the most of your waste. </li>
+                <li class="signup-rows"><i class="fa fa-arrow-right" aria-hidden="true"></i> Guaranteed pickup* </li>
+                <li class="signup-rows"><i class="fa fa-arrow-right" aria-hidden="true"></i> No internet required to request </li>
+                <li class="signup-rows"><i class="fa fa-arrow-right" aria-hidden="true"></i> Every kilogram counts for you </li>
+            </ul>
+            <div class="w-100">
+                *within our service areas <br>
+                <a routerLink="/contact" class="sc-green">Have Questions?</a>
+            </div>
         </div>
     </div>
-</main>
+</div>
+
+
+
+
 <ng-template #content let-modal>
     <div class="modal-header">
         <h4 class="modal-title">{{ modalTitle }}</h4>

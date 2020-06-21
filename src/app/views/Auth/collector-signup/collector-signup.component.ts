@@ -23,7 +23,7 @@ export class CollectorSignupComponent implements OnInit {
   modalTitle: any;
   modalBody: any;
 
-  collector_validation_messages = {
+  validation_messages = {
     'firstName': [
       { type: 'required', message: 'A First Name is required.' }
     ],
@@ -37,6 +37,9 @@ export class CollectorSignupComponent implements OnInit {
     'phone': [
       { type: 'required', message: 'A Phone Number is required.' },
       { type: 'pattern', message: 'Please enter a valid Phone Number.' }
+    ],
+    'collectionCoverageZone': [
+      { type: 'required', message: 'A Collection Coverage Zone is required.' }
     ],
     'password': [
       { type: 'required', message: 'A Password is required.' },
@@ -65,6 +68,9 @@ export class CollectorSignupComponent implements OnInit {
       phone: new FormControl('', Validators.compose([
         Validators.pattern('[0-9 ]*'),
         Validators.required])),
+      collectionCoverageZone: new FormControl('', Validators.compose([
+        Validators.required])),
+      inviteCode: new FormControl(''),
       password: new FormControl('', Validators.compose([
         Validators.required,
         Validators.minLength(6)

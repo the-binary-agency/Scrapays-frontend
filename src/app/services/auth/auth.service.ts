@@ -13,12 +13,14 @@ export class AuthService {
 
   private loggedIn: Subject<boolean> = new BehaviorSubject<boolean>( this.token.loggedIn() );
   private Admin: Subject<boolean> = new BehaviorSubject<boolean>( this.token.Admin() );
-  private Producer: Subject<boolean> = new BehaviorSubject<boolean>( this.token.Producer() );
+  private Household: Subject<boolean> = new BehaviorSubject<boolean>( this.token.Household() );
+  private Enterprise: Subject<boolean> = new BehaviorSubject<boolean>( this.token.Enterprise() );
   private Vendor: Subject<boolean> = new BehaviorSubject<boolean>( this.token.Vendor() );
   private Collector: Subject<boolean> = new BehaviorSubject<boolean>( this.token.Collector() );
   authStatus = this.loggedIn.asObservable();
   adminStatus = this.Admin.asObservable();
-  producerStatus = this.Producer.asObservable();
+  householdStatus = this.Household.asObservable();
+  enterpriseStatus = this.Enterprise.asObservable();
   vendorStatus = this.Vendor.asObservable();
   collectorStatus = this.Collector.asObservable();
 
@@ -46,8 +48,12 @@ URL = this.env.backendUrl + '/api/auth'
     this.Admin.next( value );
   }
   
-  changeProducerStatus(value: boolean) {
-    this.Producer.next( value );
+  changeHouseholdStatus(value: boolean) {
+    this.Household.next( value );
+  }
+  
+  changeEnterpriseStatus(value: boolean) {
+    this.Enterprise.next( value );
   }
   
   changeVendorStatus(value: boolean) {
@@ -57,18 +63,6 @@ URL = this.env.backendUrl + '/api/auth'
   changeCollectorStatus(value: boolean) {
     this.Collector.next( value );
   }
-
-  // logOut(){
-  //   event.preventDefault();
-  //   this.token.remove();
-  //   this.changeAuthStatus(false);
-  //   this.changeAdminStatus(false);
-  //   this.changeProducerStatus(false);
-  //   this.changeVendorStatus(false);
-  //   this.changeCollectorStatus(false);
-  //   this.sidenav.sidenav.close();
-  //   this.router.navigateByUrl('/login');
-  // }
   
   getAllUsers(id) {
     return this.http.get( `${ this.URL }/getAllUsers/${id}` );
@@ -145,5 +139,14 @@ URL = this.env.backendUrl + '/api/auth'
   automatePickup( form ) {
     return this.http.post( `${ this.URL }/automatePickup`, form);
   }
+
+  unautomatePickup( id ) {
+    return this.http.post( `${ this.URL }/automatePickup/`, id);
+  }
+
+  submitInventory( form ) {
+    return this.http.post( `${ this.URL }/submitInventory`, form);
+  }
+
 
 }

@@ -14,9 +14,7 @@ export class LoginComponent implements OnInit {
   @ViewChild('content') private content;
   loading: boolean;
   
-  constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router) {
-    this.initForm();
-   }
+  constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router) {}
 
   initForm(){
     this.PhoneForm = this.formBuilder.group({
@@ -41,6 +39,7 @@ export class LoginComponent implements OnInit {
   }
 
   public Error = null;
+  public User: string;
 
   public PhoneForm: FormGroup;
   public EmailForm: FormGroup;
@@ -61,6 +60,8 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.initForm();
+    this.User = this.getRoute();
   }
 
 loginWithPhone(Form){
@@ -99,12 +100,15 @@ handleError(error){
   
   goToDashboard() {
     this.Auth.changeAuthStatus( true );
-    if ( this.Token.isProducer() ) {
-      this.Auth.changeProducerStatus( true );
-      this.router.navigateByUrl('/dashboard/producer');
-    } else if ( this.Token.isVendor() ) { 
+    if ( this.Token.isHousehold() ) {
+      this.Auth.changeHouseholdStatus( true );
+      this.router.navigateByUrl('/dashboard/household');
+    } else if ( this.Token.isEnterprise() ) { 
+      this.Auth.changeEnterpriseStatus( true );
+      this.router.navigateByUrl('/dashboard/enterprise');
+    }  else if ( this.Token.isVendor() ) { 
       this.Auth.changeVendorStatus( true );
-      this.router.navigateByUrl('/dashboard/vendor');
+      this.router.navigateByUrl('/dashboard/host');
     } else if ( this.Token.isCollector() ) {
       this.Auth.changeCollectorStatus( true );
       this.router.navigateByUrl('/dashboard/collector');
@@ -114,6 +118,11 @@ handleError(error){
 
   openModal(content) {
     this.modal.open(content, { centered: true });
+  }
+
+   getRoute() {
+     var route = this.router.url;
+    return route.split( '/' )[ 2 ];
   }
 
 }

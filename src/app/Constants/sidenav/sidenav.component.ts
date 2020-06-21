@@ -5,6 +5,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { TokenService } from 'src/app/services/auth/token.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { UserDataService } from 'src/app/services/auth/user-data.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -14,29 +15,30 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class SidenavComponent implements OnInit {
   @ViewChild( 'sidenav' ) public sidenav: MatSidenav;
   @ViewChild( 'content' ) private content;
+
   public loggedIn: boolean;
   public Admin: boolean;
-  public Producer: boolean;
+  public Household: boolean;
+  public Enterprise: boolean;
   public Vendor: boolean;
   public Collector: boolean;
   modalTitle: any;
   modalBody: any;
   loading = false;
 
-  constructor ( private sideNavService: SideMenuService, private router: Router,  private Auth: AuthService, private Token: TokenService,  private modal: NgbModal ) {
-    this.changeSidenavMode();
+  constructor ( private sideNavService: SideMenuService, private router: Router,  private Auth: AuthService, private Token: TokenService,  private modal: NgbModal, private userData: UserDataService ) {
    }
 
   screenWidth: number;
   lastHome: string;
+  User = this.userData.User;
 
   ngOnInit(): void { 
     this.processRoles();
+    this.changeSidenavMode();
   }
   
   ngAfterViewInit(): void {
-    console.log( 'route is ', this.getRoute() );
-    
    this.sideNavService.sideNavToggleSubject.subscribe(()=> {
       this.sidenav.toggle();
    } );
@@ -54,8 +56,6 @@ export class SidenavComponent implements OnInit {
     this.screenWidth = window.innerWidth;
     window.onresize = () => {
       // set screenWidth on screen size change
-      
-    console.log(this.getRoute());
       this.screenWidth = window.innerWidth;
     };
   }
@@ -63,7 +63,8 @@ export class SidenavComponent implements OnInit {
   processRoles() {
     this.Auth.authStatus.subscribe( value => this.loggedIn = value);
     this.Auth.adminStatus.subscribe( value => this.Admin = value );
-    this.Auth.producerStatus.subscribe( value => this.Producer = value );
+    this.Auth.householdStatus.subscribe( value => this.Household = value );
+    this.Auth.enterpriseStatus.subscribe( value => this.Enterprise = value );
     this.Auth.collectorStatus.subscribe( value => this.Collector = value );
     this.Auth.vendorStatus.subscribe( value => this.Vendor = value );
   }
@@ -71,30 +72,58 @@ export class SidenavComponent implements OnInit {
 
   logOut(event: MouseEvent){
     event.preventDefault();
+    var Admin = this.Admin;
+    var Household = this.Household;
+    var Enterprise = this.Enterprise;
+    var Vendor = this.Vendor;
+    var Collector = this.Collector;
     this.Token.remove();
     this.Auth.changeAuthStatus(false);
     this.Auth.changeAdminStatus(false);
-    this.Auth.changeProducerStatus(false);
+    this.Auth.changeHouseholdStatus(false);
+    this.Auth.changeEnterpriseStatus(false);
     this.Auth.changeVendorStatus(false);
     this.Auth.changeCollectorStatus(false);
     this.sidenav.close();
-    this.router.navigateByUrl('/login');
+    if ( Admin ) {
+      this.router.navigateByUrl( '/login/enterprise' );
+    } else if ( Enterprise ) {
+      this.router.navigateByUrl( '/login/enterprise' );
+    } else if ( Household ) {
+      this.router.navigateByUrl( '/login/household' );
+    } else if ( Vendor ) {
+      this.router.navigateByUrl( '/login/vendor' );
+    } else if ( Collector ) {
+      this.router.navigateByUrl( '/login/collector' );
+    }
   }
 
-  signOut(){
+  signOut() {
+    var Admin = this.Admin;
+    var Household = this.Household;
+    var Enterprise = this.Enterprise;
+    var Vendor = this.Vendor;
+    var Collector = this.Collector;
     this.Token.remove();
     this.Auth.changeAuthStatus(false);
     this.Auth.changeAdminStatus(false);
-    this.Auth.changeProducerStatus(false);
+    this.Auth.changeHouseholdStatus(false);
+    this.Auth.changeEnterpriseStatus(false);
     this.Auth.changeVendorStatus(false);
     this.Auth.changeCollectorStatus(false);
-    this.router.navigateByUrl('/login');
+    if ( Admin ) {
+      this.router.navigateByUrl( '/login/partners' );
+    } else if ( Enterprise ) {
+      this.router.navigateByUrl( '/login/enterprise' );
+    } else if ( Household ) {
+      this.router.navigateByUrl( '/login/household' );
+    } 
     this.sidenav.close();
   }
 
   clickMenu(event: MouseEvent) {
-    this.sidenav.toggle();
     event.preventDefault();
+    this.sidenav.toggle();
   }
 
   getRoute() {
@@ -103,18 +132,10 @@ export class SidenavComponent implements OnInit {
   }
 
   checkRoute() {
-    var excludedRoutes = [ 'home', 'producers', 'enterprises', 'vendors', 'collectors', 'listing' ];
-    // var valid: boolean;
-    return  Object.values(excludedRoutes).indexOf(this.getRoute()) > -1 ? false : true; 
-    // excludedRoutes.map( route => {
-   
-    //   if ( route == this.getRoute() ) {
-    //     valid = false;
-    //   } else {
-    //     valid = true;
-    //   }
-    // } )
-    // return valid;
+    if ( this.getRoute() == 'listing' ) {
+      return false;
+    }
+    return true;
   }
 
   success( message ) {
@@ -132,5 +153,5 @@ export class SidenavComponent implements OnInit {
   openModal(content) {
     this.modal.open(content, { centered: true });
   }
-  
+
 }

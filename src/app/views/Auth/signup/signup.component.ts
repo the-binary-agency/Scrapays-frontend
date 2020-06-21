@@ -12,50 +12,17 @@ import { LoginComponent } from '../login/login.component';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-  @ViewChild( 'content' ) private content;
-   loading: boolean;
+     @ViewChild( 'content' ) private content;
 
-  constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router, private loginPage: LoginComponent) {
-   }
-
+  constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router, private loginPage: LoginComponent) {}
+  
+  
+  loading: boolean;
+  public error = {password: ''};
+  public BusinessForm: FormGroup;
   modalTitle: any;
   modalBody: any;
 
-
-  initForm(){
-    this.Form = this.formBuilder.group({
-      firstName: new FormControl('', Validators.compose([
-        Validators.maxLength(30),
-        Validators.pattern('[a-zA-Z ]*'),
-        Validators.required])),
-      lastName: new FormControl('', Validators.compose([
-        Validators.maxLength(30),
-        Validators.pattern('[a-zA-Z ]*'),
-        Validators.required])),
-      email: new FormControl('', Validators.compose([
-        Validators.required,
-        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
-      ])),
-      phone: new FormControl('', Validators.compose([
-        Validators.pattern('[0-9 ]*'),
-        Validators.required])),
-      password: new FormControl('', Validators.compose([
-        Validators.required,
-        Validators.minLength(6)
-      ])),
-      password_confirmation: new FormControl('', Validators.compose([
-        Validators.required]))
-  });
-  }
-
-
-  ngOnInit(): void {
-    this.initForm();
-  }
-
-
-  public error = {password: ''};
-  public Form: FormGroup;
   validation_messages = {
     'firstName': [
       { type: 'required', message: 'A First Name is required.' }
@@ -71,37 +38,65 @@ export class SignupComponent implements OnInit {
       { type: 'required', message: 'A Phone Number is required.' },
       { type: 'pattern', message: 'Please enter a valid Phone Number.' }
     ],
+    'requestAddress': [
+      { type: 'required', message: 'A request address is required.' }
+    ],
     'password': [
       { type: 'required', message: 'A Password is required.' },
       { type: 'minlength', message: 'Minimum of 6 characters' },
     ]
   };
 
-
-  register( Form ) {
-    this.loading = true;
-    const formdata = new FormData();
-    formdata.append( 'firstName', Form.firstName );
-    formdata.append( 'lastName', Form.lastName );
-    formdata.append( 'email', Form.email );
-    formdata.append( 'phone', Form.phone );
-    formdata.append( 'type', 'Individual' );
-    formdata.append( 'role', 'Producer' );
-    formdata.append( 'recoveryAutomated', 'false' );
-    formdata.append( 'password', Form.password );
-    formdata.append( 'password_confirmation', Form.password_confirmation );
-
-  this.Auth.register(formdata).subscribe(
-    data => {
-      this.handleResponse( data );
-    },
-    error => {
-      this.handleError(error);
-    }
-  );
+  ngOnInit(): void {
+     this.initForm();
   }
 
-handleResponse(data){
+  initForm() {
+     this.BusinessForm = this.formBuilder.group({
+      firstName: new FormControl('', Validators.compose([
+        Validators.maxLength(30),
+        Validators.pattern('[a-zA-Z ]*'),
+        Validators.required])),
+      lastName: new FormControl('', Validators.compose([
+        Validators.maxLength(30),
+        Validators.pattern('[a-zA-Z ]*'),
+        Validators.required])),
+      email: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
+      ])),
+      phone: new FormControl('', Validators.compose([
+        Validators.pattern('[0-9 ]*'),
+        Validators.required])),
+      requestAddress: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      inviteCode: new FormControl(''),
+      role: new FormControl('Household', Validators.compose([
+        Validators.required
+      ])),
+      password: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.minLength(6)
+      ])),
+      password_confirmation: new FormControl('', Validators.compose([
+        Validators.required]))
+  });
+  }
+
+  registerBusiness( Form ) {
+    this.loading = true;
+    this.Auth.register( Form ).subscribe(
+      data => {
+        this.handleResponse(data);
+      },
+      error => {
+        this.handleError(error);
+      }
+    );
+  }
+
+  handleResponse(data){
   this.loading = false;
   this.modalTitle = "Success";
   this.modalBody = data.data;
@@ -132,9 +127,9 @@ handleResponse(data){
   }
   
   goToDashboard() {
-    var form = {
-        phone: this.Form.value.phone,
-        password: this.Form.value.password
+        var form = {
+        phone: this.BusinessForm.value.phone,
+        password: this.BusinessForm.value.password
       }
       this.loginPage.loginWithPhone( form );
   }

@@ -9,12 +9,12 @@ import { TokenService } from './token.service';
 export class IsProducerService
  implements CanActivate{
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise <boolean> {
-    const Producer: boolean = this.Token.Producer();
+    const Producer: boolean = false;
     if (!Producer) {
       this.router.navigateByUrl('home');
     }
     
-    return this.Token.Producer();
+    return true;
   }
 
   constructor(private Token: TokenService, private router: Router) { }

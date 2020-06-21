@@ -27,9 +27,7 @@ export class MaterialImagesHandlerService {
     reader.readAsDataURL(file);
     reader.onload = ( e: any ) => {
           this.materialImages[ind].images.push( file )
-          console.log('material images are ', this.materialImages);
           this.files[ind].images.push( { name: file.name, size: file.size, url: e.target.result } )
-          console.log('files are ', this.files);
     }
   }
 }

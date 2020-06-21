@@ -1,8 +1,58 @@
 mat-sidenav{
-    padding-top: 78px;
+    padding-top: 50px;
     width: 250px;
 }
 .list-item-active{
-    color: #FF7900;
+    border-left: 5px solid #FF7900;
+    /* color: #FF7900; */
     font-weight: bold;
+}
+.menu-toggler{
+    position: absolute !important;
+    bottom: 0;
+}
+.schedule-modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 3; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    border: 0;
+    background-color: transparent;
+    margin: 20% auto;
+}
+
+.modal-cal{
+    border: 1px solid #888;
+    border-radius: 15px;
+    background-color: #fefefe;
+    padding: 10px;
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+.modal-container{
+    border-radius: 15px;
+    padding: 10px;
 }

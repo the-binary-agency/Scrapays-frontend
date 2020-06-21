@@ -3,7 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 
 declare let fbq:Function;
 declare let gtag:Function;
-declare let analytics:any;
+// declare let analytics:any;
 
 @Component({
   selector: 'app-root',
@@ -12,15 +12,24 @@ declare let analytics:any;
 })
 export class AppComponent {
   title = 'Scrapays-angular';
+  page;
 
-  constructor(private router: Router){
+  constructor ( private router: Router ) {
+    console.log("app component constructor");
+    
     router.events.subscribe((y: NavigationEnd) => {
-      if(y instanceof NavigationEnd){
+      if ( y instanceof NavigationEnd ) {
+        this.page = this.getRoute();
         fbq( 'track', 'PageView' );
-        analytics.page();
+        // analytics.page();
         gtag('js', new Date());
       }
     })
+  }
+
+  getRoute() {
+    var route = this.router.url;
+    return route.split( '/' )[ 1 ];
   }
   
 }

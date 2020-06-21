@@ -71,16 +71,6 @@ isValid(){
      }
   }
   
-  isProducer(){
-    const token = this.get();
-    if(token){
-      const payload = this.payload( token )
-      if ( payload ) {
-        return  (payload.role == 'Producer') ? true : false; 
-      }
-        return false;
-    }
-  }
   
   isVendor(){
     const token = this.get();
@@ -88,6 +78,28 @@ isValid(){
       const payload = this.payload( token )
       if ( payload ) {
         return  (payload.role == 'Vendor') ? true : false; 
+      }
+        return false;
+    }
+  }
+  
+  isEnterprise(){
+    const token = this.get();
+    if(token){
+      const payload = this.payload( token )
+      if ( payload ) {
+        return  (payload.role == 'Enterprise') ? true : false; 
+      }
+        return false;
+    }
+  }
+  
+  isHousehold(){
+    const token = this.get();
+    if(token){
+      const payload = this.payload( token )
+      if ( payload ) {
+        return  (payload.role == 'Household') ? true : false; 
       }
         return false;
     }
@@ -110,12 +122,17 @@ loggedIn(){
     return this.isAdmin();
   }
 
-  Producer() {
-    return this.isProducer();
-  }
   
   Vendor() {
     return this.isVendor();
+  }
+
+  Enterprise() {
+    return this.isEnterprise();
+  }
+  
+  Household() {
+    return this.isHousehold();
   }
 
   Collector() {

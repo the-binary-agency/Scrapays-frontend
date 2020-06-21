@@ -15,8 +15,6 @@ export class DndDirective {
     evt.preventDefault();
     evt.stopPropagation();
     this.fileOver = true;
-
-    console.log("Drag Over");
   }
 
   //DragLeave Listener
@@ -24,8 +22,6 @@ export class DndDirective {
     evt.preventDefault();
     evt.stopPropagation();
     this.fileOver = false;
-    
-    console.log("Drag Leave");
   }
 
   //Drop Listener

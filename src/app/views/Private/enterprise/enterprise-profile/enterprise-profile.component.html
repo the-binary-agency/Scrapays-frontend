@@ -6,15 +6,15 @@
     <form [formGroup]="Form" (ngSubmit)="updateProfile(Form.value)" class="w-100">
         <div class="row align-items-center justify-content-center">
         <div class="position-relative">
-            <img src="{{ URL }}/storage/Material_Images/{{ User.avatarImage }}" class="user-avatar" alt="User Icon" *ngIf="User.avatarImage">
-            <img [src]="avatar" class="user-avatar" alt="User Icon" *ngIf="!User.avatarImage">
+            <img src="assets/images/icons/user-icon.png" class="user-avatar" alt="User Icon" *ngIf="User.avatarImageName">
+            <img src="assets/images/icons/user-icon.png" class="user-avatar" alt="User Icon" *ngIf="!User.avatarImageName">
             <input type="file" formControlName="avatarImage"  class="d-none" #fileInput accept="image/*" (change)="onFileInput($event)">
             <button type="button" class="btn btn-primary btn-circle btn-sm solid" (click)="fileInput.click()"  *ngIf="edit">
                 <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
             </button>
         </div>
             <div class="ml-3">
-                <h2 class="font-weight-bold mb-0">Company</h2>
+                <h2 class="font-weight-bold mb-0">{{ User.companyName }}</h2>
                 {{ User.email }}
             </div>
         </div>
@@ -41,6 +41,43 @@
                             <div class="col-6 details">
                             <span *ngIf="!edit"> {{ User.phone }}</span>
                                 <input class="form-control" formControlName="phone" [(ngModel)]="User.phone" *ngIf="edit"/>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="row font-weight-bold">
+                    <div class="col-12">
+                        <h3 class="font-weight-bold ml-3">Company's Infrormation</h3><br>
+                    </div>
+                    <div class="col-12 col-md-6">
+                    <div class="row">
+                            <div class="col-6 details mb-3">
+                                Company’s Name:
+                            </div>
+                            <div class="col-6 details mb-3">
+                            <span *ngIf="!edit"> {{ User.companyName }}</span>
+                                <input class="form-control" formControlName="companyName" [(ngModel)]="User.companyName" *ngIf="edit"/>
+                            </div>
+                            <div class="col-6 details mb-3 mb-md-0">
+                                Industry:
+                            </div>
+                            <div class="col-6 details mb-3 mb-md-0">
+                            <span *ngIf="!edit"> {{ User.industry }}</span>
+                                <input class="form-control" formControlName="industry" [(ngModel)]="User.industry" *ngIf="edit"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <div class="col-6 details mb-3">
+                                Company’s Size:
+                            </div>
+                            <div class="col-6 details">
+                            <span *ngIf="!edit"> {{ User.companySize }}</span>
+                                <input class="form-control" formControlName="companySize" [(ngModel)]="User.companySize" *ngIf="edit"/>
                             </div>
                         </div>
                     </div>
@@ -102,13 +139,13 @@
 
                                 <div class="form-check" *ngIf="edit">
                                     <label class="form-check-label">
-                                    <input type="radio" name="gender" class="form-check-input" (change)="sex = 'male'" [checked]="User.sex == 'male'">
+                                    <input type="radio" name="gender" class="form-check-input" (change)="sex = 'male'" [checked]="sex == 'female'">
                                     Male
                                   </label>
                                 </div>
                                 <div class="form-check" *ngIf="edit">
                                     <label class="form-check-label">
-                                    <input type="radio" name="gender" class="form-check-input" (change)="sex = 'female'" [checked]="User.sex == 'female'">
+                                    <input type="radio" name="gender" class="form-check-input" (change)="sex = 'female'" [checked]="sex == 'female'">
                                     Female
                                   </label>
                                 </div>

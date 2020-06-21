@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './views/Public/home/home.component';
-import { ProducersComponent } from './views/Public/producers/producers.component';
-import { VendorsComponent } from './views/Public/vendors/vendors.component';
-import { CollectorsComponent } from './views/Public/collectors/collectors.component';
+// import { HomeComponent } from './views/Public/home/home.component';
+// import { ProducersComponent } from './views/Public/producers/producers.component';
+// import { VendorsComponent } from './views/Public/vendors/vendors.component';
+// import { CollectorsComponent } from './views/Public/collectors/collectors.component';
 import { ListingComponent } from './views/Public/listing/listing.component';
 import { LoginComponent } from './views/Auth/login/login.component';
 import { SignupComponent } from './views/Auth/signup/signup.component';
@@ -22,7 +22,6 @@ import { MessagesComponent } from './views/Private/admin/messages/messages.compo
 import { ProducerDashboardComponent } from './views/Private/producer/producer-dashboard/producer-dashboard.component';
 import { VendorDashboardComponent } from './views/Private/vendor/vendor-dashboard/vendor-dashboard.component';
 import { CollectorDashboardComponent } from './views/Private/collector/collector-dashboard/collector-dashboard.component';
-import { IsProducerService } from './services/auth/is-producer.service';
 import { IsVendorService } from './services/auth/is-vendor.service';
 import { IsCollectorService } from './services/auth/is-collector.service';
 import { AdminProfileComponent } from './views/Private/admin/admin-profile/admin-profile.component';
@@ -31,51 +30,30 @@ import { VendorProfileComponent } from './views/Private/vendor/vendor-profile/ve
 import { CollectorProfileComponent } from './views/Private/collector/collector-profile/collector-profile.component';
 import { AdminLoginComponent } from './views/Private/admin/admin-login/admin-login.component';
 import { AdminComponent } from './views/Private/admin/admin-dashboard/admin.component';
-import { EnterprisesComponent } from './views/Public/enterprises/enterprises.component';
+// import { EnterprisesComponent } from './views/Public/enterprises/enterprises.component';
 import { EnterpriseSignupComponent } from './views/Auth/enterprise-signup/enterprise-signup.component';
 import { VendorSignupComponent } from './views/Auth/vendor-signup/vendor-signup.component';
 import { CollectorSignupComponent } from './views/Auth/collector-signup/collector-signup.component';
+import { EnterpriseProfileComponent } from './views/Private/enterprise/enterprise-profile/enterprise-profile.component';
+import { EnterpriseDashboardComponent } from './views/Private/enterprise/enterprise-dashboard/enterprise-dashboard.component';
+import { IsEnterpriseService } from './services/auth/is-enterprise.service';
+import { IsHouseholdService } from './services/auth/is-household.service';
  
 
 
 const routes: Routes = [
-  { path: "", pathMatch: "full", redirectTo: "home" },
-  { path: "home", component: HomeComponent },
-  { path: "producers", component: ProducersComponent },
-  { path: "individuals", component: ProducersComponent },
-  { path: "enterprises", component: EnterprisesComponent },
-  { path: "vendors", component: VendorsComponent },
-  { path: "collectors", component: CollectorsComponent },
+  { path: "", pathMatch: "full", redirectTo: "login" },
+  // { path: "home", component: HomeComponent },
+  // { path: "producers", component: ProducersComponent },
+  // { path: "individuals", component: ProducersComponent },
+  // { path: "enterprises", component: EnterprisesComponent },
+  // { path: "vendors", component: VendorsComponent },
+  // { path: "collectors", component: CollectorsComponent },
   { path: "listing", component: ListingComponent },
   { path: "contact", component: ContactComponent },
   {
     path: "admin",
     component: AdminLoginComponent,
-    canActivate: [BeforeLoginService]
-  },
-  {
-    path: "login",
-    component: LoginComponent,
-    canActivate: [BeforeLoginService]
-  },
-  {
-    path: "households/signup",
-    component: SignupComponent,
-    canActivate: [BeforeLoginService]
-  },
-  {
-    path: "enterprises/signup",
-    component: EnterpriseSignupComponent,
-    canActivate: [BeforeLoginService]
-  },
-  {
-    path: "vendors/signup",
-    component: VendorSignupComponent,
-    canActivate: [BeforeLoginService]
-  },
-  {
-    path: "collectors/signup",
-    component: CollectorSignupComponent,
     canActivate: [BeforeLoginService]
   },
   {
@@ -113,36 +91,87 @@ const routes: Routes = [
     component: AdminProfileComponent,
     canActivate: [AfterLoginService, IsAdminService]
   },
+
   {
-    path: "producer/profile",
-    component: UserProfileComponent,
-    canActivate: [AfterLoginService, IsProducerService]
+    path: "login/enterprise",
+    component: LoginComponent,
+    canActivate: [BeforeLoginService]
   },
+  {
+    path: "login/household",
+    component: LoginComponent,
+    canActivate: [BeforeLoginService]
+  },
+  {
+    path: "login/partners",
+    component: LoginComponent,
+    canActivate: [BeforeLoginService]
+  },
+  {
+    path: "household/signup",
+    component: SignupComponent,
+    canActivate: [BeforeLoginService]
+  },
+  {
+    path: "enterprise/signup",
+    component: EnterpriseSignupComponent,
+    canActivate: [BeforeLoginService]
+  },
+  {
+    path: "host/signup",
+    component: VendorSignupComponent,
+    canActivate: [BeforeLoginService]
+  },
+  {
+    path: "collector/signup",
+    component: CollectorSignupComponent,
+    canActivate: [BeforeLoginService]
+  },
+
+  {
+    path: "household/profile",
+    component: UserProfileComponent,
+    canActivate: [AfterLoginService, IsHouseholdService]
+  },
+  {
+    path: "dashboard/household",
+    component: ProducerDashboardComponent,
+    canActivate: [AfterLoginService, IsHouseholdService]
+  },
+
   {
     path: "collector/profile",
     component: CollectorProfileComponent,
     canActivate: [AfterLoginService, IsCollectorService]
   },
   {
-    path: "vendor/profile",
-    component: VendorProfileComponent,
-    canActivate: [AfterLoginService, IsVendorService]
-  },
-  {
-    path: "dashboard/producer",
-    component: ProducerDashboardComponent,
-    canActivate: [AfterLoginService, IsProducerService]
-  },
-  {
-    path: "dashboard/vendor",
-    component: VendorDashboardComponent,
-    canActivate: [AfterLoginService, IsVendorService]
-  },
-  {
     path: "dashboard/collector",
     component: CollectorDashboardComponent,
     canActivate: [AfterLoginService, IsCollectorService]
   },
+
+  {
+    path: "host/profile",
+    component: VendorProfileComponent,
+    canActivate: [AfterLoginService, IsVendorService]
+  },
+  {
+    path: "dashboard/host",
+    component: VendorDashboardComponent,
+    canActivate: [AfterLoginService, IsVendorService]
+  },
+
+  {
+    path: "enterprise/profile",
+    component: EnterpriseProfileComponent,
+    canActivate: [AfterLoginService, IsEnterpriseService]
+  },
+  {
+    path: "dashboard/enterprise",
+    component: EnterpriseDashboardComponent,
+    canActivate: [AfterLoginService, IsEnterpriseService]
+  },
+  
   {
     path: "request-password-reset",
     component: RequestResetPasswordComponent,

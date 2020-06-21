@@ -4,81 +4,14 @@
 <header id="header" class="fixed-top header4" role="banner">
 	<div class="header-container">
 		<nav class="navbar navbar-expand-lg navbar-light px-0 px-md-4 py-2 custom-container">
-	 <button (click)="clickMenu()" class="btn mr-4" *ngIf="loggedIn">
-	 	<i class="fa fa-list fa-lg" aria-hidden="true"></i>
-	</button>
 
-			<a class="navbar-brand" routerLink="/"><img class="img-fluid" src="assets/images/main-logo.png" alt="logo"></a>
-			<button class="navbar-toggler ml-auto border-0 rounded-0 text-dark" type="button" data-toggle="collapse"
-				data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="fa fa-bars"></span>
+
+			<a class="navbar-brand" href="https://scrapays.com"><img class="img-fluid" src="assets/images/main-logo.png" alt="logo"></a>
+			<button class="btn btn-clear ml-auto border-0 rounded-0 text-dark" type="button" (click)="clickMenu()"  >
+				<span class="fa fa-bars fa-1x"></span>
 			</button>
 
-			<div class="collapse navbar-collapse text-center" id="navigation">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<a class="nav-link" routerLink="/individuals" data-toggle="collapse" data-target="#navigation">Households</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" routerLink="/enterprises" data-toggle="collapse" data-target="#navigation">Enterprises</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" routerLink="/vendors" data-toggle="collapse" data-target="#navigation">Vendors</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" routerLink="/collectors" data-toggle="collapse" data-target="#navigation">Collectors</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" routerLink="/listing" data-toggle="collapse" data-target="#navigation" [ngClass]="{ 'hr-border': Admin}">Listing</a>
-					</li>
-					<li class="nav-item dropdown" *ngIf="!loggedIn">
-						<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-							aria-expanded="false">
-							Account
-						</a>
-						<div class="dropdown-menu">
-							<a class="dropdown-item" routerLink="/login" data-toggle="collapse" data-target="#navigation">Login</a>
-							<a class="dropdown-item" routerLink="/households/signup" data-toggle="collapse" data-target="#navigation"> Househlod Signup</a>
-							<a class="dropdown-item" routerLink="/enterprises/signup" data-toggle="collapse" data-target="#navigation"> Enterprise Signup</a>
-							<a class="dropdown-item" routerLink="/vendors/signup" data-toggle="collapse" data-target="#navigation"> Vendor Signup</a>
-							<a class="dropdown-item" routerLink="/collectors/signup" data-toggle="collapse" data-target="#navigation"> Collector Signup</a>
-						</div>
-					</li>
-
-					<li class="nav-item mt-lg-2 ml-lg-4  d-flex align-items-center justify-content-center">
-						<a class="nav-link py-0" routerLink="/dashboard/messages" data-toggle="collapse" data-target="#navigation">
-							<i class="fa fa-bell-o fa-2x badge" aria-hidden="true" *ngIf="Admin" data-count="10"></i>
-						</a>
-						
-					</li>
-
-					<li class="nav-item " *ngIf="loggedIn">
-						<a class="nav-link pb-0 profile-drop-down" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-							aria-expanded="false">
-							<span class="font-weight-bold mr-2"  *ngIf="Admin" >Admin</span>
-
-							<span class="font-weight-bold mr-2" *ngIf="!Admin">User</span>
-							<img src="assets/images/icons/user-icon.png" class="profile-icon" alt="User Icon">
-						</a>
-						<div class="dropdown-menu">
-							<!-- Admin  -->
-							<!-- <a class="dropdown-item" routerLink="/dashboard" data-toggle="collapse" data-target="#navigation" *ngIf="loggedIn && Admin">Dashboard</a>
-							<a class="dropdown-item" routerLink="/admin/profile" data-toggle="collapse" data-target="#navigation" *ngIf="loggedIn && Admin">Profile</a>
-							<a class="dropdown-item" routerLink="/dashboard/users" data-toggle="collapse" data-target="#navigation" *ngIf="loggedIn && Admin">Users</a> -->
-							
-							<!-- Users -->
-							<!-- <a class="dropdown-item" routerLink="/dashboard/producer" data-toggle="collapse" data-target="#navigation" *ngIf="loggedIn && Producer">Dashboard</a>
-							<a class="dropdown-item" routerLink="/dashboard/vendor" data-toggle="collapse" data-target="#navigation" *ngIf="loggedIn && Vendor">Dashboard</a>
-							<a class="dropdown-item" routerLink="/dashboard/collector" data-toggle="collapse" data-target="#navigation" *ngIf="loggedIn && Collector">Dashboard</a>
-							<a class="dropdown-item" routerLink="/producer/profile" data-toggle="collapse" data-target="#navigation" *ngIf="loggedIn && Producer">Profile</a>
-							<a class="dropdown-item" routerLink="/vendor/profile" data-toggle="collapse" data-target="#navigation" *ngIf="loggedIn && Vendor">Profile</a>
-							<a class="dropdown-item" routerLink="/collector/profile" data-toggle="collapse" data-target="#navigation" *ngIf="loggedIn && Collector">Profile</a>
-							<a class="dropdown-item" href="#" (click)="logOut($event)" data-toggle="collapse" data-target="#navigation" *ngIf="loggedIn">LogOut</a> -->
-						<!-- </div>
-					</li>
-				</ul>
-			</div>
 		</nav>
 	</div>
-</header> -->
-<!--/ Header end -->
+</header>
+<!-- Header end -->

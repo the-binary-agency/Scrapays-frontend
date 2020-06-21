@@ -12,18 +12,18 @@ import { LoginComponent } from '../login/login.component';
   styleUrls: ['./vendor-signup.component.css']
 })
 export class VendorSignupComponent implements OnInit {
-@ViewChild( 'content' ) private content;
+     @ViewChild( 'content' ) private content;
 
   constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router, private loginPage: LoginComponent) {}
   
   
   loading: boolean;
   public error = {password: ''};
-  public VendorForm: FormGroup;
+  public BusinessForm: FormGroup;
   modalTitle: any;
   modalBody: any;
 
-  vendor_validation_messages = {
+  validation_messages = {
     'firstName': [
       { type: 'required', message: 'A First Name is required.' }
     ],
@@ -38,6 +38,18 @@ export class VendorSignupComponent implements OnInit {
       { type: 'required', message: 'A Phone Number is required.' },
       { type: 'pattern', message: 'Please enter a valid Phone Number.' }
     ],
+    'hostAddress': [
+      { type: 'required', message: 'An host address is required.' }
+    ],
+    'spaceSize': [
+      { type: 'required', message: 'Your space size is required.' }
+    ],
+    'hostStartDate': [
+      { type: 'required', message: 'An hosting start date  is required.' }
+    ],
+    'hostingDuration': [
+      { type: 'required', message: 'An hosting start date  is required.' }
+    ],
     'password': [
       { type: 'required', message: 'A Password is required.' },
       { type: 'minlength', message: 'Minimum of 6 characters' },
@@ -49,7 +61,7 @@ export class VendorSignupComponent implements OnInit {
   }
 
   initForm() {
-     this.VendorForm = this.formBuilder.group({
+     this.BusinessForm = this.formBuilder.group({
       firstName: new FormControl('', Validators.compose([
         Validators.maxLength(30),
         Validators.pattern('[a-zA-Z ]*'),
@@ -65,6 +77,21 @@ export class VendorSignupComponent implements OnInit {
       phone: new FormControl('', Validators.compose([
         Validators.pattern('[0-9 ]*'),
         Validators.required])),
+      hostAddress: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      role: new FormControl('Host', Validators.compose([
+        Validators.required
+      ])),
+      hostingDuration: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      spaceSize: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      hostStartDate: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
       password: new FormControl('', Validators.compose([
         Validators.required,
         Validators.minLength(6)
@@ -74,26 +101,16 @@ export class VendorSignupComponent implements OnInit {
   });
   }
 
-  registerVendor( Form ) {
-    this.loading = true;
-    const formdata = new FormData();
-    formdata.append( 'firstName', Form.firstName );
-    formdata.append( 'lastName', Form.lastName );
-    formdata.append( 'email', Form.email );
-    formdata.append( 'phone', Form.phone );
-    formdata.append( 'role', 'Collector' );
-    formdata.append( 'password', Form.password );
-    formdata.append( 'password_confirmation', Form.password_confirmation );
-
-  this.Auth.register(formdata).subscribe(
-    data => {
-      this.handleResponse(data);
-    },
-    error => {
-      this.handleError(error);
-    }
-  );
-}
+  registerBusiness( Form ) {
+    this.Auth.register( Form ).subscribe(
+      data => {
+        this.handleResponse(data);
+      },
+      error => {
+        this.handleError(error);
+      }
+    );
+  }
 
   handleResponse(data){
   this.loading = false;
@@ -126,9 +143,9 @@ export class VendorSignupComponent implements OnInit {
   }
   
   goToDashboard() {
-    var form = {
-        phone: this.VendorForm.value.phone,
-        password: this.VendorForm.value.password
+        var form = {
+        phone: this.BusinessForm.value.phone,
+        password: this.BusinessForm.value.password
       }
       this.loginPage.loginWithPhone( form );
   }
