@@ -4,7 +4,6 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TokenService } from 'src/app/services/auth/token.service';
 import { Router } from '@angular/router';
-import { AdminService } from 'src/app/services/auth/admin.service';
 
 @Component({
   selector: 'app-admin-login',
@@ -15,7 +14,7 @@ export class AdminLoginComponent implements OnInit {
  @ViewChild('content') private content;
   loading: boolean;
 
-  constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router, private Admin: AdminService) {
+  constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router) {
     this.initForm();
   }
 initForm(){

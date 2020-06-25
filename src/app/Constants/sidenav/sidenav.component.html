@@ -1,8 +1,23 @@
- <app-header *ngIf="checkRoute()"></app-header>
  <mat-sidenav-container hasBackdrop="false" [hasBackdrop]="screenWidth < 768">
     <mat-sidenav #sidenav class="mat-elevation-z4" [opened]="screenWidth > 768 && loggedIn &&  checkRoute()" [mode]="(screenWidth > 768) ? 'side' : 'over'"  fixedInViewport="true" position="end">
     <mat-nav-list>
     <a mat-list-item routerLink="/" style="height: 0;"></a>
+    <div class="w-100 pr-0 mb-4">
+      <div class="row p-0">
+         <div class="col-2 px-0 pl-2">
+            <i class="fa fa-bell-o fa-2x badge p-0 pt-2" aria-hidden="true" data-count="0" (click)="test()"></i>
+         </div>
+         <div class="col-6 px-0">
+            <!-- <span class="font-weight-bold" *ngIf="User.companyName">{{ User.companyName }}</span>  <br>
+            <span class="font-weight-bold" *ngIf="!User.companyName">{{ User.firstName + ' ' + User.lastName }}</span>  <br> -->
+            <span class="font-weight-bold" >Company Name</span>  <br>
+            <span class="text-muted small" >company@test.com</span>
+         </div>
+         <div class="col-3 px-0 text-right pl-2">
+            <img src="assets/images/icons/user-icon.png" class="profile-icon" alt="User Icon">
+         </div>
+      </div>
+   </div>
     <!-- Admin -->
    <a mat-list-item routerLink="/dashboard/admin" routerLinkActive="list-item-active" *ngIf="loggedIn && Admin"><i class="fa fa-line-chart  mr-3 ml-1 fa-lg" aria-hidden="true"></i> Dashboard </a>
    <a mat-list-item routerLink="/admin/profile" routerLinkActive="list-item-active" *ngIf="loggedIn && Admin"><i class="fa fa-user-circle-o  mr-3 ml-1 fa-lg" aria-hidden="true"></i> Profile </a>
@@ -34,8 +49,82 @@
 </mat-nav-list>
 </mat-sidenav>
 <mat-sidenav-content>
+    <app-header *ngIf="checkRoute()"></app-header>
      <div class="body-inner">
          <router-outlet></router-outlet>
+
+         <div id="loginModal" class="schedule-modal">
+
+            <!-- Modal content -->
+            <div class="modal-content w-80 w-md-60 head-modal-content">
+               <div class="modal-cal rounded-0">
+                  <span class="loginModalCloser head-model-closer">
+                     <i class="fa fa-times" aria-hidden="true"></i>
+                  </span>
+                  <div class="row">
+                     <div class="col-md-6 col-12 mb-4">
+                        <div class="row p-0 pb-3 bb-black">
+                          <a routerLink="/login/enterprise" class="col-10 pl-0 text-center modal-link">
+                           <h3 class="text-dark font-weight-bold">Login as an <br> Enterprise</h3>
+                          </a>
+                           <a routerLink="/login/enterprise" class="col-2 pr-0 d-flex align-items-center modal-link">
+                              <i class="fa fa-arrow-right fa-3x text-dark" aria-hidden="true"></i>
+                           </a>
+                        </div>
+                     </div>
+                     <div class="col-md-6 col-12 mb-4">
+                        <div class="row pb-3 bb-black">
+                           <a routerLink="/login/household" class="col-10 text-center pl-0 modal-link">
+                              <h3 class="text-dark font-weight-bold">Login as a Household Producer</h3>
+                           </a>
+                           <a routerLink="/login/household" class="col-2 pr-0 d-flex align-items-center modal-link">
+                              <i class="fa fa-arrow-right fa-3x text-dark" aria-hidden="true"></i>
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+         </div>
+
+         <div id="signupModal" class="schedule-modal">
+
+            <!-- Modal content -->
+            <div class="modal-content w-80 w-md-60 head-modal-content">
+               <div class="modal-cal rounded-0">
+                  <span class="signupModalCloser head-model-closer">
+                     <i class="fa fa-times" aria-hidden="true"></i>
+                  </span>
+                  <div class="row">
+                     <div class="col-md-6 col-12 mb-4">
+                        <div class="row p-0 pb-3 bb-black">
+                          <a routerLink="/enterprise/signup" class="col-10 pl-0 text-center modal-link">
+                           <h3 class="text-dark font-weight-bold">Signup as an <br> Enterprise</h3>
+                          </a>
+                           <a routerLink="/enterprise/signup" class="col-2 pr-0 d-flex align-items-center modal-link">
+                              <i class="fa fa-arrow-right fa-3x text-dark" aria-hidden="true"></i>
+                           </a>
+                        </div>
+                     </div>
+                     <div class="col-md-6 col-12 mb-4">
+                        <div class="row pb-3 bb-black">
+                           <a routerLink="/household/signup" class="col-10 text-center pl-0 modal-link">
+                              <h3 class="text-dark font-weight-bold">Signup as a Household Producer</h3>
+                           </a>
+                           <a routerLink="/household/signup" class="col-2 pr-0 d-flex align-items-center modal-link">
+                              <i class="fa fa-arrow-right fa-3x text-dark" aria-hidden="true"></i>
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+         </div>
+
+
+
          <app-footer *ngIf="checkRoute()"></app-footer>
     </div>
 </mat-sidenav-content>

@@ -51,3 +51,16 @@
     left: 68px;
     z-index: 10;
 }
+.dropdown-item {
+    border-radius: 3px !important;
+    border-bottom: 0 !important;
+}
+.dropdown-item:hover {
+    background: #FF7900;
+}
+.dropdown-item:hover {
+    color: #fff !important;
+}
+a.btn.btn-primary.rounded-pill:not(:hover){
+    border: 2px solid #fff !important;
+}

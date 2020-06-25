@@ -50,7 +50,7 @@
         <div class="row mb-5">
             <div class="row font-weight-bold">
                     <div class="col-12">
-                        <h3 class="font-weight-bold ml-3">Company's Infrormation</h3><br>
+                        <h3 class="font-weight-bold ml-3">Company's Information</h3><br>
                     </div>
                     <div class="col-12 col-md-6">
                     <div class="row">
@@ -58,15 +58,15 @@
                                 Company’s Name:
                             </div>
                             <div class="col-6 details mb-3">
-                            <span *ngIf="!edit"> {{ User.companyName }}</span>
-                                <input class="form-control" formControlName="companyName" [(ngModel)]="User.companyName" *ngIf="edit"/>
+                            <span *ngIf="!edit"> {{ User.userable.companyName }}</span>
+                                <input class="form-control" formControlName="companyName" [(ngModel)]="User.userable.companyName" *ngIf="edit"/>
                             </div>
                             <div class="col-6 details mb-3 mb-md-0">
                                 Industry:
                             </div>
                             <div class="col-6 details mb-3 mb-md-0">
-                            <span *ngIf="!edit"> {{ User.industry }}</span>
-                                <input class="form-control" formControlName="industry" [(ngModel)]="User.industry" *ngIf="edit"/>
+                            <span *ngIf="!edit"> {{ User.userable.industry }}</span>
+                                <input class="form-control" formControlName="industry" [(ngModel)]="User.userable.industry" *ngIf="edit"/>
                             </div>
                         </div>
                     </div>
@@ -76,8 +76,8 @@
                                 Company’s Size:
                             </div>
                             <div class="col-6 details">
-                            <span *ngIf="!edit"> {{ User.companySize }}</span>
-                                <input class="form-control" formControlName="companySize" [(ngModel)]="User.companySize" *ngIf="edit"/>
+                            <span *ngIf="!edit"> {{ User.userable.companySize }}</span>
+                                <input class="form-control" formControlName="companySize" [(ngModel)]="User.userable.companySize" *ngIf="edit"/>
                             </div>
                         </div>
                     </div>
@@ -135,7 +135,7 @@
                             Sex:
                             </div>
                             <div class="col-6 details">
-                            <span *ngIf="!edit"> {{ User.sex }}</span>
+                            <span *ngIf="!edit"> {{ User.userable.sex }}</span>
 
                                 <div class="form-check" *ngIf="edit">
                                     <label class="form-check-label">

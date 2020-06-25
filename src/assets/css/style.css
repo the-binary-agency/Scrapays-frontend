@@ -647,7 +647,7 @@ blockquote {
 }
 
 .navbar-light .navbar-nav .nav-link {
-  color: #333;
+  color: #fff;
 }
 
 .navbar-nav .nav-link {
@@ -1602,6 +1602,16 @@ blockquote {
   background-size: cover !important;
   background-repeat: no-repeat;
   background-position: center center;
+}
+.bg-black{
+  background-color: #000;
+}
+.navbar-expand-lg .navbar-nav .nav-link {
+    padding-right: 1.5rem;
+    padding-left: .5rem;
+}
+.side-menu-toggler{
+  font-size: 1.25rem;
 }
 /* End Custom css */
 .q-list-item{
@@ -2580,7 +2590,6 @@ figure.effect-oscar:hover img {
 /* Footer
 ================================================== */
 .footer {
-  padding: 60px 0 100px;
   /* background: #2e2e2e url(../images/footer-bg.png) no-repeat center 0; */
   background-size: cover;
   color: black;
@@ -2723,7 +2732,7 @@ ul.arrow li:before {
 }
 
 .footer ul li a {
-  color: black;
+  color: white;
 }
 
 /* Copyright
@@ -2765,7 +2774,7 @@ ul.arrow li:before {
 }
 
 .footer2 .copyright-info {
-  color: #323232;
+  color: #fff;
   border-top: 1px solid #e7e7e7;
 }
 

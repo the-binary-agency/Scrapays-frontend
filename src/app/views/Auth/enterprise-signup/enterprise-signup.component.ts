@@ -91,7 +91,7 @@ export class EnterpriseSignupComponent implements OnInit {
 
   registerBusiness( Form ) {
     this.loading = true;
-    this.Auth.register( Form ).subscribe(
+    this.Auth.registerEnterprise( Form ).subscribe(
       data => {
         this.handleResponse(data);
       },

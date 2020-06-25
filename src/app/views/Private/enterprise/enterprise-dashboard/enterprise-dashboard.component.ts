@@ -89,7 +89,7 @@ export class EnterpriseDashboardComponent implements OnInit {
   requestMaterials = [ ];
   modalTitle: any;
   modalBody: any;
-  loading: boolean;
+  loading = false;
   model: NgbDateStruct;
   date: { year: number, month: number };
   times = [
@@ -167,7 +167,7 @@ export class EnterpriseDashboardComponent implements OnInit {
     this.auth.getUserWithTonnage( this.token.phone ).subscribe(
       (data : any) => {
         this.User = data.user;  
-        this.automated = data.user.recoveryAutomated;
+        this.automated = data.user.userable.recoveryAutomated;
         this.CollectedScrap = data.tonnage;
         this.processTonnage();
       },
@@ -312,6 +312,14 @@ export class EnterpriseDashboardComponent implements OnInit {
   automatePickup() {
     this.loading = true;
     this.auth.automatePickup( {phone: this.token.phone } ).subscribe(
+      data => this.handleResponse( data ),
+      error => this.handleError( error )
+    )
+  }
+
+  unAutomatePickup() {
+    this.loading = true;
+    this.auth.unAutomatePickup( {phone: this.token.phone } ).subscribe(
       data => this.handleResponse( data ),
       error => this.handleError( error )
     )

@@ -11,7 +11,7 @@ canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean 
     const Household: boolean = this.Token.Household();
     
     if (!Household) {
-      this.router.navigateByUrl('login');
+      this.router.navigateByUrl('/login/household');
     }
     
     return this.Token.Household();

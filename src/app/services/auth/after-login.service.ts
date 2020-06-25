@@ -12,8 +12,8 @@ export class AfterLoginService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise <boolean> {
     const loggedIn: boolean = this.Token.loggedIn();
   if (!loggedIn) {
-    this.document.location.href = 'https://scrapays.com';
     this.header.changeErrorMessage( 'Your session has expired or you are not logged in.' );
+    this.document.location.href = 'https://scrapays.com';
   }
     
     return this.Token.loggedIn();

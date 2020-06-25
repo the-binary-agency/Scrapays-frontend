@@ -27,18 +27,6 @@ export class AuthService {
 URL = this.env.backendUrl + '/api/auth'
   
   constructor ( private http: HttpClient, private token: TokenService, private env: EnvironmentService, private router: Router ) { }
-  
-  loginWithEmail( Form ) {
-    return this.http.post( `${ this.URL }/loginwithemail`, Form );
-  }
-
-  loginWithPhone( Form ) {
-    return this.http.post( `${ this.URL }/loginwithphone`, Form );
-  }
-  
-  register( Form ) {
-    return this.http.post( `${ this.URL }/signup`, Form );
-}
 
   changeAuthStatus(value: boolean) {
     this.loggedIn.next( value );
@@ -64,6 +52,33 @@ URL = this.env.backendUrl + '/api/auth'
     this.Collector.next( value );
   }
   
+  loginWithEmail( Form ) {
+    return this.http.post( `${ this.URL }/loginwithemail`, Form );
+  }
+
+  loginWithPhone( Form ) {
+    return this.http.post( `${ this.URL }/loginwithphone`, Form );
+  }
+  
+  registerEnterprise( Form ) {
+    return this.http.post( `${ this.URL }/registerEnterprise`, Form );
+  }
+  
+  registerHousehold( Form ) {
+    return this.http.post( `${ this.URL }/registerHousehold`, Form );
+  }
+  
+  registerHost( Form ) {
+    return this.http.post( `${ this.URL }/registerHost`, Form );
+}
+
+  registerCollector( Form ) {
+    return this.http.post( `${ this.URL }/registerCollector`, Form );
+}
+  registerAgent( Form ) {
+    return this.http.post( `${ this.URL }/registerAgent`, Form );
+}
+  
   getAllUsers(id) {
     return this.http.get( `${ this.URL }/getAllUsers/${id}` );
   }
@@ -83,14 +98,6 @@ URL = this.env.backendUrl + '/api/auth'
   getUserWithTonnage( id ) {
     return this.http.get( `${ this.URL }/getUserWithTonnage/${id}`);
   }
-
-  // getProducerWithToken( id ) {
-  //   return this.http.get( `${ this.URL }/getProducerWithToken/${id}` );
-  // }
-
-  // getVendorWithToken( id ) {
-  //   return this.http.get( `${ this.URL }/getVendorWithToken/${id}`);
-  // }
 
   getDisposedTonnage( id ): Observable<any> {
     return this.http.get<any>( `${ this.URL }/getDisposedTonnage/${id}`);
@@ -140,8 +147,8 @@ URL = this.env.backendUrl + '/api/auth'
     return this.http.post( `${ this.URL }/automatePickup`, form);
   }
 
-  unautomatePickup( id ) {
-    return this.http.post( `${ this.URL }/automatePickup/`, id);
+  unAutomatePickup( id ) {
+    return this.http.post( `${ this.URL }/unAutomatePickup`, id);
   }
 
   submitInventory( form ) {

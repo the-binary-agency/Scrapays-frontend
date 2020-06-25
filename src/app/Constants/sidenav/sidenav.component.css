@@ -1,5 +1,5 @@
 mat-sidenav{
-    padding-top: 50px;
+    /* padding-top: 72px; */
     width: 250px;
 }
 .list-item-active{
@@ -29,6 +29,8 @@ mat-sidenav{
     border: 0;
     background-color: transparent;
     margin: 20% auto;
+    animation-name: animatetop;
+    animation-duration: 0.4s
 }
 
 .modal-cal{
@@ -39,13 +41,18 @@ mat-sidenav{
 }
 
 /* The Close Button */
+.loginModalCloser,
+.signupModalCloser,
 .close {
   color: white;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
-
+.loginModalCloser:hover,
+.loginModalCloser:focus,
+.signupModalCloser:focus,
+.signupModalCloser:hover,
 .close:hover,
 .close:focus {
   color: red;
@@ -55,4 +62,59 @@ mat-sidenav{
 .modal-container{
     border-radius: 15px;
     padding: 10px;
+}
+.profile-icon{
+    height: 40px;
+    width: auto;
+}
+.profile-drop-down{
+    padding-top: 0.85rem !important;
+}
+.fa.badge{
+    display: flow-root;
+    width: fit-content;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+}
+.fa.badge:after{
+    content: attr(data-count);
+    position: absolute;
+    background: red;
+    top: 0;
+    left: 13px;
+    padding: 3px;
+    text-align: center;
+    line-height: 1rem;
+    font-size: 1rem;
+    border-radius: 100%;
+    color: white;
+    border: 1px solid red;
+}
+.mat-list-item-content:first-of-type{
+  padding-left: 2px !important; 
+  padding-right: 2px !important; 
+}
+/* Modal Header */
+.modal-header {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+/* Add Animation */
+@keyframes animatetop {
+  from {top: -300px; opacity: 0}
+  to {top: 0; opacity: 1}
+}
+.head-model-closer{
+    position: relative;
+    top: -22px;
+    right: -18px;
+    background-color: black;
+    border-radius: 27px;
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 3px;
+    border: 1px solid white;
 }

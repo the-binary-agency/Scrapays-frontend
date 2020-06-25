@@ -129,3 +129,13 @@ ngb-datepicker {
 [ngbDatepickerDayView].bg-primary {
     background-color: #FF7900 !important;
 }
+.logo{
+    width: 120px;
+    height: auto;
+}
+.head-modal-content {
+  margin: 24% auto !important;
+}
+.bb-black{
+  border-bottom: 1px solid black;
+}

@@ -102,7 +102,7 @@ export class VendorSignupComponent implements OnInit {
   }
 
   registerBusiness( Form ) {
-    this.Auth.register( Form ).subscribe(
+    this.Auth.registerHost( Form ).subscribe(
       data => {
         this.handleResponse(data);
       },

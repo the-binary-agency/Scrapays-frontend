@@ -317,7 +317,7 @@ jQuery(function ($) {
 
 
   /* ----------------------------------------------------------- */
-  /*  Listing header
+  /*  Custom Js
   /* ----------------------------------------------------------- */
 
 
@@ -337,5 +337,30 @@ var images = ["home-scrap-carousel-6.png", "home-scrap-carousel-3.png", "home-sc
         }, 5000);
     });
 
+  $( '#loginModalToggler' ).click( function () {
+    $( '#loginModal' ).show()
+  } );
+  $( '.loginModalCloser' ).click( function () {
+    $( '#loginModal' ).hide()
+  } );
 
-});
+  $( '#signupModalToggler' ).click( function () {
+    $( '#signupModal' ).show()
+  } );
+  $( '.signupModalCloser' ).click( function () {
+    $( '#signupModal' ).hide()
+  } );
+
+  $( '.modal-link' ).click( function () {
+    $( '#loginModal' ).hide()
+    $( '#signupModal' ).hide()
+  })
+
+  $( window ).click( function ( event ){
+    if (  '#' + event.target.id == $( '#loginModal' ).selector || '#' + event.target.id == $( '#signupModal' ).selector ) {
+      $( '#loginModal' ).hide()
+      $( '#signupModal' ).hide()
+    }
+  })
+
+} );

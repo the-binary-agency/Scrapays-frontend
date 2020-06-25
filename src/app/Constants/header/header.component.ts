@@ -65,6 +65,11 @@ export class HeaderComponent implements OnInit {
 
   logOut(event: MouseEvent){
     event.preventDefault();
+    var Admin = this.Admin;
+    var Household = this.Household;
+    var Enterprise = this.Enterprise;
+    var Vendor = this.Vendor;
+    var Collector = this.Collector;
     this.Token.remove();
     this.Auth.changeAuthStatus(false);
     this.Auth.changeAdminStatus(false);
@@ -72,10 +77,16 @@ export class HeaderComponent implements OnInit {
     this.Auth.changeEnterpriseStatus(false);
     this.Auth.changeVendorStatus(false);
     this.Auth.changeCollectorStatus(false);
-    this.router.navigateByUrl('/login');
+    if ( Admin ) {
+      this.router.navigateByUrl( '/login/partners' );
+    } else if ( Enterprise ) {
+      this.router.navigateByUrl( '/login/enterprise' );
+    } else if ( Household ) {
+      this.router.navigateByUrl( '/login/household' );
+    } 
   }
 
- clickMenu() { 
+  clickMenu() { 
     this.sidenav.sidenav.toggle();
   }
   

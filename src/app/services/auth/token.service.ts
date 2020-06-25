@@ -11,7 +11,11 @@ export class TokenService {
     login1: this.env.backendUrl + '/api/auth/loginwithemail',
     login2: this.env.backendUrl + '/api/auth/loginwithphone',
     loginAdmin: this.env.backendUrl + '/api/auth/loginAdmin',
-    signup: this.env.backendUrl + '/api/auth/signup',
+    registerEnterprise: this.env.backendUrl + '/api/auth/registerEnterprise',
+    registerHousehold: this.env.backendUrl + '/api/auth/registerHousehold',
+    registerCollector: this.env.backendUrl + '/api/auth/registerCollector',
+    registerHost: this.env.backendUrl + '/api/auth/registerHost',
+    registerAgent: this.env.backendUrl + '/api/auth/registerAgent',
     signupAdmin: this.env.backendUrl + '/api/auth/signupAdmin'
   }
 
@@ -54,7 +58,7 @@ isValid(){
   if(token){
     const payload = this.payload( token )
     if ( payload ) {
-      return  (payload.role == 'Admin') ? true : false; 
+      return  (payload.userable_type == 'App\\Admin') ? true : false; 
     }
       return false;
     }
@@ -65,7 +69,7 @@ isValid(){
     if(token){
       const payload = this.payload( token )
       if ( payload ) {
-        return  (payload.role == 'Collector') ? true : false; 
+        return  (payload.userable_type == 'App\\Collector') ? true : false; 
       }
         return false;
      }
@@ -77,7 +81,7 @@ isValid(){
     if(token){
       const payload = this.payload( token )
       if ( payload ) {
-        return  (payload.role == 'Vendor') ? true : false; 
+        return  (payload.userable_type == 'App\\Vendor') ? true : false; 
       }
         return false;
     }
@@ -88,7 +92,7 @@ isValid(){
     if(token){
       const payload = this.payload( token )
       if ( payload ) {
-        return  (payload.role == 'Enterprise') ? true : false; 
+        return  (payload.userable_type == 'App\\Enterprise') ? true : false; 
       }
         return false;
     }
@@ -99,7 +103,7 @@ isValid(){
     if(token){
       const payload = this.payload( token )
       if ( payload ) {
-        return  (payload.role == 'Household') ? true : false; 
+        return  (payload.userable_type == 'App\\Household') ? true : false; 
       }
         return false;
     }

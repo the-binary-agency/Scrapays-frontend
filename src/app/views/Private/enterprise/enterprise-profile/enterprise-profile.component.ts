@@ -24,7 +24,9 @@ export class EnterpriseProfileComponent implements OnInit {
   modalBody: any;
   loading: boolean;
   edit = false;
-  User: any = {};
+  User: any = {
+    'userable' : {}
+  };
   avatarImage: any;
   sex: string;
   public Form: FormGroup;
@@ -86,27 +88,27 @@ export class EnterpriseProfileComponent implements OnInit {
   updateProfile( form ) {
     this.loading = true;
     var user = this.processForm( form )
-    this.auth.updateUser( user.id, user ).subscribe(
+    this.auth.updateUser( this.token.phone, user ).subscribe(
       data => this.handleResponse( data ),
       error => this.handleError( error )
     )
   }
 
   processForm( Form ) {
-    var formdata = {
-      id: this.User.id,
-      avatarImage: this.avatarImage,
-      firstName: Form.firstName,
-      lastName: Form.lastName,
-      phone: Form.phone,
-      email: Form.email,
-      companyName: Form.companyName,
-      companySize: Form.companySize,
-      industry: Form.industry,
-      sex: this.sex,
-    };
+    const formData = new FormData();
+      formData.append('firstName', Form.firstName);
+      formData.append('lastName', Form.lastName);
+      formData.append('phone', Form.phone);
+      formData.append('email', Form.email);
+      formData.append('companyName', Form.companyName);
+      formData.append('companySize', Form.companySize);
+      formData.append('industry', Form.industry);
+    formData.append( 'sex', Form.sex );
+    if ( this.avatarImage ) {
+      formData.append('avatarImage', this.avatarImage, this.avatarImage.name);
+    }
 
-    return formdata;
+    return formData;
   }
 
   handleResponse( data ) {

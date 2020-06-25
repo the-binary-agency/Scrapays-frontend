@@ -72,9 +72,6 @@ export class SignupComponent implements OnInit {
         Validators.required
       ])),
       inviteCode: new FormControl(''),
-      role: new FormControl('Household', Validators.compose([
-        Validators.required
-      ])),
       password: new FormControl('', Validators.compose([
         Validators.required,
         Validators.minLength(6)
@@ -86,7 +83,7 @@ export class SignupComponent implements OnInit {
 
   registerBusiness( Form ) {
     this.loading = true;
-    this.Auth.register( Form ).subscribe(
+    this.Auth.registerHousehold( Form ).subscribe(
       data => {
         this.handleResponse(data);
       },

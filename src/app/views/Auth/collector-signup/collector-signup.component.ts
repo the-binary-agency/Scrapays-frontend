@@ -91,7 +91,7 @@ export class CollectorSignupComponent implements OnInit {
     formdata.append( 'password', Form.password );
     formdata.append( 'password_confirmation', Form.password_confirmation );
 
-  this.Auth.register(formdata).subscribe(
+  this.Auth.registerCollector(formdata).subscribe(
     data => {
       this.handleResponse(data);
     },

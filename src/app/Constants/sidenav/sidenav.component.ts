@@ -26,16 +26,17 @@ export class SidenavComponent implements OnInit {
   modalBody: any;
   loading = false;
 
-  constructor ( private sideNavService: SideMenuService, private router: Router,  private Auth: AuthService, private Token: TokenService,  private modal: NgbModal, private userData: UserDataService ) {
+  constructor ( private sideNavService: SideMenuService, private router: Router,  private Auth: AuthService, private Token: TokenService,  private modal: NgbModal, private userData: UserDataService, private token: TokenService, private auth: AuthService ) {
    }
 
   screenWidth: number;
   lastHome: string;
-  User = this.userData.User;
+  User: any = {};
 
   ngOnInit(): void { 
     this.processRoles();
     this.changeSidenavMode();
+    // this.getUser();
   }
   
   ngAfterViewInit(): void {
@@ -154,4 +155,20 @@ export class SidenavComponent implements OnInit {
     this.modal.open(content, { centered: true });
   }
 
+  test() {
+    console.log('sdfghjkl;lkj');
+    
+  }
+
+  getUser() {
+    if ( this.token.phone ) {
+      this.auth.getUserWithID( this.token.phone ).subscribe(
+        data => {
+          this.User.User = data;
+          console.log(this.User.User);
+        }
+      )
+    }
+  }
+  
 }

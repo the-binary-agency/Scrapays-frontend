@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { AuthService } from './services/auth/auth.service';
+import { TokenService } from './services/auth/token.service';
+import { UserDataService } from './services/auth/user-data.service';
 
 declare let fbq:Function;
 declare let gtag:Function;
@@ -14,7 +17,7 @@ export class AppComponent {
   title = 'Scrapays-angular';
   page;
 
-  constructor ( private router: Router ) {
+  constructor ( private router: Router, private auth: AuthService, private token: TokenService, private userData: UserDataService ) {
     console.log("app component constructor");
     
     router.events.subscribe((y: NavigationEnd) => {
@@ -24,7 +27,7 @@ export class AppComponent {
         // analytics.page();
         gtag('js', new Date());
       }
-    })
+    } )
   }
 
   getRoute() {

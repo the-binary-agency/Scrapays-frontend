@@ -2,14 +2,62 @@
 <!-- <button class="btn btn-primary" (click)="changeErrorMessage('abc\'h')">Change message</button> -->
 <!-- Header start -->
 <header id="header" class="fixed-top header4" role="banner">
-	<div class="header-container">
+	<div class="header-container bg-black">
 		<nav class="navbar navbar-expand-lg navbar-light px-0 px-md-4 py-2 custom-container">
+						<button class="btn btn-clear ml-lg-auto border-0 rounded-0 text-light side-menu-toggler" type="button" (click)="clickMenu()" *ngIf="loggedIn">
+							<span class="fa fa-bars"></span>
+						</button>
+
+			<a class="navbar-brand" href="https://scrapays.com"><img class="logo" src="assets/images/main-logo.png" alt="logo"></a>
 
 
-			<a class="navbar-brand" href="https://scrapays.com"><img class="img-fluid" src="assets/images/main-logo.png" alt="logo"></a>
-			<button class="btn btn-clear ml-auto border-0 rounded-0 text-dark" type="button" (click)="clickMenu()"  >
-				<span class="fa fa-bars fa-1x"></span>
+			<button class="navbar-toggler ml-auto border-0 rounded-0 text-white" type="button" data-toggle="collapse"
+				data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="fa fa-bars"></span>
 			</button>
+
+			<div class="collapse navbar-collapse text-center" id="navigation">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false">
+							Product
+						</a>
+						<div class="dropdown-menu bg-black text-white">
+							<a class="dropdown-item  text-white" href="https://scrapays.com/enterprise" data-toggle="collapse" data-target="#navigation">Enterprise</a>
+							<a class="dropdown-item  text-white" href="https://scrapays.com/household" data-toggle="collapse" data-target="#navigation">Household</a>
+							<a class="dropdown-item  text-white" href="https://scrapays.com/list" data-toggle="collapse" data-target="#navigation">List</a>
+						</div>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false">
+							Partners
+						</a>
+						<div class="dropdown-menu bg-black text-white">
+							<a class="dropdown-item  text-white" href="https://scrapays.com/host" data-toggle="collapse" data-target="#navigation">Host</a>
+							<a class="dropdown-item  text-white" href="https://scrapays.com/agent" data-toggle="collapse" data-target="#navigation">Agents</a>
+							<a class="dropdown-item  text-white" href="https://scrapays.com/collectors" data-toggle="collapse" data-target="#navigation">Colectors</a>
+						</div>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="https://scrapays.com/contact-us">Contact Us</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link"  id="loginModalToggler" href="javascript:void(0)">Sign In</a>
+					</li>
+					<li class="nav-item d-flex align-items-center justify-content-center">
+						<a class="btn btn-primary rounded-pill solid"   id="signupModalToggler" href="javascript:void(0)">Sign Up</a>
+					</li>
+
+					<!-- <li class="nav-item mt-lg-2 ml-lg-4  d-flex align-items-center justify-content-center">
+						<a class="nav-link py-0" routerLink="/dashboard/messages" data-toggle="collapse" data-target="#navigation">
+							<i class="fa fa-bell-o fa-2x badge" aria-hidden="true" *ngIf="Admin" data-count="10"></i>
+						</a>
+						
+					</li> -->
+				</ul>
+			</div>
 
 		</nav>
 	</div>

@@ -10,7 +10,7 @@ export class IsVendorService implements CanActivate{
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise <boolean> {
     const Vendor: boolean = this.Token.Vendor();
     if (!Vendor) {
-      this.router.navigateByUrl('home');
+      this.router.navigateByUrl('/login/partners');
     }
     
     return this.Token.Vendor();

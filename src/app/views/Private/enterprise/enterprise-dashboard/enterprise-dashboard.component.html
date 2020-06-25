@@ -13,7 +13,7 @@
           <div class="alert automate-alert w-100 fake-btn sc-green text-center" role="alert" (click)="automatePickup()" *ngIf="!automated">
             <strong>Click  here to automate your recovery process with scrapays</strong>
           </div>
-          <div class="alert unautomate-alert w-100 fake-btn sc-orange text-center" role="alert" (click)="automatePickup()" *ngIf="automated">
+          <div class="alert unautomate-alert w-100 fake-btn sc-orange text-center" role="alert" (click)="unAutomatePickup()" *ngIf="automated">
             <strong>Click  here to undo  the automation of your recovery process</strong>
           </div>
         </div>
@@ -83,8 +83,8 @@
       </div>
       <div class="row">
          <div class="col-6 d-flex pb-2 border-right border-bottom" *ngFor="let display of displayedMaterials">
-            <img src="{{ URL }}/storage/material_list_images/{{ display.image }}" alt="metal icon">
-          <span class="ml-2 ml-md-4 font-weight-bold text-capitalize">
+            <img src="{{ URL }}/storage/material_list_images/{{ display.image }}" alt="material icon" *ngIf="display">
+          <span class="ml-2 ml-md-4 font-weight-bold text-capitalize" *ngIf="display">
             {{ display.name }} <br>
             {{ getDisplayedPrice( display.name ) }}kg
           </span>

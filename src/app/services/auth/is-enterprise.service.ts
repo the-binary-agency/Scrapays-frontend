@@ -11,7 +11,7 @@ canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean 
     const Enterprise: boolean = this.Token.Enterprise();
     
     if (!Enterprise) {
-      this.router.navigateByUrl('login');
+      this.router.navigateByUrl('/login/enterprise');
     }
     
     return this.Token.Enterprise();
