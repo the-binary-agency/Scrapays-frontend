@@ -4,17 +4,23 @@
     <a mat-list-item routerLink="/" style="height: 0;"></a>
     <div class="w-100 pr-0 mb-4">
       <div class="row p-0">
-         <div class="col-2 px-0 pl-2">
-            <i class="fa fa-bell-o fa-2x badge p-0 pt-2" aria-hidden="true" data-count="0" (click)="test()"></i>
+         <div class="col-2 px-0 pl-1 mr-1">
+            <!-- <i class="fa fa-bell-o fa-2x p-0 pt-2 notificationsModalToggler" aria-hidden="true" [ngClass]="{ badge: newNotifications.length > 0}" [attr.data-count]="newNotifications.length" id="notificationsModalToggler"></i> -->
+            <div id="notificationsModalToggler" class="notificationsModalToggler">
+            
+               <button mat-icon-button>
+                  <mat-icon [matBadgeHidden]="newNotifications.length == 0" [matBadge]="newNotifications.length" matBadgeColor="warn" class="h1">notifications_none</mat-icon>
+               </button>
+            </div>
          </div>
          <div class="col-6 px-0">
-            <!-- <span class="font-weight-bold" *ngIf="User.companyName">{{ User.companyName }}</span>  <br>
-            <span class="font-weight-bold" *ngIf="!User.companyName">{{ User.firstName + ' ' + User.lastName }}</span>  <br> -->
-            <span class="font-weight-bold" >Company Name</span>  <br>
-            <span class="text-muted small" >company@test.com</span>
+            <span class="font-weight-bold companyName" *ngIf="Enterprise">{{ User.userable.companyName }}</span>  <br *ngIf="Enterprise">
+            <span class="font-weight-bold" *ngIf="!Enterprise">{{ User.firstName + ' ' + User.lastName }}</span>  <br *ngIf="!Enterprise">
+            <span class="text-muted small" >{{ User.email }}</span>
          </div>
          <div class="col-3 px-0 text-right pl-2">
-            <img src="assets/images/icons/user-icon.png" class="profile-icon" alt="User Icon">
+            <img src="{{ URL }}/storage/profile_pictures/{{ User.avatarImage }}" class="profile-icon" alt="User Icon" *ngIf="User.avatarImage">
+            <img [src]="avatar" class="profile-icon" alt="User Icon" *ngIf="!User.avatarImage">
          </div>
       </div>
    </div>
@@ -45,12 +51,12 @@
    <a mat-list-item routerLink="/contact" routerLinkActive="list-item-active" *ngIf="loggedIn && !Admin"><i class="fa fa-comment-o  mr-3 ml-1 fa-lg" aria-hidden="true"></i> Contact Scrapays </a>
    <hr>
    <a mat-list-item href="#" (click)="logOut($event)"><i class="fa fa-sign-out fa-flip-horizontal mr-3 ml-1 fa-lg" aria-hidden="true"></i> Log Out </a>
-   <a mat-list-item href="#" (click)="clickMenu($event)" class="menu-toggler" *ngIf="screenWidth > 768"><i class="fa fa-columns mr-3 ml-1 fa-lg" aria-hidden="true"></i> Toggle Sidemenu </a>
+   <a mat-list-item href="#" (click)="clickMenu($event)" class="menu-toggler" *ngIf="screenWidth > 768"><i class="fa fa-columns mr-3 ml-1 fa-lg" aria-hidden="true"></i> Close Sidemenu </a>
 </mat-nav-list>
 </mat-sidenav>
 <mat-sidenav-content>
     <app-header *ngIf="checkRoute()"></app-header>
-     <div class="body-inner">
+     <div class="app-content custom-container">
          <router-outlet></router-outlet>
 
          <div id="loginModal" class="schedule-modal">
@@ -75,7 +81,7 @@
                      <div class="col-md-6 col-12 mb-4">
                         <div class="row pb-3 bb-black">
                            <a routerLink="/login/household" class="col-10 text-center pl-0 modal-link">
-                              <h3 class="text-dark font-weight-bold">Login as a Household Producer</h3>
+                              <h3 class="text-dark font-weight-bold">Login as a <br> Household Producer</h3>
                            </a>
                            <a routerLink="/login/household" class="col-2 pr-0 d-flex align-items-center modal-link">
                               <i class="fa fa-arrow-right fa-3x text-dark" aria-hidden="true"></i>
@@ -110,7 +116,7 @@
                      <div class="col-md-6 col-12 mb-4">
                         <div class="row pb-3 bb-black">
                            <a routerLink="/household/signup" class="col-10 text-center pl-0 modal-link">
-                              <h3 class="text-dark font-weight-bold">Signup as a Household Producer</h3>
+                              <h3 class="text-dark font-weight-bold">Signup as a <br> Household Producer</h3>
                            </a>
                            <a routerLink="/household/signup" class="col-2 pr-0 d-flex align-items-center modal-link">
                               <i class="fa fa-arrow-right fa-3x text-dark" aria-hidden="true"></i>
@@ -123,9 +129,78 @@
 
          </div>
 
+         <div #notificationsModal class="schedule-modal notificationsModal">
 
+            <!-- Modal content -->
+            <div class="modal-content w-80 w-md-60 not-modal-content">
+               <div class="modal-cal p-4">
+                  <div class="w-100" *ngIf="!viewNotification">
+                     <div class="w-100 text-center font-weight-bold" *ngIf="newNotifications.length == 0">
+                        You have no new notiifications <i class="fa fa-smile-o" aria-hidden="true"></i>
+                        <span class="notificationsModalCloser text-danger float-right fake-btn" (click)="closeNotificationModal()">
+                           <i class="fa fa-times" aria-hidden="true"></i>
+                        </span>
+                     </div>
+                     <div class="bb-black pb-2" *ngIf="newNotifications.length > 0">
+                        <span class="font-weight-bold">
+                           New Notifications
+                        </span>
+                        <span class="notificationsModalCloser text-danger float-right fake-btn" (click)="closeNotificationModal()">
+                           <i class="fa fa-times" aria-hidden="true"></i>
+                        </span>
+                     </div>
+                     <div class="w-100" *ngIf="newNotifications.length > 0">
+                        <div class="list-group">
+                           <div *ngFor="let new of newNotificationsToShow | slice: 0 : 5; let i = index" class="w-90">
+                              <input class="not-check-input sc-orange" type="checkbox"  (change)="checkValue($event, i)">
+                              <a href="javascript:void(0)" class="list-group-item list-group-item-action trunc-text" (click)="showNotification( new )"> {{ new.notification_body }} </a>
+                           </div>
+                        </div>
+                     </div>
 
-         <app-footer *ngIf="checkRoute()"></app-footer>
+                     <mat-paginator (page)="onNewPageChange($event)" [length]="newNotifications.length" pageSize="5" *ngIf="newNotifications.length > 0">
+                     </mat-paginator>
+
+                     <div class="bb-black py-2" *ngIf="readNotifications.length > 0">
+                        <span class="font-weight-bold">
+                        Previous
+                        </span>
+                     </div>
+                     <div class="w-100" *ngIf="readNotifications.length > 0">
+                        <div class="list-group">
+                           <div *ngFor="let read of readNotificationsToShow | slice: 0 : 5; let i = index" class="w-90">
+                              <input class="not-check-input sc-orange" type="checkbox"  (change)="checkReadValue($event, i)">
+                              <a href="javascript:void(0)" class="list-group-item list-group-item-action trunc-text"> {{ read.notification_body }} </a>
+                           </div>
+                        </div>
+                     </div>
+
+                     <mat-paginator (page)="onReadPageChange($event)" [length]="readNotifications.length" pageSize="5" *ngIf="readNotifications.length > 0">
+                     </mat-paginator>
+
+                     <div class="w-100" *ngIf="tempNotifications.length > 0">
+                        <button type="button" class="btn  btn-link btn-sm text-success float-right" (click)="toggleSelected(true)" [disabled]="notyLoading">Toggle read Status</button>
+                        <button type="button" class="btn  btn-link btn-sm text-danger float-right"  (click)="deleteSelected()" [disabled]="notyLoading">Delete</button>
+                        <i class="fa fa-circle-o-notch fa-spin fa-2x float-right mr-3" aria-hidden="true" *ngIf="notyLoading"></i>
+                     </div>
+
+                  </div>
+
+                  <div class="w-100" *ngIf="viewNotification">
+                     <div class="w-100">
+                        <i class="fa fa-arrow-left" aria-hidden="true" (click)="cancelShow()"></i>
+                        <span class="notificationsModalCloser text-danger float-right fake-btn" (click)="closeNotificationModal()">
+                           <i class="fa fa-times" aria-hidden="true"></i>
+                        </span>
+                     </div>
+                     <p>{{ notificationToBeViewed }}</p>
+                  </div>
+               </div>
+            </div>
+
+         </div>
+
     </div>
+      <app-footer *ngIf="checkRoute()"></app-footer>
 </mat-sidenav-content>
 </mat-sidenav-container>

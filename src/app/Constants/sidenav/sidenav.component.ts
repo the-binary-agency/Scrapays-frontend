@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { TokenService } from 'src/app/services/auth/token.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserDataService } from 'src/app/services/auth/user-data.service';
+import { EnvironmentService } from 'src/app/services/env/environment.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -15,6 +16,7 @@ import { UserDataService } from 'src/app/services/auth/user-data.service';
 export class SidenavComponent implements OnInit {
   @ViewChild( 'sidenav' ) public sidenav: MatSidenav;
   @ViewChild( 'content' ) private content;
+  @ViewChild( 'notificationsModal' ) private notificationsModal;
 
   public loggedIn: boolean;
   public Admin: boolean;
@@ -25,18 +27,29 @@ export class SidenavComponent implements OnInit {
   modalTitle: any;
   modalBody: any;
   loading = false;
+  viewNotification = false;
+  notificationToBeViewed: any = {};
 
-  constructor ( private sideNavService: SideMenuService, private router: Router,  private Auth: AuthService, private Token: TokenService,  private modal: NgbModal, private userData: UserDataService, private token: TokenService, private auth: AuthService ) {
+  constructor ( private sideNavService: SideMenuService, private router: Router,  private Auth: AuthService, private Token: TokenService,  private modal: NgbModal, private userData: UserDataService, private token: TokenService, private auth: AuthService, private env: EnvironmentService ) {
    }
 
+  avatar = 'assets/images/icons/user-icon.png';
+  URL = this.env.backendUrl;
   screenWidth: number;
   lastHome: string;
-  User: any = {};
+  User: any = { userable: {} };
+  newNotificationsToShow = [];
+  readNotificationsToShow = [];
+  newNotifications = []
+  readNotifications = [];
+  tempNotifications = [];
+  openedNotifications = [];
+  notyLoading = false;
 
   ngOnInit(): void { 
     this.processRoles();
     this.changeSidenavMode();
-    // this.getUser();
+    this.getUser();
   }
   
   ngAfterViewInit(): void {
@@ -68,6 +81,7 @@ export class SidenavComponent implements OnInit {
     this.Auth.enterpriseStatus.subscribe( value => this.Enterprise = value );
     this.Auth.collectorStatus.subscribe( value => this.Collector = value );
     this.Auth.vendorStatus.subscribe( value => this.Vendor = value );
+    this.userData.User.subscribe( value => this.User = value );
   }
 
 
@@ -93,9 +107,9 @@ export class SidenavComponent implements OnInit {
     } else if ( Household ) {
       this.router.navigateByUrl( '/login/household' );
     } else if ( Vendor ) {
-      this.router.navigateByUrl( '/login/vendor' );
+      this.router.navigateByUrl( '/login/partners' );
     } else if ( Collector ) {
-      this.router.navigateByUrl( '/login/collector' );
+      this.router.navigateByUrl( '/login/partners' );
     }
   }
 
@@ -112,7 +126,7 @@ export class SidenavComponent implements OnInit {
     this.Auth.changeEnterpriseStatus(false);
     this.Auth.changeVendorStatus(false);
     this.Auth.changeCollectorStatus(false);
-    if ( Admin ) {
+    if ( Admin || Collector || Vendor ) {
       this.router.navigateByUrl( '/login/partners' );
     } else if ( Enterprise ) {
       this.router.navigateByUrl( '/login/enterprise' );
@@ -162,13 +176,106 @@ export class SidenavComponent implements OnInit {
 
   getUser() {
     if ( this.token.phone ) {
-      this.auth.getUserWithID( this.token.phone ).subscribe(
-        data => {
-          this.User.User = data;
-          console.log(this.User.User);
+      this.auth.getUserWithNotifications( this.token.phone ).subscribe(
+        (data: any) => {
+          this.userData.updateUserData( data.user );
+          this.handleNotifications( data.notifications );
         }
       )
+    } 
+  }
+
+  handleNotifications( notifications ) {
+    this.newNotifications = [];
+    this.readNotifications = [];
+    for ( let i = 0; i < notifications.length; i++ ){
+      if ( notifications[ i ].read == false ) {
+        this.newNotifications.push( notifications[ i ] );
+      } else {
+        this.readNotifications.push( notifications[ i ] );
+      }
+    }  
+    this.newNotificationsToShow = this.newNotifications;
+    this.readNotificationsToShow = this.readNotifications;
+    console.log(this.newNotificationsToShow);
+    
+  }
+
+  closeNotificationModal(){
+    this.notificationsModal.nativeElement.style.display = "none";
+  }
+
+  onNewPageChange( $event ) {
+    this.newNotificationsToShow =  this.newNotifications.slice($event.pageIndex*$event.pageSize, $event.pageIndex*$event.pageSize + $event.pageSize);
+  }
+
+  onReadPageChange( $event ) {
+    this.readNotificationsToShow =  this.readNotifications.slice($event.pageIndex*$event.pageSize, $event.pageIndex*$event.pageSize + $event.pageSize);
+  }
+
+  showNotification( notification ) {
+    this.viewNotification = true;
+    this.tempNotifications.push( notification );
+    this.toggleSelected( false );
+    this.notificationToBeViewed = notification.notification_body;
+    if ( this.tempNotifications.indexOf( notification ) == -1 ) {
+      this.openedNotifications.push( notification );
+      this.auth.toggleNotifications( { notifications: this.openedNotifications } ).subscribe();
     }
+    this.getUser();
+  }
+
+  cancelShow() {
+    this.viewNotification = false;
+  }
+
+  checkValue( event, i ) {
+    if ( event.currentTarget.checked == true ) {
+      this.tempNotifications.push( this.newNotifications[ i ] );
+    } else {
+      for ( let ind = 0; ind < this.tempNotifications.length; ind++ ) {
+        if ( this.newNotifications[ i ].id == this.tempNotifications[ ind ].id ) {
+          this.tempNotifications.splice( ind, 1 );
+        }
+      }
+    }
+  }
+
+  checkReadValue( event, i ) {
+    if ( event.currentTarget.checked == true ) {
+      this.tempNotifications.push( this.readNotifications[ i ] );
+    } else {
+      for ( let ind = 0; ind < this.tempNotifications.length; ind++ ) {
+        if ( this.readNotifications[ i ].id == this.tempNotifications[ ind ].id ) {
+          this.tempNotifications.splice( ind, 1 );
+        }
+      }
+    }
+  }
+
+  deleteSelected() {
+    this.notyLoading = true;
+    this.auth.deleteNotifications( { notifications: this.tempNotifications } ).subscribe(
+      data => {
+        this.notyLoading = false;
+        this.tempNotifications = [];
+        this.getUser();
+      }
+    )
+  }
+
+  toggleSelected( load: boolean ) {
+    if ( load == true ) {
+      this.notyLoading = true;
+    }
+    this.auth.toggleNotifications( { notifications: this.tempNotifications } ).subscribe(
+      data => {
+        this.notyLoading = false;
+        this.tempNotifications = [];
+        this.getUser();
+      },
+      error => console.log(error)
+    )
   }
   
 }

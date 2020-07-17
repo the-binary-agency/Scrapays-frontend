@@ -38,13 +38,7 @@ export class EnterpriseDashboardComponent implements OnInit {
     role: '',
     created_at: ""
  };
-  Scrap: any = {
-    metal:  0,
-    aluminium:  0,
-    plastic:  0,
-    paper:  0,
-    'pet bottles':  0,
-  }
+  Scrap: any = {}
   CollectedScrap: any = [];
   totalTonnage: number = 0;
   public Form: FormGroup;
@@ -90,6 +84,7 @@ export class EnterpriseDashboardComponent implements OnInit {
   modalTitle: any;
   modalBody: any;
   loading = false;
+  requestLoading = false;
   model: NgbDateStruct;
   date: { year: number, month: number };
   times = [
@@ -162,40 +157,46 @@ export class EnterpriseDashboardComponent implements OnInit {
         break;
     }
   }
+
   getUser() {
     this.loading = true;
     this.auth.getUserWithTonnage( this.token.phone ).subscribe(
       (data : any) => {
         this.User = data.user;  
-        this.automated = data.user.userable.recoveryAutomated;
         this.CollectedScrap = data.tonnage;
+        this.automated = data.user.userable.recoveryAutomated;
         this.processTonnage();
       },
-      error => this.loading = false,
+      error => {
+        this.loading = false;
+        console.log( error )
+      },
     );      
   }
 
-
   processTonnage() {
     for ( let scrap of this.CollectedScrap ) {
-      this.Scrap.metal += Number( scrap.metal )
-      this.Scrap.aluminium += Number( scrap.aluminium )
-      this.Scrap.paper += Number( scrap.paper )
-      this.Scrap.plastic += Number( scrap.plastic )
-      this.Scrap.others += Number( scrap.others )
-      var temptotal = Number( scrap.metal ) + Number( scrap.aluminium ) + Number( scrap.plastic ) + Number( scrap.paper ) + Number( scrap.paper ); 
-        this.totalTonnage += temptotal;       
+        this.totalTonnage += scrap.weight;       
     }
-
       this.lineChartData = [ {
-      data: [
-        this.round( ( this.Scrap.metal / this.totalTonnage ) * 100 ),
-        this.round( ( this.Scrap.aluminium / this.totalTonnage ) * 100 ),
-        this.round( ( this.Scrap.paper / this.totalTonnage ) * 100 ),
-        this.round( ( this.Scrap.plastic / this.totalTonnage ) * 100 ),
-        this.round( ( this.Scrap.others / this.totalTonnage ) * 100 ) ], label: "Scrap"
+      data: this.getSingleScrapForGraph(), label: "Scrap"
     } ];
+    
+  }
+
+  getSingleScrapForGraph() {
+    var data = [];
+    var tonnage = this.totalTonnage;
+    var label = this.lineChartLabels;
+    var scrap = this.Scrap;
+    this.CollectedScrap.forEach( function ( d ) {
+      scrap[`${d.name}`] = [`${d.weight}`];
+        label.push( d.name );
+      var tonn = ( ( d.weight / tonnage ) * 100 ).toFixed( 2 );
+      data.push( tonn );
+    } )
     this.loading = false;
+    return data;
   }
 
   getDisabledDates() {
@@ -222,22 +223,11 @@ export class EnterpriseDashboardComponent implements OnInit {
   // lineChart
   public lineChartData: Array<any> = [
     {
-      data: [
-        0,
-        0,
-        0,
-        0,
-        0], label: "Scrap"
+      data: [], label: "Scrap"
     }
   ];
 
-  public lineChartLabels: Array<any> = [
-    "Metal",
-    "Aluminium",
-    "Paper",
-    "Plastic",
-    "Pet Bottles"
-  ];
+  public lineChartLabels: Array<any> = [];
   public lineChartOptions: any = {
     animation: false,
     responsive: true
@@ -296,9 +286,24 @@ export class EnterpriseDashboardComponent implements OnInit {
 
   }
 
-  onSubmit(Form) {
-    console.log(Form);
-    
+  onSubmit( Form ) {
+    this.loading = true;
+    var inv = this.processForm(Form);
+    this.auth.submitInventory( inv ).subscribe(
+      data => this.handleInvResponse( data ),
+      error => this.handleInvError( error )
+    )
+  }
+
+  processForm( Form ) {
+    const formData = new FormData();
+      formData.append('material', Form.materialType);
+      formData.append('enterpriseID', this.token.phone.toString());
+      formData.append('volume', Form.materialVolume);
+      formData.append('revenueGenerated', Form.generatedRevenue);
+      formData.append('receipt', this.receipt, this.receipt.name);
+
+    return formData;
   }
 
   test() {
@@ -337,8 +342,17 @@ export class EnterpriseDashboardComponent implements OnInit {
     this.originalMaterials.push( material );
   }
 
+  handlePickupError( error ) {
+    this.loading = false;
+    this.requestLoading = false;
+    this.modalTitle = "Error";
+    this.modalBody = error.error.error;
+    this.openModal( this.content );
+  }
+
   handleResponse( data ) {
     this.loading = false;
+    this.requestLoading = false;
     this.modalTitle = "Success";
     this.modalBody = data.data;
     this.getUser();
@@ -346,6 +360,24 @@ export class EnterpriseDashboardComponent implements OnInit {
   }
 
   handleError( error ) {
+    this.loading = false;
+    this.requestLoading = false;
+    this.modalTitle = "Error";
+    this.modalBody = error.error;
+    this.openModal( this.content );
+  }
+
+  handleInvResponse( data ) {
+    this.loading = false;
+    this.modalTitle = "Success";
+    this.modalBody = data[0];
+    this.Form.reset();
+    this.receipt = '';
+    this.getUser();
+    this.openModal( this.content );
+  }
+
+  handleInvError( error ) {
     this.loading = false;
     this.modalTitle = "Error";
     this.modalBody = error.error;
@@ -374,12 +406,17 @@ export class EnterpriseDashboardComponent implements OnInit {
   }
 
   getDisplayedPrice( materialName ) {
-    var property = materialName.toLowerCase();
-    var display = this.Scrap[ property ] * 907;
+    var display = this.Scrap[ materialName ] ? this.Scrap[ materialName ] : 0;
     return this.roundToWhole( display );
   }
    
   openScheduleModal() {
+    if ( this.User.userable.address == null ) {
+      this.modalTitle = "Error";
+      this.modalBody = "Please add an address to your profile before making a pickup request.";
+      this.openModal( this.content );
+      return;
+    }
     this.scheduleModal.nativeElement.style.display = "block";
   }
 
@@ -402,7 +439,14 @@ export class EnterpriseDashboardComponent implements OnInit {
   navigateEvent(event) {
     this.date = event.next;
     console.log(this.date);
-    
+  }
+
+  cancelPickup() {
+    this.loading = true;
+    this.auth.cancelPickup( { phone: this.token.phone } ).subscribe(
+      data => this.handleResponse( data ),
+      error => this.handlePickupError( error )
+    )
   }
 
   requestIncomplete() {
@@ -413,20 +457,25 @@ export class EnterpriseDashboardComponent implements OnInit {
   }
   
   requestPickup() {   
+    this.requestLoading = true;
     var form = {
       id: this.token.phone,
       materials: this.requestMaterials,
       description: this.requestDescription,
       comment: this.requestComment,
       scheduleDate : this.model,
+      address : this.User.userable.address,
       scheduleTime : this.selectedTime,
     };
     this.auth.requestPickup( form ).subscribe(
       data => {
         this.handleResponse( data );
+        this.getPrices();
         this.requestMaterials = [];
       },
-      error => console.log("ertyrertyt", error)
+      error => {
+        this.handlePickupError( error );
+      }
     )
   }
 
@@ -443,6 +492,17 @@ export class EnterpriseDashboardComponent implements OnInit {
      },
       error => console.log(error)
     )
+  }
+
+  addBorder( i ) {
+    var classes = {};
+    if ( i == 0 || i == 2 ) {
+      classes['border-right'] = true
+    }
+    if ( i == 0 || i == 1 ) {
+      classes['border-bottom'] = true
+    }
+    return classes;
   }
 
 }

@@ -2,6 +2,13 @@ mat-sidenav{
     /* padding-top: 72px; */
     width: 250px;
 }
+mat-sidenav-container /deep/ .mat-sidenav-content {
+  overflow: hidden;
+}
+/* .app-content {
+  height: calc(100% - 64px);
+  overflow: auto;
+} */
 .list-item-active{
     border-left: 5px solid #FF7900;
     /* color: #FF7900; */
@@ -117,4 +124,53 @@ mat-sidenav{
     padding-top: 2px;
     padding-bottom: 3px;
     border: 1px solid white;
+}
+.trunc-text {
+  display: block;
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list-group-item:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: #FF7900;
+    border-color: #FF7900;
+}
+.list-group-item:first-child {
+    margin-top: 4px;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 0.05rem 1.35rem;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 0;
+    border-radius: 5px;
+}
+.list-group-item-action {
+    width: 100%;
+    color: #495057;
+    text-align: inherit;
+}
+.not-check-input {
+    position: absolute;
+    margin-top: .3rem;
+    margin-left: -1.25rem;
+    left: 42.4px;
+    margin-right: 5px;
+    z-index: 3;
+}
+.not-modal-content {
+    margin: 15% auto !important;
+}
+.companyName{
+    line-height: 1rem;
+}
+.notificationsModalToggler{
+  margin-left: -10px;
 }

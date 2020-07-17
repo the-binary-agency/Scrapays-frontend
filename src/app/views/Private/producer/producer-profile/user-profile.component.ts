@@ -27,7 +27,7 @@ export class UserProfileComponent implements OnInit {
   modalBody: any;
   loading: boolean;
   edit = false;
-  User: any = {};
+  User: any = { userable:{} };
   avatarImage: any;
   sex: string;
   URL = this.env.backendUrl;
@@ -68,9 +68,8 @@ export class UserProfileComponent implements OnInit {
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
-      phone: new FormControl('', Validators.compose([
-        Validators.pattern('[0-9 ]*'),
-        Validators.required]))
+      requestAddress: new FormControl('', Validators.compose([
+        Validators.required])),
   });
   }
 
@@ -84,9 +83,7 @@ export class UserProfileComponent implements OnInit {
   updateProfile( form ) {
     this.loading = true;
     var user = this.processForm( form );
-    console.log(user);
-    
-    this.auth.updateUser( this.User.id, user ).subscribe(
+    this.auth.updateUser( this.token.phone, user ).subscribe(
       data => this.handleResponse( data ),
       error => this.handleError( error )
     )
@@ -94,19 +91,17 @@ export class UserProfileComponent implements OnInit {
 
   processForm( Form ) {
     const formData = new FormData();
-    formData.append('avatarImage', this.avatarImage);
     formData.append('firstName', Form.firstName);
     formData.append('lastName', Form.lastName);
-    formData.append('phone', Form.phone);
     formData.append('email', Form.email);
-    formData.append( 'email', Form.email );
-    formData.append( 'sex', Form.sex );
-    formData.append( 'email', Form.email );
+    formData.append( 'requestAddress', Form.requestAddress );
+    formData.append('avatarImage', this.avatarImage);
 
     return formData;
   }
 
   handleResponse( data ) {
+    this.edit = false;
     this.getSingleUser();
     this.loading = false;
     this.modalTitle = "Success";

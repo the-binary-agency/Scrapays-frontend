@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EnvironmentService } from '../env/environment.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -8,15 +9,15 @@ export class TokenService {
 
   public phone: number;
   private iss = {
-    login1: this.env.backendUrl + '/api/auth/loginwithemail',
-    login2: this.env.backendUrl + '/api/auth/loginwithphone',
-    loginAdmin: this.env.backendUrl + '/api/auth/loginAdmin',
-    registerEnterprise: this.env.backendUrl + '/api/auth/registerEnterprise',
-    registerHousehold: this.env.backendUrl + '/api/auth/registerHousehold',
-    registerCollector: this.env.backendUrl + '/api/auth/registerCollector',
-    registerHost: this.env.backendUrl + '/api/auth/registerHost',
-    registerAgent: this.env.backendUrl + '/api/auth/registerAgent',
-    signupAdmin: this.env.backendUrl + '/api/auth/signupAdmin'
+    login1: this.env.backendUrl + '/loginwithemail',
+    login2: this.env.backendUrl + '/loginwithphone',
+    loginAdmin: this.env.backendUrl + '/loginAdmin',
+    registerEnterprise: this.env.backendUrl + '/registerEnterprise',
+    registerHousehold: this.env.backendUrl + '/registerHousehold',
+    registerCollector: this.env.backendUrl + '/registerCollector',
+    registerHost: this.env.backendUrl + '/registerHost',
+    registerAgent: this.env.backendUrl + '/registerAgent',
+    signupAdmin: this.env.backendUrl + '/signupAdmin'
   }
 
   public errorMessage: string = '';
@@ -41,16 +42,27 @@ remove(){
   localStorage.removeItem('token');
 }
 
-isValid(){
-  const token = this.get();
-  if(token){
-    const payload = this.payload( token )
-    if ( payload ) { 
-      this.phone = payload.phone;
-     return  Object.values(this.iss).indexOf(payload.iss) > -1 ? true : false; 
+  isValid() {
+    const helper = new JwtHelperService();
+    let token = this.get();
+    if(token){
+      const payload = this.payload( token )
+      if ( payload ) { 
+        this.phone = payload.phone;
+        return !helper.isTokenExpired( token );
+      }
+      return false;
     }
-    return false;
-  }
+    
+  // const token = this.get();
+  // if(token){
+  //   const payload = this.payload( token )
+  //   if ( payload ) { 
+  //     this.phone = payload.phone;
+  //    return  Object.values(this.iss).indexOf(payload.iss) > -1 ? true : false; 
+  //   }
+  //   return false;
+  // }
 }
   
   isAdmin(){
@@ -110,7 +122,7 @@ isValid(){
 }
 
 payload(token){
-  const payload = token.split('.')[1];
+  const payload = token.split( '.' )[ 1 ];
   return this.decode(payload);
 }
 

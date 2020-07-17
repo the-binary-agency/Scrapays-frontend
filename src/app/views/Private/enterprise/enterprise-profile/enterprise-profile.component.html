@@ -6,8 +6,8 @@
     <form [formGroup]="Form" (ngSubmit)="updateProfile(Form.value)" class="w-100">
         <div class="row align-items-center justify-content-center">
         <div class="position-relative">
-            <img src="assets/images/icons/user-icon.png" class="user-avatar" alt="User Icon" *ngIf="User.avatarImageName">
-            <img src="assets/images/icons/user-icon.png" class="user-avatar" alt="User Icon" *ngIf="!User.avatarImageName">
+            <img src="{{ URL }}/storage/profile_pictures/{{ User.avatarImage }}" class="user-avatar" alt="User Icon" *ngIf="User.avatarImage">
+            <img [src]="avatar" class="user-avatar" alt="User Icon" *ngIf="!User.avatarImage">
             <input type="file" formControlName="avatarImage"  class="d-none" #fileInput accept="image/*" (change)="onFileInput($event)">
             <button type="button" class="btn btn-primary btn-circle btn-sm solid" (click)="fileInput.click()"  *ngIf="edit">
                 <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
@@ -39,8 +39,7 @@
                                 Phone number:
                             </div>
                             <div class="col-6 details">
-                            <span *ngIf="!edit"> {{ User.phone }}</span>
-                                <input class="form-control" formControlName="phone" [(ngModel)]="User.phone" *ngIf="edit"/>
+                                {{ User.phone }}
                             </div>
                         </div>
                     </div>
@@ -53,7 +52,7 @@
                         <h3 class="font-weight-bold ml-3">Company's Information</h3><br>
                     </div>
                     <div class="col-12 col-md-6">
-                    <div class="row">
+                        <div class="row">
                             <div class="col-6 details mb-3">
                                 Company’s Name:
                             </div>
@@ -77,7 +76,22 @@
                             </div>
                             <div class="col-6 details">
                             <span *ngIf="!edit"> {{ User.userable.companySize }}</span>
-                                <input class="form-control" formControlName="companySize" [(ngModel)]="User.userable.companySize" *ngIf="edit"/>
+                                <select class="form-control w-100" formControlName="companySize"  [(ngModel)]="User.userable.companySize" *ngIf="edit">
+                                    <option value="1 - 10">1 - 10</option>
+                                    <option value="10 - 50">10 - 50</option>
+                                    <option value="50 - 100">50 - 100</option>
+                                    <option value="100 - 500">100 - 500</option>
+                                    <option value="> 500"> > 500</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 details mb-3">
+                                Address:
+                            </div>
+                            <div class="col-6 details">
+                            <span *ngIf="!edit"> {{ User.userable.address }}</span>
+                                <input class="form-control" formControlName="address" [(ngModel)]="User.userable.address" *ngIf="edit"/>
                             </div>
                         </div>
                     </div>
@@ -110,7 +124,7 @@
                                     <div class="col-6 details mb-3 px-0">
                                     First Name:
                                     </div>
-                                    <div class="col-6 details mb-3">
+                                    <div class="col-6 details mb-3 text-capitalize">
                                     <span *ngIf="!edit"> {{ User.firstName }}</span>
                                         <input class="form-control" formControlName="firstName" [(ngModel)]="User.firstName" *ngIf="edit"/>
                                     </div>
@@ -121,7 +135,7 @@
                                     <div class="col-6 details mb-3 px-0">
                                     Last Name:
                                     </div>
-                                    <div class="col-6 details mb-3">
+                                    <div class="col-6 details mb-3 text-capitalize">
                                     <span *ngIf="!edit"> {{ User.lastName }}</span>
                                         <input class="form-control" formControlName="lastName" [(ngModel)]="User.lastName" *ngIf="edit"/>
                                     </div>
@@ -134,18 +148,18 @@
                             <div class="col-6 details mb-3">
                             Sex:
                             </div>
-                            <div class="col-6 details">
-                            <span *ngIf="!edit"> {{ User.userable.sex }}</span>
+                            <div class="col-6 details text-capitalize">
+                            <span *ngIf="!edit" class="ml-2"> {{ User.userable.sex }}</span>
 
                                 <div class="form-check" *ngIf="edit">
                                     <label class="form-check-label">
-                                    <input type="radio" name="gender" class="form-check-input" (change)="sex = 'male'" [checked]="sex == 'female'">
+                                    <input type="radio" name="gender" class="form-check-input" (change)="sex = 'male'" [checked]="User.userable.sex == 'male'">
                                     Male
                                   </label>
                                 </div>
                                 <div class="form-check" *ngIf="edit">
                                     <label class="form-check-label">
-                                    <input type="radio" name="gender" class="form-check-input" (change)="sex = 'female'" [checked]="sex == 'female'">
+                                    <input type="radio" name="gender" class="form-check-input" (change)="sex = 'female'" [checked]="User.userable.sex == 'female'">
                                     Female
                                   </label>
                                 </div>

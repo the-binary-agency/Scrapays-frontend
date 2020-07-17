@@ -13,7 +13,8 @@ export class AfterLoginService implements CanActivate {
     const loggedIn: boolean = this.Token.loggedIn();
   if (!loggedIn) {
     this.header.changeErrorMessage( 'Your session has expired or you are not logged in.' );
-    this.document.location.href = 'https://scrapays.com';
+    this.router.navigateByUrl('/login/household')
+    // this.document.location.href = 'https://scrapays.com';
   }
     
     return this.Token.loggedIn();

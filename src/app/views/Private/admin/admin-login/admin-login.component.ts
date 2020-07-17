@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TokenService } from 'src/app/services/auth/token.service';
 import { Router } from '@angular/router';
+import { UserDataService } from 'src/app/services/auth/user-data.service';
 
 @Component({
   selector: 'app-admin-login',
@@ -14,7 +15,7 @@ export class AdminLoginComponent implements OnInit {
  @ViewChild('content') private content;
   loading: boolean;
 
-  constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router, private userData: UserDataService) {
     this.initForm();
   }
 initForm(){
@@ -63,6 +64,7 @@ handleResponse(data){
   this.Token.handle(data.access_token);
   this.Auth.changeAuthStatus( true );
   this.Auth.changeAdminStatus( true );
+  this.userData.updateUserData( data.User );
   this.loading = false;
   this.router.navigateByUrl('/dashboard/admin');
 }

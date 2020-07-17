@@ -3,14 +3,14 @@ import { NgModule } from '@angular/core';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
-// import { MatIconModule } from '@angular/material/icon';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatButtonModule } from '@angular/material/button';
 // import { MatMenuModule } from '@angular/material/menu';
-// import { MatButtonModule } from '@angular/material/button';
 // import { MatTabsModule } from '@angular/material/tabs';
 // import { MatTableModule } from '@angular/material/table';
-// import {MatPaginatorModule} from '@angular/material/paginator';
 // import { MatSortModule } from '@angular/material/sort';
-// import { MatBadgeModule } from '@angular/material/badge';
 // import { MatChipsModule } from '@angular/material/chips';
 // import { MatSelectModule } from '@angular/material/select';
 // import { MatDialogModule } from '@angular/material/dialog';
@@ -22,14 +22,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatSidenavModule,
     MatListModule,
     MatExpansionModule,
-    // MatIconModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatBadgeModule,
+    MatButtonModule,
     // MatMenuModule,
-    // MatButtonModule,
     // MatTabsModule,
     // MatTableModule,
-    // MatPaginatorModule,
     // MatSortModule,
-    // MatBadgeModule,
     // MatChipsModule,
     // MatSelectModule,
     // MatDialogModule,

@@ -31,11 +31,14 @@
           </ng-container>
         </div>
         <div class="row mt-5">
-          <div class="col-6">
+          <div class="col-auto p-0">
             <button type="submit" class="btn btn-primary px-4 solid" [disabled]="!EmailForm.valid">Login</button>
           </div>
-          <div class="col-6 text-right">
+          <div class="col text-right p-0">
             <a routerLink="/request-password-reset" class="px-0">Forgot password?</a>
+           <div class="small">
+            Don't have an account?  <a routerLink="/enterprise/signup" class="px-0">Signup</a>
+           </div>
           </div>
         </div>
       </form>
@@ -90,11 +93,14 @@
           </ng-container>
           </div>
         <div class="row mt-5">
-          <div class="col-6">
+          <div class="col-auto p-0">
             <button type="submit" class="btn btn-primary px-4 solid" [disabled]="!PhoneForm.valid">Login</button>
           </div>
-          <div class="col-6 text-right">
+         <div class="col text-right p-0">
             <a routerLink="/request-password-reset" class="px-0">Forgot password?</a>
+           <div class="small">
+            Don't have an account?  <a routerLink="/household/signup" class="px-0">Signup</a>
+           </div>
           </div>
         </div>
       </form>

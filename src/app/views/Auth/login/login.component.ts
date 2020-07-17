@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TokenService } from 'src/app/services/auth/token.service';
 import { Router } from '@angular/router';
+import { UserDataService } from 'src/app/services/auth/user-data.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ export class LoginComponent implements OnInit {
   @ViewChild('content') private content;
   loading: boolean;
   
-  constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router) {}
+  constructor(private formBuilder: FormBuilder, private Auth: AuthService, private modal: NgbModal, private Token: TokenService, private router: Router, private userData: UserDataService) {}
 
   initForm(){
     this.PhoneForm = this.formBuilder.group({
@@ -89,7 +90,7 @@ handleResponse(data){
   this.Token.handle(data.access_token);
   this.Auth.changeAuthStatus( true );
   this.loading = false;
-  this.goToDashboard();
+  this.goToDashboard(data);
 }
 
 handleError(error){
@@ -98,8 +99,9 @@ handleError(error){
   this.openModal(this.content)
 }
   
-  goToDashboard() {
+  goToDashboard(data) {
     this.Auth.changeAuthStatus( true );
+    this.userData.updateUserData( data.User );
     if ( this.Token.isHousehold() ) {
       this.Auth.changeHouseholdStatus( true );
       this.router.navigateByUrl('/dashboard/household');

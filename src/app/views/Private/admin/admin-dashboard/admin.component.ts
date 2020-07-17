@@ -35,6 +35,7 @@ export class AdminComponent implements OnInit {
   }
   materialPrices: any[] = [];
   newMaterial: any = [];
+  editedMaterials: any = [];
 
 //  lineChart
   public lineChartData: Array<any> = [
@@ -135,7 +136,7 @@ export class AdminComponent implements OnInit {
     this.loading = true;
     this.Auth.setMaterialPrices( this.token.phone, form).subscribe(
       data => this.handleSuccess( data ),
-      error => this.handleError( error )
+      error => this.handleEditError( "An error occured while trying to edit the material prices. There is possibly a duplicate." )
     )
   }
 
@@ -165,6 +166,13 @@ export class AdminComponent implements OnInit {
 handleError( error ) {
   this.modalTitle = "Error";
   this.modalBody = error.error;
+  this.loading = false;
+  this.openModal(this.content);
+}
+  
+handleEditError( error ) {
+  this.modalTitle = "Error";
+  this.modalBody = error;
   this.loading = false;
   this.openModal(this.content);
 }
@@ -205,7 +213,11 @@ handleError( error ) {
   }
 
   removeMaterial( i ) {
-    this.materialPrices.splice( i, 1 );
+    this.editedMaterials.splice( i, 1 );
+  }
+
+  toggleEditMaterials() {
+    this.editedMaterials = this.materialPrices;
   }
 
   processFormData() {
@@ -219,6 +231,26 @@ handleError( error ) {
     return formData;
   }
 
-  isString(val): boolean { return typeof val === 'string'; }
+  processEditFormData() {
+    const formData = new FormData();
+    for ( var i = 0; i < this.newMaterial.length; i++ ){
+        formData.append(`material_name[]`, this.editedMaterials[i].name);
+        formData.append(`material_price[]`, this.editedMaterials[i].price);
+        formData.append(`material_img[]`, this.editedMaterials[i].image, 'material-' + ( i + 1 )  + '-' + this.editedMaterials[i].image.name );
+    }
+
+    return formData;
+  }
+
+  isString( val ): boolean { return typeof val === 'string'; }
+  
+  saveEditedMaterials() {
+    var form = this.processEditFormData();
+    this.loading = true;
+    this.Auth.editMaterialPrices( this.token.phone, form).subscribe(
+      data => this.handleSuccess( data ),
+      error => this.handleEditError( "An error occured while trying to edit the material prices. There is possibly a duplicate." )
+    )
+  }
 
 }

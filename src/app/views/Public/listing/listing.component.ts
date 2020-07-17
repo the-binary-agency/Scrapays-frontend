@@ -65,7 +65,7 @@ export class ListingComponent implements OnInit {
 
   initForm(){
     this.Form = this.formBuilder.group({
-      businessName: new FormControl(''),
+      companyName: new FormControl(''),
       firstName: new FormControl('', Validators.compose([
         Validators.maxLength(30),
         Validators.pattern('[a-zA-Z ]*'),
@@ -179,7 +179,7 @@ processForm() {
   const images = this.materialImages;
   const controls = this.FormAsArray.controls;
   const formData = new FormData();
-  formData.append('businessName', this.Form.get('businessName').value);
+  formData.append('companyName', this.Form.get('companyName').value);
   formData.append('firstName', this.Form.get('firstName').value);
   formData.append('lastName', this.Form.get('lastName').value);
   formData.append('phone', this.Form.get('phone').value);

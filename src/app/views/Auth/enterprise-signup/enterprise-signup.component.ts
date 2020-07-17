@@ -113,7 +113,7 @@ export class EnterpriseSignupComponent implements OnInit {
     console.log(error)
     this.loading = false;
     if ( error.error.errors.password ) {
-      this.error = error.error.errors.password;
+      this.error = error.error.errors.password[0];
     } else if ( error.error.errors.email ) {
       this.modalTitle = "Error";
       this.modalBody = error.error.errors.email;

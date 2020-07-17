@@ -9,14 +9,6 @@
         <div class="col-12 col-md-3">
             <span class="h3 text-primary ml-2 bb-blue">Overview</span>
         </div>
-        <!-- <div class="col-12 col-md-9 px-0">
-          <div class="alert automate-alert w-100 fake-btn sc-green text-center" role="alert" (click)="automatePickup()" *ngIf="!automated">
-            <strong>Click  here to automate your recovery process with scrapays</strong>
-          </div>
-          <div class="alert unautomate-alert w-100 fake-btn sc-orange text-center" role="alert" (click)="automatePickup()" *ngIf="automated">
-            <strong>Click  here to undo  the automation of your recovery process</strong>
-          </div>
-        </div> -->
                 <button class="btn btn-primary solid" type="button" (click)="openSellBulkModal()">
                   Sell your BULK scrap materials now 
                 </button>
@@ -45,8 +37,8 @@
           <span class="display-4">
             {{ totalTonnage }}
           </span>
-          Tons <br>
-          Total tonnage disposed
+          KG <br>
+          Total weight disposed
       </div>
     </div>
   </div>
@@ -58,7 +50,7 @@
       <div class="col-12 text-center px-0">
         <div class="card-title row">
           <div class="col px-0">
-            Total tonnage disposed per material class 
+            Total weight disposed per material class 
           </div>
           <div class="col-2 px-0">
              <button type="button" class="btn btn-clear float-right py-0" [ngbPopover]="popContent" container="body">
@@ -79,9 +71,9 @@
         
       </div>
       <div class="row">
-         <div class="col-6 d-flex pb-2 border-right border-bottom" *ngFor="let display of displayedMaterials">
-           <img src="{{ URL }}/storage/material_list_images/{{ display.image }}" alt="metal icon">
-          <span class="ml-2 ml-md-4 font-weight-bold text-capitalize">
+         <div class="col-6 d-flex pb-2" *ngFor="let display of displayedMaterials; let i = index" [ngClass]="addBorder(i)">
+           <img src="{{ URL }}/storage/material_list_images/{{ display.image }}" alt="metal icon" *ngIf="display">
+          <span class="ml-2 ml-md-4 font-weight-bold text-capitalize" *ngIf="display">
             {{ display.name }} <br>
             {{ getDisplayedPrice( display.name ) }}kg
           </span>
@@ -210,7 +202,7 @@
             <td></td>
             <td>No Registered Users</td>
             </tr> -->
-              <tr>
+              <!-- <tr>
                 <td>
                   <div>10-4-2020</div>
                   <div class="small text-muted">
@@ -223,7 +215,7 @@
                 <td class="text-right">
                   + ₦<span class="text-bold">0</span>
                 </td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
         

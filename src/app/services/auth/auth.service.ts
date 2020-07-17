@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Subject, Observable } from 'rxjs';
 import { TokenService } from './token.service';
 import { EnvironmentService } from '../env/environment.service';
-// import { SidenavComponent } from '../views/sidenav/sidenav.component';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -24,7 +23,7 @@ export class AuthService {
   vendorStatus = this.Vendor.asObservable();
   collectorStatus = this.Collector.asObservable();
 
-URL = this.env.backendUrl + '/api/auth'
+  URL = this.env.backendUrl;
   
   constructor ( private http: HttpClient, private token: TokenService, private env: EnvironmentService, private router: Router ) { }
 
@@ -91,12 +90,20 @@ URL = this.env.backendUrl + '/api/auth'
     return this.http.get( `${ this.URL }/getUserWithID/${id}`);
   }
 
+  getUserWithNotifications( id ) {
+    return this.http.get( `${ this.URL }/getUserWithNotifications/${id}`);
+  }
+
   getProducedTonnage( id ) {
     return this.http.get( `${ this.URL }/getUserWithID/${id}`);
   }
 
   getUserWithTonnage( id ) {
     return this.http.get( `${ this.URL }/getUserWithTonnage/${id}`);
+  }
+
+  getCollectorWithTonnage( id ) {
+    return this.http.get( `${ this.URL }/getCollectorWithTonnage/${id}`);
   }
 
   getDisposedTonnage( id ): Observable<any> {
@@ -112,7 +119,7 @@ URL = this.env.backendUrl + '/api/auth'
   }
 
   updateUser( id, Form ) {
-    return this.http.put( `${ this.URL }/updateUser/${id}`, Form );
+    return this.http.post( `${ this.URL }/updateUser/${id}`, Form );
   }
 
   registerVendor( Form ) {
@@ -135,12 +142,20 @@ URL = this.env.backendUrl + '/api/auth'
     return this.http.get( `${ this.URL }/getMaterialPrices/${id}`);
   }
 
+  editMaterialPrices( id, form ) {
+    return this.http.post( `${ this.URL }/editMaterialPrices/${id}`, form);
+  }
+
   setMaterialPrices( id, form ) {
     return this.http.post( `${ this.URL }/setMaterialPrices/${id}`, form);
   }
 
   requestPickup( form ) {
     return this.http.post( `${ this.URL }/requestPickup`, form);
+  }
+
+  cancelPickup( form ) {
+    return this.http.post( `${ this.URL }/cancelPickup`, form);
   }
 
   automatePickup( form ) {
@@ -155,5 +170,18 @@ URL = this.env.backendUrl + '/api/auth'
     return this.http.post( `${ this.URL }/submitInventory`, form);
   }
 
+  deleteNotifications( notifications ) {
+    return this.http.post( `${ this.URL }/deleteNotifications`, notifications);
+  }
+
+  toggleNotifications( notifications ) {
+    return this.http.post( `${ this.URL }/toggleNotifications`, notifications);
+  }
+  
+  getUserName( form ) {
+    return this.http.post( `${ this.URL }/getUserName`, form);
+  }
+
 
 }
+``

@@ -1,253 +1,130 @@
-<div class="dashboard-body pt-5 p-1 p-md-5">
+<div class="dashboard-body pt-5 p-1 py-md-4 px-md-5">
+    <div class="row">
+        <span class="h3 text-primary ml-2 bb-blue">Profile</span>
+    </div>
 
-<div class="col-12 hh1 text-center">User Profile</div>
-    <div class="card p-md-5 bg-light mb-5">
-        <div class="card-body">
-            <form [formGroup]="Form" (ngSubmit)="updateProfile(Form.value)">
-                <div class="row">
-                    <div class="col-md-6 col-12 mb-md-5 mb-3 text-center">
-                        <img src="assets/images/icons/user-icon.png" class="w-40" alt="User Icon">
-                    </div>
-                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh1 d-flex align-items-center justify-content-center">
-                        UUID: {{ User.id }} 
-                    </div>
-                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
-                        FirstName: &nbsp;&nbsp; <span class="text-muted" *ngIf="!edit">{{ User.firstName }}</span>
-                        <input class="form-control" formControlName="firstName" [(ngModel)]="User.firstName" *ngIf="edit"/>
-                        <div class="validation-errors small">
-                                <ng-container
-                                    *ngFor="let validation of validation_messages.firstName"
-                                >
-                                    <div
-                                    class="error-message alert alert-danger"
-                                    *ngIf="
-                                        Form.get('firstName').hasError(
-                                        validation.type
-                                        ) &&
-                                        (Form.get('firstName').dirty ||
-                                        Form.get('firstName').touched)
-                                    "
-                                    >
-                                    <i class="fa fa-info-circle text-danger"></i> &nbsp;
-                                    <span class="text-danger">{{
-                                        validation.message
-                                    }}</span>
-                                    </div>
-                                </ng-container>
-                                </div>
-                    </div>
-                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
-                        LastName: &nbsp;&nbsp; <span class="text-muted" *ngIf="!edit">{{ User.lastName }}</span>
-                        <input class="form-control" formControlName="lastName" [(ngModel)]="User.lastName" *ngIf="edit"/>
-                        <div class="validation-errors small">
-                                <ng-container
-                                    *ngFor="let validation of validation_messages.lastName"
-                                >
-                                    <div
-                                    class="error-message alert alert-danger"
-                                    *ngIf="
-                                        Form.get('lastName').hasError(
-                                        validation.type
-                                        ) &&
-                                        (Form.get('lastName').dirty ||
-                                        Form.get('lastName').touched)
-                                    "
-                                    >
-                                    <i class="fa fa-info-circle text-danger"></i> &nbsp;
-                                    <span class="text-danger">{{
-                                        validation.message
-                                    }}</span>
-                                    </div>
-                                </ng-container>
-                                </div>
-                    </div>
-                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
-                        Phone Number: &nbsp;&nbsp; <span class="text-muted" *ngIf="!edit">{{ User.phone }}</span>
-                        <input class="form-control" formControlName="phone" [(ngModel)]="User.phone" *ngIf="edit"/>
-                        <div class="validation-errors small">
-                                <ng-container
-                                    *ngFor="let validation of validation_messages.phone"
-                                >
-                                    <div
-                                    class="error-message alert alert-danger"
-                                    *ngIf="
-                                        Form.get('phone').hasError(
-                                        validation.type
-                                        ) &&
-                                        (Form.get('phone').dirty ||
-                                        Form.get('phone').touched)
-                                    "
-                                    >
-                                    <i class="fa fa-info-circle text-danger"></i> &nbsp;
-                                    <span class="text-danger">{{
-                                        validation.message
-                                    }}</span>
-                                    </div>
-                                </ng-container>
-                                </div>
-                    </div>
-                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
-                        Email: &nbsp;&nbsp; <span class="text-muted" *ngIf="!edit">{{ User.email }}</span>
-                        <input class="form-control" formControlName="email" [(ngModel)]="User.email" *ngIf="edit"/>
-                        <div class="validation-errors small">
-                                <ng-container
-                                    *ngFor="let validation of validation_messages.email"
-                                >
-                                    <div
-                                    class="error-message alert alert-danger"
-                                    *ngIf="
-                                        Form.get('email').hasError(
-                                        validation.type
-                                        ) &&
-                                        (Form.get('email').dirty ||
-                                        Form.get('email').touched)
-                                    "
-                                    >
-                                    <i class="fa fa-info-circle text-danger"></i> &nbsp;
-                                    <span class="text-danger">{{
-                                        validation.message
-                                    }}</span>
-                                    </div>
-                                </ng-container>
-                                </div>
-                    </div>
-                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
-                        Address: &nbsp;&nbsp; <span class="text-muted">{{ User.address }}</span>
-                        <input class="form-control" formControlName="email" [(ngModel)]="User.email" *ngIf="edit"/>
-                        <div class="validation-errors small">
-                                <ng-container
-                                    *ngFor="let validation of validation_messages.email"
-                                >
-                                    <div
-                                    class="error-message alert alert-danger"
-                                    *ngIf="
-                                        Form.get('email').hasError(
-                                        validation.type
-                                        ) &&
-                                        (Form.get('email').dirty ||
-                                        Form.get('email').touched)
-                                    "
-                                    >
-                                    <i class="fa fa-info-circle text-danger"></i> &nbsp;
-                                    <span class="text-danger">{{
-                                        validation.message
-                                    }}</span>
-                                    </div>
-                                </ng-container>
-                                </div>
-                    </div>
-                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
-                        Collection Coverage Zone: &nbsp;&nbsp; <span class="text-muted">{{ User.collectionCoverageZone }}</span>
-                        <input class="form-control" formControlName="email" [(ngModel)]="User.email" *ngIf="edit"/>
-                        <div class="validation-errors small">
-                                <ng-container
-                                    *ngFor="let validation of validation_messages.email"
-                                >
-                                    <div
-                                    class="error-message alert alert-danger"
-                                    *ngIf="
-                                        Form.get('email').hasError(
-                                        validation.type
-                                        ) &&
-                                        (Form.get('email').dirty ||
-                                        Form.get('email').touched)
-                                    "
-                                    >
-                                    <i class="fa fa-info-circle text-danger"></i> &nbsp;
-                                    <span class="text-danger">{{
-                                        validation.message
-                                    }}</span>
-                                    </div>
-                                </ng-container>
-                                </div>
-                    </div>
-                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
-                        Role: &nbsp;&nbsp; <span class="text-muted">{{ User.role }}</span>
-                    </div>
-                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
-                        Vendor ID: &nbsp;&nbsp; <span class="text-muted">{{ User.vendorID }}</span><br>
-                        <span *ngIf="User.vendorApproved == 'false'" class="text-muted small" style="font-size: small;">*Your Vendor Registeration is pending approval from the Vendor</span>
-                    </div>
-                    <div class="col-md-6 col-12 mb-md-5 mb-3 hh2">
-                        Time Registered: &nbsp;&nbsp; <br> <span class="text-muted">{{ User.created_at }}</span>
-                    </div>
-                </div>
-                
-                <!-- <div class="text-right">
-                    <button type="button" class="btn btn-primary px-4" (click)="edit = true" *ngIf="!edit">Edit</button> &nbsp;
-                    <button type="button" class="btn btn-primary px-4" (click)="edit = false" *ngIf="edit">Cancel Edit</button> &nbsp;
-                    <button type="submit" class="btn btn-success px-4" *ngIf="edit">Save</button>
-                </div> -->
-            </form>
+    <form [formGroup]="Form" (ngSubmit)="updateProfile(Form.value)" class="w-100">
+        <div class="row align-items-center justify-content-center">
+        <div class="position-relative">
+            <img src="{{ URL }}/storage/profile_pictures/{{ User.avatarImage }}" class="user-avatar" alt="User Icon" *ngIf="User.avatarImage">
+            <img [src]="avatar" class="user-avatar" alt="User Icon" *ngIf="!User.avatarImage">
+            <input type="file" formControlName="avatarImage"  class="d-none" #fileInput accept="image/*" (change)="onFileInput($event)">
+            <button type="button" class="btn btn-primary btn-circle btn-sm solid" (click)="fileInput.click()"  *ngIf="edit">
+                <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
+            </button>
         </div>
-    </div>
-
-<div class="card text-white bg-light"  *ngIf="!User.vendorID">
-  <div class="card-body">
-  <div class="col12 text-center hh3">Register Vendor</div>
-    <div class="container">
-        <form [formGroup]="VendorIDForm" (ngSubmit)="registerVendor(VendorIDForm.value)">
-            <div class="form-group row">
-                <label for="inputName" class="col-sm-1-12 col-form-label"></label>
-                <div class="col-12 col-md-8">
-                    <input type="text" class="form-control"  placeholder="Vendor ID" formControlName="vendorID">
-                     <div class="validation-errors">
-                                <ng-container
-                                    *ngFor="let validation of validation_messages.vendorID"
-                                >
-                                    <div
-                                    class="error-message alert alert-danger"
-                                    *ngIf="
-                                        VendorIDForm.get('vendorID').hasError(
-                                        validation.type
-                                        ) &&
-                                        (VendorIDForm.get('vendorID').dirty ||
-                                        VendorIDForm.get('vendorID').touched)
-                                    "
-                                    >
-                                    <i class="fa fa-info-circle text-danger"></i> &nbsp;
-                                    <span class="text-danger">{{
-                                        validation.message
-                                    }}</span>
-                                    </div>
-                                </ng-container>
-                                </div>
-                </div>
-                <div class="col-12 col-md-4 text-right">
-                    <button type="submit" class="btn btn-primary">Register Vendor</button>
-                </div>
+            <div class="ml-3">
+                {{ User.email }}
             </div>
-        </form>
-    </div>
-  </div>
-</div>
+        </div>
+        <div class="w-100 text-right">
+            <button type="button" class="btn btn-primary px-4" (click)="edit = false" *ngIf="edit">Cancel Edit</button>
+            <button type="button" class="btn btn-primary solid" (click)="edit = !edit"  *ngIf="!edit">Edit Profile</button>
+        </div>
 
+        <div class="row mb-5">
+            <div class="row font-weight-bold">
+                    <div class="col-md-6">
+                        <h3 class="font-weight-bold ml-3">Contact Infrormation</h3><br>
+                        <div class="row">
+                            <div class="col-6 details mb-3">
+                                Email:
+                            </div>
+                            <div class="col-6 details mb-3">
+                            <span *ngIf="!edit"> {{ User.email }}</span>
+                                <input class="form-control" formControlName="email" [(ngModel)]="User.email" *ngIf="edit"/>
+                            </div>
+                            <div class="col-6 details pr-0 pr-md-3">
+                                Phone number:
+                            </div>
+                            <div class="col-6 details">
+                             {{ User.phone }}
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="row font-weight-bold">
+                    <div class="col-12">
+                        <h3 class="font-weight-bold ml-3">Personal Infrormation</h3><br>
+                    </div>
+                    <div class="col-12">
+                    <div class="row">
+                            <div class="col-12 col-md-6 details mb-3">
+                                    <div class="row">
+                                        <div class="col-6 details mb-3 px-0">
+                                            User ID:
+                                        </div>
+                                        <div class="col-6 details mb-3">
+                                            {{ User.id }}
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-12 col-md-6 details mb-3">
+                                <div class="row">
+                                    <div class="col-6 details mb-3 px-0">
+                                    First Name:
+                                    </div>
+                                    <div class="col-6 details mb-3 text-capitalize">
+                                    <span *ngIf="!edit"> {{ User.firstName }}</span>
+                                        <input class="form-control" formControlName="firstName" [(ngModel)]="User.firstName" *ngIf="edit"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 details mb-3 mb-md-0">
+                                <div class="row">
+                                    <div class="col-6 details mb-3 px-0">
+                                    Last Name:
+                                    </div>
+                                    <div class="col-6 details mb-3 text-capitalize">
+                                    <span *ngIf="!edit"> {{ User.lastName }}</span>
+                                        <input class="form-control" formControlName="lastName" [(ngModel)]="User.lastName" *ngIf="edit"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <div class="col-6 details mb-3">
+                            Collection Coverage Zone:
+                            </div>
+                            <div class="col-6 details">
+                            <span *ngIf="!edit"> {{ User.userable.collectionCoverageZone }}</span>
+
+                                <input class="form-control" formControlName="collectionCoverageZone" [(ngModel)]="User.userable.collectionCoverageZone" *ngIf="edit"/>
+
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <div class="text-right">
+            <button type="submit" class="btn btn-success px-4" *ngIf="edit">Save</button>
+        </div>
+    </form>
 </div>
 
 <ng-template #content let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">{{ modalTitle }}</h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <p>{{ modalBody }}</p>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-light"
-      (click)="modal.close('Close click')"
-    >
-      Close
-    </button>
-  </div>
-</ng-template>
+      <div class="modal-header">
+        <h4 class="modal-title">{{ modalTitle }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{ modalBody }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+      </div>
+    </ng-template>
 
-<ngx-loading [show]="loading"></ngx-loading>
+    <ngx-loading [show]="loading"></ngx-loading>

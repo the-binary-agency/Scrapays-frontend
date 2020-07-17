@@ -20,6 +20,8 @@ export class EnterpriseProfileComponent implements OnInit {
      this.getSingleUser();
   }
 
+  avatar = 'assets/images/icons/user-icon.png';
+  URL = this.env.backendUrl;
   modalTitle: any;
   modalBody: any;
   loading: boolean;
@@ -66,12 +68,11 @@ export class EnterpriseProfileComponent implements OnInit {
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
-      phone: new FormControl('', Validators.compose([
-        Validators.pattern('[0-9 ]*'),
-        Validators.required])),
       companyName: new FormControl('', Validators.compose([
         Validators.required])),
       industry: new FormControl('', Validators.compose([
+        Validators.required])),
+      address: new FormControl('', Validators.compose([
         Validators.required])),
       companySize: new FormControl('', Validators.compose([
         Validators.required]))
@@ -98,12 +99,12 @@ export class EnterpriseProfileComponent implements OnInit {
     const formData = new FormData();
       formData.append('firstName', Form.firstName);
       formData.append('lastName', Form.lastName);
-      formData.append('phone', Form.phone);
       formData.append('email', Form.email);
       formData.append('companyName', Form.companyName);
       formData.append('companySize', Form.companySize);
+      formData.append('address', Form.address);
       formData.append('industry', Form.industry);
-    formData.append( 'sex', Form.sex );
+    formData.append( 'sex', this.sex );
     if ( this.avatarImage ) {
       formData.append('avatarImage', this.avatarImage, this.avatarImage.name);
     }
@@ -112,6 +113,7 @@ export class EnterpriseProfileComponent implements OnInit {
   }
 
   handleResponse( data ) {
+    this.edit = false;
     this.getSingleUser();
     this.loading = false;
     this.modalTitle = "Success";
@@ -131,6 +133,11 @@ export class EnterpriseProfileComponent implements OnInit {
   }
 
   onFileInput(event) {
+    let reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = ( e: any ) => {
+      this.avatar = e.target.result;
+    }
     this.avatarImage = event.target.files[0];
   }
 

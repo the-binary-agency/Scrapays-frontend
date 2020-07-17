@@ -17,47 +17,48 @@
           <span class="display-4">
             {{ totalTonnage }}
           </span>
-          Tons <br>
-          Total tonnage disposed
+          KG <br>
+          Total weight of materials disposed
       </div>
     </div>
   </div>
 
 <div class="col-12 col-md-8 px-0 px-md-4 mb-4">
-  <div class="card h-100 rounded-card inset-card">
-    <div class="card-body px-0 px-md-4">
+  <div class="card h-100 rounded-card">
+    <div class="card-body px-0 pl-md-3 pr-md-2">
       <div class="row">
-      <div class="col-12 text-center">
-        <div class="card-title">Total tonnage disposed per material class</div>
+      <div class="col-12 text-center px-0">
+        <div class="card-title row">
+          <div class="col px-0">
+            Total tonnage disposed per material class 
+          </div>
+          <div class="col-2 px-0">
+             <button type="button" class="btn btn-clear float-right py-0" [ngbPopover]="popContent" container="body">
+              <i class="fa fa-caret-down fa-2x sc-orange" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <ng-template #popContent class="px-0"> 
+          <ul class="select-material pl-0">
+            <li *ngFor="let material of materials; let i = index"  class="border-bottom fake-btn py-2" (click)="addToDisplayedMaterials( material, i )">
+              <span class="mx-3">
+                  {{ material.name }}
+              </span>
+            </li>
+          </ul>
+        </ng-template>
+        
       </div>
-        <div class="col-6 d-flex mb-5">
-          <img src="assets/images/icons/metal-icon.png" alt="metal icon">
-          <span class="ml-2 ml-md-4 font-weight-bold">
-            Metal <br>
-            {{ (Scrap.metal + Scrap.aluminium)/907 }}kg
+      <div class="row">
+         <div class="col-6 d-flex pb-2" *ngFor="let display of displayedMaterials; let i = index" [ngClass]="addBorder(i)">
+           <img src="{{ URL }}/storage/material_list_images/{{ display.image }}" alt="metal icon" *ngIf="display">
+          <span class="ml-2 ml-md-4 font-weight-bold text-capitalize" *ngIf="display">
+            {{ display.name }} <br>
+            {{ getDisplayedPrice( display.name ) }}kg
           </span>
-        </div>
-        <div class="col-6 d-flex mb-5">
-           <img src="assets/images/icons/bottles-icon.png" alt="plastic icon">
-          <span class="ml-2 ml-md-4 font-weight-bold">
-            Plastic <br>
-            {{ (Scrap.plastic)/907 }}kg
-          </span>
-        </div>
-        <div class="col-6 d-flex">
-           <img src="assets/images/icons/paper-icon.png" alt="paper icon">
-          <span class="ml-2 ml-md-4 font-weight-bold">
-            Paper <br>
-            {{ (Scrap.paper)/907 }}kg
-          </span>
-        </div>
-        <div class="col-6 d-flex">
-           <img src="assets/images/icons/can-icon.png" alt="others icon">
-          <span class="ml-2 ml-md-4 font-weight-bold">
-            Others <br>
-            {{ (Scrap.others)/907 }}kg
-          </span>
-        </div>
+         </div>
+      </div>
       </div>
 
     </div>
@@ -67,7 +68,7 @@
 <div class="col-12 px-0 px-md-4 mb-4">
   <div class="card shadow-sm h-100">
      <div class="card-header bg-white">
-      <span class="font-weight-bold mt-3">Disposal <br class="d-block d-md-none"> History</span>
+      <span class="font-weight-bold mt-3">Disposal <br class="d-block d-md-none"> History (%)</span>
 
       <select class="custom-select custom-select-sm w-auto float-right border-0">
           <option value="1" selected> Monthly </option>
@@ -179,7 +180,7 @@
             <td></td>
             <td>No Registered Users</td>
             </tr> -->
-              <tr>
+              <!-- <tr>
                 <td>
                   <div>10-4-2020</div>
                   <div class="small text-muted">
@@ -192,7 +193,7 @@
                 <td class="text-right">
                   + ₦<span class="text-bold">0</span>
                 </td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
         
@@ -207,49 +208,29 @@
 
 
     <div class="card mt-5">
-      <form (ngSubmit)="onSubmit(Form)" [formGroup]="Form">
-        <div class="card-body">
+      <form (ngSubmit)="onSubmit(Form)">
+        <div class="card-body p-0 p-md-4">
           <div class="row">
           <div class="col-12 text-center h1">List Collected Scrap</div>
             <div class="col-6">
                <div class="form-group">
-                  <input type="text" class="form-control" name="producerID" id=""  placeholder="Producer ID" formControlName="producerID">
-                </div>
-                <div class="validation-errors">
-                  <ng-container *ngFor="let validation of idValidation">
-                    <div class="error-message alert alert-danger" *ngIf="Form.get('producerID').hasError(validation.type) && (Form.get('producerID').dirty || Form.get('producerID').touched)">
-                    <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message }}</span>
-                    </div>
-                  </ng-container>
+                  <input type="tel" class="form-control" name="producerID" [(ngModel)]="producerPhone"  placeholder="Producer Phone Number" (focusout)="PhoneOnFocusOut($event)">
                 </div>
             </div>
-            <div class="col-6">
+
+            <div class="col-6" *ngFor="let material of collectionMaterials; let i = index">
                <div class="form-group">
-                  <input type="number" class="form-control" name="metal" id=""  placeholder="Metal" formControlName="metal">
+                  <input type="number" class="form-control" name="{{ material.name }}"  placeholder="{{ material.name }}"  [(ngModel)]="collectionMaterials[i].weight" (keyup)="weightChange($event, i)">
                 </div>
             </div>
+
             <div class="col-6">
-              <div class="form-group">
-                  <input type="number" class="form-control" name="aluminium" id=""  placeholder="Aluminium" formControlName="aluminium">
-                </div>
-              </div>
-            <div class="col-6">
-               <div class="form-group">
-                  <input type="number" class="form-control" name="paper" id=""  placeholder="Paper" formControlName="paper">
-                </div>
+              <span class="font-weight-bold">Producer Name:</span> <i class="fa fa-spinner fa-spin ml-2" aria-hidden="true" *ngIf="nameloading"></i> &nbsp; <span class="text-capitalize">{{ producerName }}</span>
             </div>
-            <div class="col-6">
-              <div class="form-group">
-                  <input type="number" class="form-control" name="plastic" id=""  placeholder="Plastic" formControlName="plastic">
-                </div>
-              </div>
-            <div class="col-6">
-               <div class="form-group">
-                  <input type="number" class="form-control" name="others" id=""  placeholder="Others" formControlName="others">
-                </div>
-            </div>
-            <div class="col-6 text-right offset-6">
-              <button type="submit" class="btn btn-primary px-4" [disabled]="!Form.valid">List</button>
+            
+            <div class="col-6 offset-6">
+              <span class="text-left font-weight-bold">Cost: {{ Cost }}</span>
+              <button type="submit" class="btn btn-primary px-4 float-right" [disabled]="false">List</button>
             </div>
        
           </div><!--/.row-->

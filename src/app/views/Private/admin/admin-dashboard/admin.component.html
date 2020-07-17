@@ -162,8 +162,8 @@
             <div class="col-12 col-md-6" *ngFor="let material of materialPrices; let i = index">
                <div class="form-group">
                <label for="metal" [ngClass]="{h3: !edit}" class="text-capitalize">
-                {{ material.name }}
-                <span *ngIf="!edit">:&nbsp; {{ material.price }} </span>
+                <span>Material: {{ " " + material.name }}</span><br>
+                <span *ngIf="!edit">Material Price:&nbsp; ₦{{ material.price }} </span>
                </label>
                   <div class="row">
                     <div class="col-7 p-0 px-md-3">
@@ -185,9 +185,9 @@
 
                     <div class="col-12 text-right">
                     <div class="form-group pt-md-4">
-                        <!-- <button type="button" class="btn btn-primary px-4" (click)="edit = true" *ngIf="!edit">Edit</button> &nbsp; -->
+                        <button type="button" class="btn btn-primary px-4" (click)="edit = true" *ngIf="!edit && materialPrices.length > 0">Edit</button> &nbsp;
                         <button type="button" class="btn btn-danger px-4 text-nowrap mb-3 mb-md-0" (click)="edit = false" *ngIf="edit">Cancel Edit</button> &nbsp;
-                        <button type="button" class="btn btn-primary px-4" *ngIf="edit">Save Materials</button>
+                        <button type="button" class="btn btn-primary px-4" *ngIf="edit" (click)="saveEditedMaterials()">Save Materials</button>
                     </div>
                 </div>
        

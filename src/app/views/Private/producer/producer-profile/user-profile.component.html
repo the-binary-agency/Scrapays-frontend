@@ -6,7 +6,7 @@
     <form [formGroup]="Form" (ngSubmit)="updateProfile(Form.value)" class="w-100">
         <div class="row align-items-center justify-content-center">
         <div class="position-relative">
-            <img src="{{ URL }}/storage/Material_Images/{{ User.avatarImage }}" class="user-avatar" alt="User Icon" *ngIf="User.avatarImage">
+            <img src="{{ URL }}/storage/profile_pictures/{{ User.avatarImage }}" class="user-avatar" alt="User Icon" *ngIf="User.avatarImage">
             <img [src]="avatar" class="user-avatar" alt="User Icon" *ngIf="!User.avatarImage">
             <input type="file" formControlName="avatarImage"  class="d-none" #fileInput accept="image/*" (change)="onFileInput($event)">
             <button type="button" class="btn btn-primary btn-circle btn-sm solid" (click)="fileInput.click()"  *ngIf="edit">
@@ -14,7 +14,6 @@
             </button>
         </div>
             <div class="ml-3">
-                <h2 class="font-weight-bold mb-0">Company</h2>
                 {{ User.email }}
             </div>
         </div>
@@ -39,8 +38,7 @@
                                 Phone number:
                             </div>
                             <div class="col-6 details">
-                            <span *ngIf="!edit"> {{ User.phone }}</span>
-                                <input class="form-control" formControlName="phone" [(ngModel)]="User.phone" *ngIf="edit"/>
+                             {{ User.phone }}
                             </div>
                         </div>
                     </div>
@@ -73,7 +71,7 @@
                                     <div class="col-6 details mb-3 px-0">
                                     First Name:
                                     </div>
-                                    <div class="col-6 details mb-3">
+                                    <div class="col-6 details mb-3 text-capitalize">
                                     <span *ngIf="!edit"> {{ User.firstName }}</span>
                                         <input class="form-control" formControlName="firstName" [(ngModel)]="User.firstName" *ngIf="edit"/>
                                     </div>
@@ -84,7 +82,7 @@
                                     <div class="col-6 details mb-3 px-0">
                                     Last Name:
                                     </div>
-                                    <div class="col-6 details mb-3">
+                                    <div class="col-6 details mb-3 text-capitalize">
                                     <span *ngIf="!edit"> {{ User.lastName }}</span>
                                         <input class="form-control" formControlName="lastName" [(ngModel)]="User.lastName" *ngIf="edit"/>
                                     </div>
@@ -95,23 +93,12 @@
                     <div class="col-12 col-md-6">
                         <div class="row">
                             <div class="col-6 details mb-3">
-                            Sex:
+                            Request Address:
                             </div>
                             <div class="col-6 details">
-                            <span *ngIf="!edit"> {{ User.sex }}</span>
+                            <span *ngIf="!edit"> {{ User.userable.requestAddress }}</span>
 
-                                <div class="form-check" *ngIf="edit">
-                                    <label class="form-check-label">
-                                    <input type="radio" name="gender" class="form-check-input" (change)="sex = 'male'" [checked]="User.sex == 'male'">
-                                    Male
-                                  </label>
-                                </div>
-                                <div class="form-check" *ngIf="edit">
-                                    <label class="form-check-label">
-                                    <input type="radio" name="gender" class="form-check-input" (change)="sex = 'female'" [checked]="User.sex == 'female'">
-                                    Female
-                                  </label>
-                                </div>
+                                <input class="form-control" formControlName="requestAddress" [(ngModel)]="User.userable.requestAddress" *ngIf="edit"/>
 
                             </div>
                         </div>

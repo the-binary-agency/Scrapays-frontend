@@ -64,3 +64,13 @@
 a.btn.btn-primary.rounded-pill:not(:hover){
     border: 2px solid #fff !important;
 }
+.fix-header{
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 1030px;
+}
+.move-header{
+    left: 0;
+    right: 249px !important;
+}

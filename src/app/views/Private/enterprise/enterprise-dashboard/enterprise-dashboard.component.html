@@ -27,7 +27,7 @@
           Request Pickup
         </button>
 
-        <button class="btn btn-primary ml-md-4" type="button" *ngIf="automated">
+        <button class="btn btn-primary ml-md-4" type="button" *ngIf="automated" (click)="cancelPickup()">
           Cancel Pickup
         </button>
        
@@ -48,8 +48,8 @@
           <span class="display-4">
             {{ totalTonnage }}
           </span>
-          Tons <br>
-          Total tonnage disposed
+          KG <br>
+          Total weight of disposed materials
       </div>
     </div>
   </div>
@@ -61,7 +61,7 @@
       <div class="col-12 text-center px-0">
         <div class="card-title row">
           <div class="col px-0">
-            Total tonnage disposed per material class 
+            Total weight disposed per material class 
           </div>
           <div class="col-2 px-0">
              <button type="button" class="btn btn-clear float-right py-0" [ngbPopover]="popContent" container="body">
@@ -82,7 +82,7 @@
         
       </div>
       <div class="row">
-         <div class="col-6 d-flex pb-2 border-right border-bottom" *ngFor="let display of displayedMaterials">
+         <div class="col-6 d-flex pb-2" *ngFor="let display of displayedMaterials; let i = index" [ngClass]="addBorder(i)">
             <img src="{{ URL }}/storage/material_list_images/{{ display.image }}" alt="material icon" *ngIf="display">
           <span class="ml-2 ml-md-4 font-weight-bold text-capitalize" *ngIf="display">
             {{ display.name }} <br>
@@ -99,7 +99,7 @@
 <div class="col-12 px-0 px-md-4 mb-4">
   <div class="card shadow-sm h-100">
      <div class="card-header bg-white">
-      <span class="font-weight-bold mt-3">Disposal <br class="d-block d-md-none"> History</span>
+      <span class="font-weight-bold mt-3">Disposal <br class="d-block d-md-none"> History (%)</span>
 
       <select class="custom-select custom-select-sm w-auto float-right border-0">
           <option value="1" selected> Monthly </option>
@@ -199,7 +199,7 @@
               </tr>
             </thead>
             <tbody class="bg-light">
-              <tr>
+              <!-- <tr>
                 <td>
                   <div>10-4-2020</div>
                   <div class="small text-muted">
@@ -212,7 +212,7 @@
                 <td class="text-right">
                   + ₦<span class="text-bold">0</span>
                 </td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
         
@@ -232,11 +232,7 @@
           <div class="form-group">
               <label>Choose Material Type</label>
               <select class="form-control" [(ngModel)]="materialType" (change)="test()" formControlName="materialType">
-                <option value="aluminium">Aluminium</option>
-                <option value="metal">Metal</option>
-                <option value="paper">Paper</option>
-                <option value="plastic">Plastic</option>
-                <option value="others">Others</option>
+                <option value="{{ material }}" *ngFor="let material of originalMaterials; let i = index"> {{ material }} </option>
               </select>
           </div>
             <div class="form-group">
@@ -252,7 +248,7 @@
               <input type="file" formControlName="receipt"  class="d-none" #fileInput accept="image/*" (change)="onFileInput($event)">
               <button type="button" name="" id="" class="form-control fake-btn" (click)="fileInput.click()">
               <i class="fa fa-picture-o float-left" aria-hidden="true"></i>
-              {{ receipt }}
+              <span class="small">{{ receipt.name }}</span>
               <i class="fa fa-plus float-right" aria-hidden="true"></i>
               </button>
             </div>
@@ -303,7 +299,7 @@
     </div>
 
     <div class="mt-2 mt-md-3   time-container bg-white">
-      <div class="w-100 font-weight mb-3">Shcedule pickup time</div>
+      <div class="w-100 font-weight mb-3">Schedule pickup time</div>
 
       <div class="row">
         <div class="col-3 col-md-2 px-1 px-md-3" *ngFor="let time of times">
@@ -350,7 +346,10 @@
           </div>
         </div>
         <div class="col-12 col-md-2 text-right text-md-left">
-          <button type="button" class="btn btn-primary solid small-input" (click)="requestPickup()" [disabled]="requestIncomplete()">Done</button>
+          <button type="button" class="btn btn-primary solid small-input" (click)="requestPickup()" [disabled]="requestIncomplete() || requestLoading">
+            <i class="fa fa-spinner fa-spin" aria-hidden="true" *ngIf="requestLoading"></i>
+            <span *ngIf="!requestLoading">Done</span>
+          </button>
         </div>
       </div>
     </div>
@@ -374,8 +373,8 @@
 
     <div class="mt-2 mt-md-3 time-container bg-white">
       <div class="w-100 font-weight-bold sc-orange h2 mb-3 text-center">SELL YOUR BULKY MATERIALS NOW</div>
-      <div class="mx-5 w-100 font-weight-bold h3 mb-3">List it, get priced, get paid</div>
-      <div class="mx-5 w-100 text-muted h4 mb-3">
+      <div class="px-5 w-100 font-weight-bold h3 mb-3">List it, get priced, get paid</div>
+      <div class="px-5 w-100 text-muted h4 mb-3">
         List your out-of-use items for free, warehouse clearance, old factory equipments, machines, cars, trucks, batteries, containers etc. 
       </div>
       <app-listing></app-listing>

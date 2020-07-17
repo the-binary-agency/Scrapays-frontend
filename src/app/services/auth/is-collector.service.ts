@@ -11,7 +11,7 @@ export class IsCollectorService implements CanActivate{
     const Collector: boolean = this.Token.Collector();
     
     if (!Collector) {
-      this.router.navigateByUrl('/login/collector');
+      this.router.navigateByUrl('/login/partners');
     }
     
     return this.Token.Collector();

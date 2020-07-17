@@ -22,12 +22,15 @@ export class CollectorProfileComponent implements OnInit {
     this.initForm();
   }
 
+  avatar = 'assets/images/icons/user-icon.png';
+  avatarImage: any;
   hasVendor = false;
   modalTitle: any;
   modalBody: any;
   loading: boolean;
   edit = false;
-  User: any = {};
+  User: any = { userable: {} };
+  URL = this.env.backendUrl;
   public Form: FormGroup;
   public VendorIDForm: FormGroup;
   validation_messages = {
@@ -57,7 +60,8 @@ export class CollectorProfileComponent implements OnInit {
   };
 
   initForm() {
-        this.Form = this.formBuilder.group({
+    this.Form = this.formBuilder.group( {
+      avatarImage: new FormControl(''),
       firstName: new FormControl('', Validators.compose([
         Validators.maxLength(30),
         Validators.pattern('[a-zA-Z ]*'),
@@ -72,12 +76,12 @@ export class CollectorProfileComponent implements OnInit {
       ])),
       phone: new FormControl('', Validators.compose([
         Validators.pattern('[0-9 ]*'),
-        Validators.required]))
+        Validators.required])),
+      collectionCoverageZone: new FormControl('', Validators.compose([
+        Validators.required])),
   });
         this.VendorIDForm = this.formBuilder.group({
       vendorID: new FormControl('', Validators.compose([
-        Validators.minLength(6),
-        Validators.maxLength(6),
         Validators.required]))
   });
   }
@@ -92,27 +96,22 @@ export class CollectorProfileComponent implements OnInit {
   updateProfile( form ) {
     this.loading = true;
     var user = this.processForm( form );
-    this.auth.updateUser( user.id, user).subscribe(
+    this.auth.updateUser( this.token.phone, user).subscribe(
       data => this.handleResponse( data ),
       error => this.handleError( error )
     )
   }
 
   processForm( Form ) {
-    var formdata = {
-      id: '',
-      firstName: '',
-      lastName: '',
-      phone: '',
-      email: ''
-    };
-    formdata.id = this.User.id;
-    formdata.firstName = Form.firstName;
-    formdata.lastName = Form.lastName;
-    formdata.email = Form.email;
-    formdata.phone = Form.phone;
+    const formData = new FormData();
+    formData.append('firstName', Form.firstName);
+    formData.append('lastName', Form.lastName);
+    formData.append('email', Form.email);
+    formData.append( 'requestAddress', Form.requestAddress );
+    formData.append('avatarImage', this.avatarImage);
+    formData.append('collectionCoverageZone', Form.collectionCoverageZone);
 
-    return formdata;
+    return formData;
   }
 
   registerVendor( form ) {
@@ -125,11 +124,12 @@ export class CollectorProfileComponent implements OnInit {
     )
   }
 
-  handleResponse(data){
-  this.loading = false;
-  this.modalTitle = "Success";
-  this.modalBody = data.data;
-  this.openModal( this.content );
+  handleResponse( data ) {
+    this.edit = false;
+    this.loading = false;
+    this.modalTitle = "Success";
+    this.modalBody = data;
+    this.openModal( this.content );
     this.VendorIDForm.reset();
     this.hasVendor = true;
   }
@@ -143,6 +143,15 @@ export class CollectorProfileComponent implements OnInit {
 
   openModal(content) {
     this.modal.open(content, { centered: true });
+  }
+
+  onFileInput( event ) {
+    let reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = ( e: any ) => {
+      this.avatar = e.target.result;
+    }
+    this.avatarImage = event.target.files[0];
   }
 
 }

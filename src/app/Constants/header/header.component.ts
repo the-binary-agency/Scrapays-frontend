@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit {
   public Collector: boolean;
   public _error = new Subject<string>();
   public authError = '';
+  navExpanded: boolean;
 
   constructor (
     private router: Router, private Auth: AuthService,
@@ -29,6 +30,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.processRoles();
+    // this.navExpanded = this.sidenav.sidenav.opened;
   }
 
   processAuthError() {
@@ -88,6 +90,12 @@ export class HeaderComponent implements OnInit {
 
   clickMenu() { 
     this.sidenav.sidenav.toggle();
+    // console.log("side nav is opened: ",this.sidenav.sidenav.opened);
+    // if ( this.sidenav.sidenav.opened == true ) {
+    //   this.navExpanded = true;
+    // } else {
+    //    this.navExpanded = true;
+    // }
   }
   
 }

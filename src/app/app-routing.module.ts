@@ -30,7 +30,6 @@ import { VendorProfileComponent } from './views/Private/vendor/vendor-profile/ve
 import { CollectorProfileComponent } from './views/Private/collector/collector-profile/collector-profile.component';
 import { AdminLoginComponent } from './views/Private/admin/admin-login/admin-login.component';
 import { AdminComponent } from './views/Private/admin/admin-dashboard/admin.component';
-// import { EnterprisesComponent } from './views/Public/enterprises/enterprises.component';
 import { EnterpriseSignupComponent } from './views/Auth/enterprise-signup/enterprise-signup.component';
 import { VendorSignupComponent } from './views/Auth/vendor-signup/vendor-signup.component';
 import { CollectorSignupComponent } from './views/Auth/collector-signup/collector-signup.component';
@@ -42,13 +41,7 @@ import { IsHouseholdService } from './services/auth/is-household.service';
 
 
 const routes: Routes = [
-  { path: "", pathMatch: "full", redirectTo: "login" },
-  // { path: "home", component: HomeComponent },
-  // { path: "producers", component: ProducersComponent },
-  // { path: "individuals", component: ProducersComponent },
-  // { path: "enterprises", component: EnterprisesComponent },
-  // { path: "vendors", component: VendorsComponent },
-  // { path: "collectors", component: CollectorsComponent },
+  { path: "", pathMatch: "full", redirectTo: "login/enterprise" },
   { path: "listing", component: ListingComponent },
   { path: "contact", component: ContactComponent },
   {

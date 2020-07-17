@@ -5,6 +5,7 @@ import { ApiService } from 'src/app/services/auth/api.service';
 import { TokenService } from 'src/app/services/auth/token.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { FormsModule } from '@angular/forms';
+import { EnvironmentService } from 'src/app/services/env/environment.service';
 
 @Component({
   selector: 'app-collector-dashboard',
@@ -15,10 +16,12 @@ export class CollectorDashboardComponent implements OnInit {
    @ViewChild('content') private content;
   Form: FormGroup;
 
-  constructor ( private formBuilder: FormBuilder, private modal: NgbModal, private api: ApiService, private Token: TokenService, private Auth: AuthService, private token: TokenService ) {  
-    this.getUser();
+  constructor ( private formBuilder: FormBuilder, private modal: NgbModal, private api: ApiService, private Token: TokenService, private Auth: AuthService, private token: TokenService, private auth: AuthService, private env: EnvironmentService ) {  
   }
   
+  Cost = '₦0';
+  tempCost = [];
+ URL = this.env.backendUrl;
  User: any = {
     id: "",
     firstName: "",
@@ -28,98 +31,106 @@ export class CollectorDashboardComponent implements OnInit {
     role: '',
     created_at: ""
  };
-  Scrap: any = {
-    metal:  0,
-    aluminium:  0,
-    plastic:  0,
-    paper:  0,
-    others:  0,
-  }
+  Scrap: any = {}
   CollectedScrap: any = [];
+  listForm: any = [];
+  producerPhone: string;
   totalTonnage: number = 0;
+  producerName: string;
+  nameloading = false;
 
   idValidation = [
     { type: 'required', message: 'A Producer ID is required.' },
-    { type: 'minlength', message: 'Minimum of 6 characters' },
-    { type: 'maxLength', message: 'Maximum of 6 characters' }
+    // { type: 'minlength', message: 'Minimum of 6 characters' },
   ];
   public loading = false;
   modalTitle: string;
   modalBody: string;
+  materials = [];
+  originalMaterials = [];
+  displayedMaterials = [];
+  collectionMaterials = [ ];
 
   ngOnInit(): void {
-    this.initForm();
+    this.getUser();
+    this.getPrices();
   }
 
   
   getUser() {
-    this.Auth.getUserWithTonnage( this.token.phone ).subscribe(
+    this.Auth.getCollectorWithTonnage( this.token.phone ).subscribe(
       (data : any) => {
         this.User = data.user;  
-        this.CollectedScrap = data.tonnage
+        this.CollectedScrap = data.tonnage;
         this.processTonnage();
       },
       error => console.log(error),
     );      
   }
 
+  getScrap( data ) {
+    this.CollectedScrap = data.tonnage;
+    // // for ( let mat of data.tonnage ) {
+    // //   this.CollectedScrap.push( JSON.parse( mat ) );
+    // // }
+    // var holder = {};
+
+    // this.CollectedScrap.forEach(function(d) {
+    //   if (holder.hasOwnProperty(d.name)) {
+    //     holder[d.name] = holder[d.name] + d.weight;
+    //   } else {
+    //     holder[d.name] = d.weight;
+    //   }
+    // });
+
+    // var obj2 = [];
+
+    // for (var prop in holder) {
+    //   obj2.push({ name: prop, weight: holder[prop] });
+    // }
+    // console.log(holder, obj2);
+    
+  }
 
   processTonnage() {
     for ( let scrap of this.CollectedScrap ) {
-      this.Scrap.metal += Number( scrap.metal )
-      this.Scrap.aluminium += Number( scrap.aluminium )
-      this.Scrap.paper += Number( scrap.paper )
-      this.Scrap.plastic += Number( scrap.plastic )
-      this.Scrap.others += Number( scrap.others )
-      var temptotal = Number( scrap.metal ) + Number( scrap.aluminium ) + Number( scrap.plastic ) + Number( scrap.paper ) + Number( scrap.paper ); 
-        this.totalTonnage += temptotal;       
+        this.totalTonnage += scrap.weight;       
     }
-
       this.lineChartData = [ {
-      data: [
-        this.round( ( this.Scrap.metal / this.totalTonnage ) * 100 ),
-        this.round( ( this.Scrap.aluminium / this.totalTonnage ) * 100 ),
-        this.round( ( this.Scrap.paper / this.totalTonnage ) * 100 ),
-        this.round( ( this.Scrap.plastic / this.totalTonnage ) * 100 ),
-        this.round( ( this.Scrap.others / this.totalTonnage ) * 100 ) ], label: "Scrap"
+      data: this.getSingleScrapForGraph(), label: "Scrap"
     } ];
     
   }
 
-  initForm(){
-    this.Form = this.formBuilder.group({
-       producerID: new FormControl('', Validators.compose([
-        Validators.required,
-        Validators.minLength(6),
-        Validators.maxLength(6)
-      ])),
-       metal: new FormControl(''),
-      aluminium: new FormControl(''),
-       paper: new FormControl(''),
-      plastic: new FormControl(''),
-       others: new FormControl(''),
-  });
+  getSingleScrapForGraph() {
+    var data = [];
+    var tonnage = this.totalTonnage;
+    var label = this.lineChartLabels;
+    var scrap = this.Scrap;
+    this.CollectedScrap.forEach( function ( d ) {
+      scrap[`${d.name}`] = [`${d.weight}`];
+        label.push( d.name );
+      var tonn = ( ( d.weight / tonnage ) * 100 ).toFixed( 2 );
+      data.push( tonn );
+    } )
+    return data;
   }
 
   onSubmit( Form ) {
     this.loading = true;
-    var scrap = this.processForm();
-    this.api.uploadCollectedScrap( scrap ).subscribe(
+    var form = this.processForm();
+    this.api.listCollectedScrap( form ).subscribe(
       data => this.handleSuccess( data ),
       error => this.handleError( error )
     )
   }
 
   processForm() {
-    const formData = new FormData();
-    formData.append('collectorID', this.User.id);
-    formData.append('role', this.User.role);
-    formData.append('producerID', this.Form.get('producerID').value);
-    formData.append('metal', this.Form.get('metal').value);
-    formData.append( 'aluminium', this.Form.get( 'aluminium' ).value );
-    formData.append( 'plastic', this.Form.get( 'plastic' ).value );
-    formData.append( 'paper', this.Form.get( 'paper' ).value );
-    formData.append( 'others', this.Form.get( 'others' ).value );
+    const formData = {
+      producerPhone: this.producerPhone,
+      collectorID: this.token.phone,
+      materials: this.collectionMaterials
+    };
 
     return formData;
   }
@@ -129,7 +140,7 @@ export class CollectorDashboardComponent implements OnInit {
     this.modalBody ="Scrap Listed Successfully.";
     this.loading = false;
     this.openModal( this.content );
-    this.Form.reset();
+    this.resetCollectionMaterials();
 }
 
 handleError( error ) {
@@ -145,7 +156,10 @@ openModal(content) {
   
   round( value ) {
     return value.toFixed(2)
-    // return Math.round( value );
+  }
+
+   roundToWhole( value ) {
+    return Math.round( value );
   }
 
   public random(min: number, max: number) {
@@ -166,30 +180,7 @@ openModal(content) {
     }
   ];
 
-  public lineChartLabels: Array<any> = [
-    "Metal",
-    "Aluminium",
-    "Paper",
-    "Plastic",
-    "Others"
-  ];
-  // public lineChartData: Array<any> = [
-  //   { data: [65, 59, 80, 81, 56, 55, 40, 33, 45, 61, 11, 32], label: "Scrap" }
-  // ];
-  // public lineChartLabels: Array<any> = [
-  //   "January",
-  //   "February",
-  //   "March",
-  //   "April",
-  //   "May",
-  //   "June",
-  //   "July",
-  //   "August",
-  //   "September",
-  //   "October",
-  //   "November",
-  //   "December"
-  // ];
+  public lineChartLabels: Array<any> = [];
   public lineChartOptions: any = {
     animation: false,
     responsive: true
@@ -233,6 +224,98 @@ openModal(content) {
 
   public chartHovered(e: any): void {
     console.log(e);
+  }
+  
+  displayMaterials() {
+    for (let i = 0; i < this.materials.length; i++) {
+      this.originalMaterials.push( this.materials[ i ] );
+    }
+    for ( let i = 0; i <= 3; i++){
+      this.displayedMaterials.push( this.materials[ i ] );
+    }
+    this.materials.splice( 0, 4 );
+  }
+  
+  addToDisplayedMaterials( material, i ) {
+    this.materials.splice( i, 1 );
+    this.materials.push(this.displayedMaterials[3] );
+    this.displayedMaterials.splice( 3, 1 );
+    this.displayedMaterials.unshift( material );
+  }
+
+  getDisplayedPrice( materialName ) {
+    var display = this.Scrap[ materialName ] ? this.Scrap[ materialName ] : 0;
+    return this.roundToWhole( display );
+  }
+
+    getPrices() {
+      this.auth.getMaterialPrices( this.token.phone ).subscribe(
+        ( data: any ) => {
+          console.log( data.prices );
+          for ( let price of data.prices ) {
+            this.materials.push( price ); 
+            var mat = { name: price.name, price: price.price, weight: '' };
+            this.collectionMaterials.push( mat );
+            this.tempCost.push( 0 );
+          }
+          this.displayMaterials();
+          console.log("display ",this.materials);
+          
+      },
+        error => console.log(error)
+      )
+    }
+  
+  PhoneOnFocusOut( event ) {
+    this.nameloading = true;
+    var form = {
+      collectorID: this.token.phone,
+      producerPhone: this.producerPhone,
+    }
+    this.auth.getUserName( form ).subscribe(
+      ( data: any ) => {
+        this.producerName = data.Name;
+        this.nameloading = false;
+     },
+      error => {
+        console.log(error)
+        this.nameloading = false;
+      }
+    )
+  }
+
+  weightChange( event: any, i ) {
+    this.tempCost[ i ] = this.originalMaterials[ i ].price * event.target.value;
+
+     var sum = this.tempCost.reduce(function(a, b){
+        return a + b;
+     }, 0 );
+    
+    var formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'NGN',
+    });
+
+    this.Cost = "₦" + sum.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
+    
+  }
+
+  resetCollectionMaterials() {
+    for ( let mat of this.collectionMaterials ) {
+      mat.weight = ''
+    }
+    this.Cost = '₦0';
+  }
+  
+  addBorder( i ) {
+    var classes = {};
+    if ( i == 0 || i == 2 ) {
+      classes['border-right'] = true
+    }
+    if ( i == 0 || i == 1 ) {
+      classes['border-bottom'] = true
+    }
+    return classes;
   }
 
 }

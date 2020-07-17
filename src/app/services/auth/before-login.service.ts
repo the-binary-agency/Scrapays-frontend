@@ -15,7 +15,7 @@ export class BeforeLoginService implements CanActivate{
     if ( loggedIn ) {
        if (admin) {
       this.router.navigateByUrl('dashboard/admin');
-      this.header.changeErrorMessage( 'You\'re alraedy logged in.' );
+      this.header.changeErrorMessage( 'You\'re already logged in.' );
        } else {
             if ( this.Token.isEnterprise() ) {
             this.router.navigateByUrl('/dashboard/enterprise');

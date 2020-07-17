@@ -35,13 +35,7 @@ export class ProducerDashboardComponent implements OnInit {
     role: '',
     created_at: ""
  };
-  Scrap: any = {
-    metal:  0,
-    aluminium:  0,
-    plastic:  0,
-    paper:  0,
-    others:  0,
-  }
+  Scrap: any = {}
   CollectedScrap: any = [];
   totalTonnage: number = 0;
   public Form: FormGroup;
@@ -82,13 +76,7 @@ export class ProducerDashboardComponent implements OnInit {
   modalBody: any;
   loading: boolean;
   automated = false;
-  materials = [
-    { name: 'Metal', img: 'metal-icon.png', price: '2500' },
-    { name: 'Aluminium', img: 'metal-icon.png', price: '2500' },
-    { name: 'Pet Bottles', img: 'bottles-icon.png', price: '2500' },
-    { name: 'Paper', img: 'paper-icon.png', price: '2500' },
-    { name: 'Plastic', img: 'can-icon.png', price: '2500' }
-  ];
+  materials = [];
   originalMaterials = [];
   displayedMaterials = [];
   requestMaterials = [ ];
@@ -164,40 +152,43 @@ export class ProducerDashboardComponent implements OnInit {
         break;
     }
   }
-    getUser() {
+  getUser() {
     this.loading = true;
     this.auth.getUserWithTonnage( this.token.phone ).subscribe(
       (data : any) => {
         this.User = data.user;  
-        this.automated = data.user.recoveryAutomated;
         this.CollectedScrap = data.tonnage;
         this.processTonnage();
       },
-      error => this.loading = false,
+      error => {
+        this.loading = false;
+        console.log( error )
+      },
     );      
   }
 
-
   processTonnage() {
     for ( let scrap of this.CollectedScrap ) {
-      this.Scrap.metal += Number( scrap.metal )
-      this.Scrap.aluminium += Number( scrap.aluminium )
-      this.Scrap.paper += Number( scrap.paper )
-      this.Scrap.plastic += Number( scrap.plastic )
-      this.Scrap.others += Number( scrap.others )
-      var temptotal = Number( scrap.metal ) + Number( scrap.aluminium ) + Number( scrap.plastic ) + Number( scrap.paper ) + Number( scrap.paper ); 
-        this.totalTonnage += temptotal;       
+        this.totalTonnage += scrap.weight;       
     }
-
       this.lineChartData = [ {
-      data: [
-        this.round( ( this.Scrap.metal / this.totalTonnage ) * 100 ),
-        this.round( ( this.Scrap.aluminium / this.totalTonnage ) * 100 ),
-        this.round( ( this.Scrap.paper / this.totalTonnage ) * 100 ),
-        this.round( ( this.Scrap.plastic / this.totalTonnage ) * 100 ),
-        this.round( ( this.Scrap.others / this.totalTonnage ) * 100 ) ], label: "Scrap"
+      data: this.getSingleScrapForGraph(), label: "Scrap"
     } ];
+  }
+
+  getSingleScrapForGraph() {
+    var data = [];
+    var tonnage = this.totalTonnage;
+    var label = this.lineChartLabels;
+    var scrap = this.Scrap;
+    this.CollectedScrap.forEach( function ( d ) {
+      scrap[`${d.name}`] = [`${d.weight}`];
+        label.push( d.name );
+      var tonn = ( ( d.weight / tonnage ) * 100 ).toFixed( 2 );
+      data.push( tonn );
+    } )
     this.loading = false;
+    return data;
   }
 
   getMaterials() {
@@ -235,22 +226,11 @@ export class ProducerDashboardComponent implements OnInit {
   // lineChart
   public lineChartData: Array<any> = [
     {
-      data: [
-        0,
-        0,
-        0,
-        0,
-        0], label: "Scrap"
+      data: [], label: "Scrap"
     }
   ];
 
-  public lineChartLabels: Array<any> = [
-    "Metal",
-    "Aluminium",
-    "Paper",
-    "Plastic",
-    "Others"
-  ];
+  public lineChartLabels: Array<any> = [];
   public lineChartOptions: any = {
     animation: false,
     responsive: true
@@ -375,8 +355,7 @@ export class ProducerDashboardComponent implements OnInit {
   }
 
   getDisplayedPrice( materialName ) {
-    var property = materialName.toLowerCase();
-    var display = this.Scrap[ property ] * 907;
+    var display = this.Scrap[ materialName ] ? this.Scrap[ materialName ] : 0;
     return this.roundToWhole( display );
   }
    
@@ -444,6 +423,17 @@ export class ProducerDashboardComponent implements OnInit {
      },
       error => console.log(error)
     )
+  }
+
+  addBorder( i ) {
+    var classes = {};
+    if ( i == 0 || i == 2 ) {
+      classes['border-right'] = true
+    }
+    if ( i == 0 || i == 1 ) {
+      classes['border-bottom'] = true
+    }
+    return classes;
   }
 
 }

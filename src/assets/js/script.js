@@ -351,15 +351,29 @@ var images = ["home-scrap-carousel-6.png", "home-scrap-carousel-3.png", "home-sc
     $( '#signupModal' ).hide()
   } );
 
+  $( '.notificationsModalToggler' ).click( function () {
+    $( '.notificationsModal' ).show()
+  } );
+  $( '.notificationsModalCloser' ).click( function () {
+    $( '#notificationsModal' ).hide()
+  } );
+  $( '.notificationsModalCloser2' ).click( function () {
+    $( '#notificationsModal' ).hide()
+  } );
+  $( '.notificationsModalCloser3' ).click( function () {
+    $( '#notificationsModal' ).hide()
+  } );
+
   $( '.modal-link' ).click( function () {
     $( '#loginModal' ).hide()
     $( '#signupModal' ).hide()
   })
 
   $( window ).click( function ( event ){
-    if (  '#' + event.target.id == $( '#loginModal' ).selector || '#' + event.target.id == $( '#signupModal' ).selector ) {
+    if (  '#' + event.target.id == $( '#loginModal' ).selector || '#' + event.target.id == $( '#signupModal' ).selector || '#' + event.target.id == $( '#notificationsModal' ).selector ) {
       $( '#loginModal' ).hide()
       $( '#signupModal' ).hide()
+      $( '#notificationsModal' ).hide()
     }
   })
 
