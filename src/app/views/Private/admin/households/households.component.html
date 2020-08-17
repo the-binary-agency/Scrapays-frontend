@@ -1,0 +1,253 @@
+<div class="dashboard-body pt-5">
+  <div class="row px-md-5 px-1 mb-4">
+    <div class="col-12 col-md-6 pl-0">
+      <div class="row">
+        <div class="col-6 pl-0">
+          <div class="form-group">
+            <select class="form-control" name="sort">
+              <option>Sort by</option>
+              <option></option>
+              <option></option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control w-auto"
+              name="search"
+              placeholder="Search"
+              (keyup)="applyFilter($event)"
+              #input
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 text-center text-md-right font-weight-bold h4">
+      {{ Users.length + " " }} Users
+    </div>
+  </div>
+
+  <div>
+    <table mat-table [dataSource]="dataSource" matSort>
+      <!-- Checkbox Column -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox
+            (change)="$event ? masterToggle() : null"
+            [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()"
+            [aria-label]="checkboxLabel()"
+          >
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)"
+            [aria-label]="checkboxLabel(row)"
+          >
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="companyName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Name
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let row"
+          (click)="gotoSingleUser(row)"
+          class="w-20"
+        >
+          <img
+            src="assets/images/icons/user-1.png"
+            alt="user icon"
+            class="img-icon mx-2"
+          />
+          <div class="line-h-s">
+            <div class="bolder">
+              {{ row.firstName + " " }} {{ row.lastName }}
+            </div>
+            <span class="small text-muted">
+              {{ row.email }}
+            </span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Progress Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>User ID</th>
+        <td mat-cell *matCellDef="let row" (click)="gotoSingleUser(row)">
+          {{ "0" + row.phone.split("+234")[1] }}
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="lastLogin">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Login</th>
+        <td mat-cell *matCellDef="let row" (click)="gotoSingleUser(row)">
+          {{ row.lastLogin }}
+        </td>
+      </ng-container>
+
+      <!-- Color Column -->
+      <ng-container matColumnDef="totalTonnage">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Total Volume Disposed
+        </th>
+        <td mat-cell *matCellDef="let row" (click)="gotoSingleUser(row)">
+          {{ row.totalTonnage }}
+        </td>
+      </ng-container>
+
+      <!-- Color Column -->
+      <ng-container matColumnDef="totalEarnings">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Total Earnings
+        </th>
+        <td mat-cell *matCellDef="let row" (click)="gotoSingleUser(row)">
+          {{ row.totalEarnings }}
+        </td>
+      </ng-container>
+
+      <!-- Color Column -->
+      <ng-container matColumnDef="totalWithdrawals">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Total Withdrawals
+        </th>
+        <td mat-cell *matCellDef="let row" (click)="gotoSingleUser(row)">
+          {{ row.totalWithdrawals }}
+        </td>
+      </ng-container>
+
+      <!-- Color Column -->
+      <ng-container matColumnDef="menu">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+        <td mat-cell *matCellDef="let row">
+          <button
+            type="button"
+            class="btn btn-clear"
+            [ngbPopover]="popContent"
+            [popoverTitle]="popTitle"
+            autoClose="outside"
+            placement="left"
+            popoverClass="delete-popover"
+            #p="ngbPopover"
+          >
+            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+          </button>
+          <ng-template #popTitle
+            >&nbsp;
+            <i
+              class="fa fa-times float-right mt-2 fake-btn"
+              aria-hidden="true"
+              (click)="p.close()"
+            ></i>
+          </ng-template>
+          <ng-template #popContent>
+            <div class="row justify-content-center">
+              <img
+                src="assets/images/icons/user-1.png"
+                alt="user icon"
+                class="pop-icon mr-2 mb-4"
+              />
+            </div>
+            <div class="row text-left mb-4">
+              <div class="col-6">
+                <div class="bolder pop-tit w-100">
+                  First Name
+                </div>
+                <span class="pop-bod">{{ row.firstName }}</span>
+              </div>
+              <div class="col-6">
+                <div class="bolder pop-tit w-100">
+                  Last Name
+                </div>
+                <span class="pop-bod">{{ row.lastName }}</span>
+              </div>
+            </div>
+            <div class="row text-left mb-4">
+              <div class="col-6">
+                <div class="bolder pop-tit w-100">
+                  Phone Number
+                </div>
+                <span class="pop-bod">{{
+                  "0" + row.phone.split("+234")[1]
+                }}</span>
+              </div>
+              <div class="col-6">
+                <div class="bolder pop-tit w-100">
+                  Email
+                </div>
+                <span class="pop-bod">{{ row.email }}</span>
+              </div>
+            </div>
+            <div class="row text-left mb-4">
+              <div class="col-6">
+                <div class="bolder pop-tit w-100">
+                  Last Material Type Disposed
+                </div>
+                <span class="pop-bod">null</span>
+              </div>
+              <div class="col-6">
+                <div class="bolder pop-tit w-100">
+                  Withdrawal History
+                </div>
+                <span class="pop-bod">null</span>
+              </div>
+            </div>
+            <div class="row text-left mb-4">
+              <div class="col-6">
+                <div class="bolder pop-tit w-100">
+                  Status
+                </div>
+                <span class="pop-bod">Active</span>
+              </div>
+              <div class="col-6">
+                <div class="bolder pop-tit w-100">
+                  Total Tonnage Disposed
+                </div>
+                <span class="pop-bod">{{ row.totalTonnage }}</span>
+              </div>
+            </div>
+            <div class="row text-left mb-4 pl-3">
+              <div class="bolder pop-tit w-100">
+                Last Withdrawal Date
+              </div>
+              <div class="w-100">
+                <span class="pop-bod">{{ row.totalWithdrawals }}</span>
+                <button
+                  (click)="deleteUser(row.phone)"
+                  type="button"
+                  class="btn btn-clear float-right text-danger"
+                >
+                  <i class="fa fa-trash" aria-hidden="true"></i> Delete User
+                </button>
+              </div>
+            </div>
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="6">
+          No data matching the filter "{{ input.value }}"
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator pageSize="25"></mat-paginator>
+  </div>
+</div>
+<ngx-loading [show]="deleteLoading"></ngx-loading>

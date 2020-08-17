@@ -1,105 +1,141 @@
-import { Component, OnInit, ViewChild, NgZone, ChangeDetectorRef } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ApiService } from 'src/app/services/auth/api.service';
-import { TokenService } from 'src/app/services/auth/token.service';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { FormsModule } from '@angular/forms';
-import { EnvironmentService } from 'src/app/services/env/environment.service';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  NgZone,
+  ChangeDetectorRef,
+} from "@angular/core";
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators,
+} from "@angular/forms";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ApiService } from "src/app/services/auth/api.service";
+import { TokenService } from "src/app/services/auth/token.service";
+import { AuthService } from "src/app/services/auth/auth.service";
+import { FormsModule } from "@angular/forms";
+import { EnvironmentService } from "src/app/services/env/environment.service";
 
 @Component({
-  selector: 'app-collector-dashboard',
-  templateUrl: './collector-dashboard.component.html',
-  styleUrls: ['./collector-dashboard.component.css']
+  selector: "app-collector-dashboard",
+  templateUrl: "./collector-dashboard.component.html",
+  styleUrls: ["./collector-dashboard.component.css"],
 })
 export class CollectorDashboardComponent implements OnInit {
-   @ViewChild('content') private content;
-  Form: FormGroup;
+  constructor(
+    private formBuilder: FormBuilder,
+    private modal: NgbModal,
+    private api: ApiService,
+    private Token: TokenService,
+    private Auth: AuthService,
+    private token: TokenService,
+    private env: EnvironmentService
+  ) {}
 
-  constructor ( private formBuilder: FormBuilder, private modal: NgbModal, private api: ApiService, private Token: TokenService, private Auth: AuthService, private token: TokenService, private auth: AuthService, private env: EnvironmentService ) {  
-  }
-  
-  Cost = '₦0';
-  tempCost = [];
- URL = this.env.backendUrl;
- User: any = {
+  URL = this.env.backendUrl;
+  User: any = {
     id: "",
     firstName: "",
     lastName: "",
     phone: "",
     email: "",
-    role: '',
-    created_at: ""
- };
-  Scrap: any = {}
+    role: "",
+    created_at: "",
+  };
+  Scrap: any = {};
   CollectedScrap: any = [];
-  listForm: any = [];
   producerPhone: string;
   totalTonnage: number = 0;
-  producerName: string;
-  nameloading = false;
 
-  idValidation = [
-    { type: 'required', message: 'A Producer ID is required.' },
-    // { type: 'minlength', message: 'Minimum of 6 characters' },
-  ];
   public loading = false;
-  modalTitle: string;
-  modalBody: string;
   materials = [];
   originalMaterials = [];
   displayedMaterials = [];
-  collectionMaterials = [ ];
+  collectionMaterials = [];
 
   ngOnInit(): void {
     this.getUser();
     this.getPrices();
   }
 
-  
+  initiateTracking() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.watchPosition((position) => {
+        this.pingServer({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          id: this.User.id,
+        });
+      });
+    }
+  }
+
+  pingServer(location) {
+    this.Auth.pingServerWithLocation(location).subscribe(
+      (res) => console.log(res),
+      (err) => console.log(err)
+    );
+  }
+
   getUser() {
-    this.Auth.getCollectorWithTonnage( this.token.phone ).subscribe(
-      (data : any) => {
-        this.User = data.user;  
+    this.Auth.getCollectorWithTonnage(this.token.phone).subscribe(
+      (data: any) => {
+        this.initiateTracking();
+        this.User = data.user;
         this.CollectedScrap = data.tonnage;
         this.processTonnage();
       },
-      error => console.log(error),
-    );      
+      (error) => console.log(error)
+    );
   }
 
-  getScrap( data ) {
-    this.CollectedScrap = data.tonnage;
-    // // for ( let mat of data.tonnage ) {
-    // //   this.CollectedScrap.push( JSON.parse( mat ) );
-    // // }
-    // var holder = {};
-
-    // this.CollectedScrap.forEach(function(d) {
-    //   if (holder.hasOwnProperty(d.name)) {
-    //     holder[d.name] = holder[d.name] + d.weight;
-    //   } else {
-    //     holder[d.name] = d.weight;
-    //   }
-    // });
-
-    // var obj2 = [];
-
-    // for (var prop in holder) {
-    //   obj2.push({ name: prop, weight: holder[prop] });
-    // }
-    // console.log(holder, obj2);
-    
+  getPrices() {
+    this.Auth.getMaterialPrices(this.token.phone).subscribe(
+      (data: any) => {
+        for (let price of data.prices) {
+          this.materials.push(price);
+        }
+        this.displayMaterials();
+      },
+      (error) => console.log(error)
+    );
   }
+
+  // getScrap(data) {
+  //   this.CollectedScrap = data.tonnage;
+  //   // // for ( let mat of data.tonnage ) {
+  //   // //   this.CollectedScrap.push( JSON.parse( mat ) );
+  //   // // }
+  //   // var holder = {};
+
+  //   // this.CollectedScrap.forEach(function(d) {
+  //   //   if (holder.hasOwnProperty(d.name)) {
+  //   //     holder[d.name] = holder[d.name] + d.weight;
+  //   //   } else {
+  //   //     holder[d.name] = d.weight;
+  //   //   }
+  //   // });
+
+  //   // var obj2 = [];
+
+  //   // for (var prop in holder) {
+  //   //   obj2.push({ name: prop, weight: holder[prop] });
+  //   // }
+  //   // console.log(holder, obj2);
+  // }
 
   processTonnage() {
-    for ( let scrap of this.CollectedScrap ) {
-        this.totalTonnage += scrap.weight;       
+    for (let scrap of this.CollectedScrap) {
+      this.totalTonnage += scrap.weight;
     }
-      this.lineChartData = [ {
-      data: this.getSingleScrapForGraph(), label: "Scrap"
-    } ];
-    
+    this.lineChartData = [
+      {
+        data: this.getSingleScrapForGraph(),
+        label: "Scrap",
+      },
+    ];
   }
 
   getSingleScrapForGraph() {
@@ -107,59 +143,21 @@ export class CollectorDashboardComponent implements OnInit {
     var tonnage = this.totalTonnage;
     var label = this.lineChartLabels;
     var scrap = this.Scrap;
-    this.CollectedScrap.forEach( function ( d ) {
+    this.CollectedScrap.forEach(function (d) {
       scrap[`${d.name}`] = [`${d.weight}`];
-        label.push( d.name );
-      var tonn = ( ( d.weight / tonnage ) * 100 ).toFixed( 2 );
-      data.push( tonn );
-    } )
+      label.push(d.name);
+      var tonn = ((d.weight / tonnage) * 100).toFixed(2);
+      data.push(tonn);
+    });
     return data;
   }
 
-  onSubmit( Form ) {
-    this.loading = true;
-    var form = this.processForm();
-    this.api.listCollectedScrap( form ).subscribe(
-      data => this.handleSuccess( data ),
-      error => this.handleError( error )
-    )
+  round(value) {
+    return value.toFixed(2);
   }
 
-  processForm() {
-    const formData = {
-      producerPhone: this.producerPhone,
-      collectorID: this.token.phone,
-      materials: this.collectionMaterials
-    };
-
-    return formData;
-  }
-
-  handleSuccess( data ) {
-    this.modalTitle = "Success";
-    this.modalBody ="Scrap Listed Successfully.";
-    this.loading = false;
-    this.openModal( this.content );
-    this.resetCollectionMaterials();
-}
-
-handleError( error ) {
-  this.modalTitle = "Error";
-  this.modalBody = error.error;
-  this.loading = false;
-  this.openModal(this.content);
-}
-
-openModal(content) {
-  this.modal.open(content, { centered: true });
-  }  
-  
-  round( value ) {
-    return value.toFixed(2)
-  }
-
-   roundToWhole( value ) {
-    return Math.round( value );
+  roundToWhole(value) {
+    return Math.round(value);
   }
 
   public random(min: number, max: number) {
@@ -171,19 +169,15 @@ openModal(content) {
   // lineChart
   public lineChartData: Array<any> = [
     {
-      data: [
-        0,
-        0,
-        0,
-        0,
-        0], label: "Scrap"
-    }
+      data: [0, 0, 0, 0, 0],
+      label: "Scrap",
+    },
   ];
 
   public lineChartLabels: Array<any> = [];
   public lineChartOptions: any = {
     animation: false,
-    responsive: true
+    responsive: true,
   };
   public lineChartColours: Array<any> = [
     {
@@ -193,7 +187,7 @@ openModal(content) {
       pointBackgroundColor: "rgba(148,159,177,1)",
       pointBorderColor: "#fff",
       pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(148,159,177,0.8)"
+      pointHoverBorderColor: "rgba(148,159,177,0.8)",
     },
     {
       // dark grey
@@ -202,7 +196,7 @@ openModal(content) {
       pointBackgroundColor: "rgba(77,83,96,1)",
       pointBorderColor: "#fff",
       pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(77,83,96,1)"
+      pointHoverBorderColor: "rgba(77,83,96,1)",
     },
     {
       // grey
@@ -211,8 +205,8 @@ openModal(content) {
       pointBackgroundColor: "rgba(148,159,177,1)",
       pointBorderColor: "#fff",
       pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(148,159,177,0.8)"
-    }
+      pointHoverBorderColor: "rgba(148,159,177,0.8)",
+    },
   ];
   public lineChartLegend = true;
   public lineChartType = "line";
@@ -225,97 +219,37 @@ openModal(content) {
   public chartHovered(e: any): void {
     console.log(e);
   }
-  
+
   displayMaterials() {
     for (let i = 0; i < this.materials.length; i++) {
-      this.originalMaterials.push( this.materials[ i ] );
+      this.originalMaterials.push(this.materials[i]);
     }
-    for ( let i = 0; i <= 3; i++){
-      this.displayedMaterials.push( this.materials[ i ] );
+    for (let i = 0; i <= 3; i++) {
+      this.displayedMaterials.push(this.materials[i]);
     }
-    this.materials.splice( 0, 4 );
-  }
-  
-  addToDisplayedMaterials( material, i ) {
-    this.materials.splice( i, 1 );
-    this.materials.push(this.displayedMaterials[3] );
-    this.displayedMaterials.splice( 3, 1 );
-    this.displayedMaterials.unshift( material );
+    this.materials.splice(0, 4);
   }
 
-  getDisplayedPrice( materialName ) {
-    var display = this.Scrap[ materialName ] ? this.Scrap[ materialName ] : 0;
-    return this.roundToWhole( display );
+  addToDisplayedMaterials(material, i) {
+    this.materials.splice(i, 1);
+    this.materials.push(this.displayedMaterials[3]);
+    this.displayedMaterials.splice(3, 1);
+    this.displayedMaterials.unshift(material);
   }
 
-    getPrices() {
-      this.auth.getMaterialPrices( this.token.phone ).subscribe(
-        ( data: any ) => {
-          console.log( data.prices );
-          for ( let price of data.prices ) {
-            this.materials.push( price ); 
-            var mat = { name: price.name, price: price.price, weight: '' };
-            this.collectionMaterials.push( mat );
-            this.tempCost.push( 0 );
-          }
-          this.displayMaterials();
-          console.log("display ",this.materials);
-          
-      },
-        error => console.log(error)
-      )
-    }
-  
-  PhoneOnFocusOut( event ) {
-    this.nameloading = true;
-    var form = {
-      collectorID: this.token.phone,
-      producerPhone: this.producerPhone,
-    }
-    this.auth.getUserName( form ).subscribe(
-      ( data: any ) => {
-        this.producerName = data.Name;
-        this.nameloading = false;
-     },
-      error => {
-        console.log(error)
-        this.nameloading = false;
-      }
-    )
+  getDisplayedPrice(materialName) {
+    var display = this.Scrap[materialName] ? this.Scrap[materialName] : 0;
+    return this.roundToWhole(display);
   }
 
-  weightChange( event: any, i ) {
-    this.tempCost[ i ] = this.originalMaterials[ i ].price * event.target.value;
-
-     var sum = this.tempCost.reduce(function(a, b){
-        return a + b;
-     }, 0 );
-    
-    var formatter = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'NGN',
-    });
-
-    this.Cost = "₦" + sum.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
-    
-  }
-
-  resetCollectionMaterials() {
-    for ( let mat of this.collectionMaterials ) {
-      mat.weight = ''
-    }
-    this.Cost = '₦0';
-  }
-  
-  addBorder( i ) {
+  addBorder(i) {
     var classes = {};
-    if ( i == 0 || i == 2 ) {
-      classes['border-right'] = true
+    if (i == 0 || i == 2) {
+      classes["border-right"] = true;
     }
-    if ( i == 0 || i == 1 ) {
-      classes['border-bottom'] = true
+    if (i == 0 || i == 1) {
+      classes["border-bottom"] = true;
     }
     return classes;
   }
-
 }

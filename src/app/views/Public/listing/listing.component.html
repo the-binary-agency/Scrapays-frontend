@@ -7,9 +7,15 @@
       </div>
       <div class="col-12 px-1 px-md-3">
         <div class="form-group">
-          <input class="form-control" name="companyname" id="companyname" type="text" formControlName="companyName"
-            placeholder="Business/Company Name" />
-          <!-- <div class="validation-errors">
+          <input
+            class="form-control"
+            name="companyname"
+            id="companyname"
+            type="text"
+            formControlName="companyName"
+            placeholder="Business/Company Name"
+          />
+          <!-- <div class="validation-errors w-100">
             <ng-container *ngFor="let validation of validation_messages.firstName">
               <div class="error-message alert alert-danger" *ngIf="
                   Form.get('firstName').hasError(validation.type) &&
@@ -24,16 +30,27 @@
       </div>
       <div class="col-md-6 px-1 px-md-3">
         <div class="form-group">
-          <input class="form-control" name="firstname" id="firstname" type="text" formControlName="firstName"
-            placeholder="First Name" />
-          <div class="validation-errors">
-            <ng-container *ngFor="let validation of validation_messages.firstName">
-              <div class="error-message alert alert-danger" *ngIf="
+          <input
+            class="form-control"
+            name="firstname"
+            id="firstname"
+            type="text"
+            formControlName="firstName"
+            placeholder="First Name"
+          />
+          <div class="validation-errors w-100">
+            <ng-container
+              *ngFor="let validation of validation_messages.firstName"
+            >
+              <div
+                class="error-message alert alert-danger"
+                *ngIf="
                   Form.get('firstName').hasError(validation.type) &&
                   (Form.get('firstName').dirty || Form.get('firstName').touched)
-                ">
-                <i class="fa fa-info-circle text-danger"></i> &nbsp; <span
-                  class="text-danger">{{ validation.message }}</span>
+                "
+              >
+                <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                <span class="text-danger">{{ validation.message }}</span>
               </div>
             </ng-container>
           </div>
@@ -41,16 +58,26 @@
       </div>
       <div class="col-md-6 px-1 px-md-3">
         <div class="form-group">
-          <input class="form-control" name="lastname" id="lastname" formControlName="lastName"
-            placeholder="Last Name" />
-          <div class="validation-errors">
-            <ng-container *ngFor="let validation of validation_messages.lastName">
-              <div class="error-message alert alert-danger" *ngIf="
+          <input
+            class="form-control"
+            name="lastname"
+            id="lastname"
+            formControlName="lastName"
+            placeholder="Last Name"
+          />
+          <div class="validation-errors w-100">
+            <ng-container
+              *ngFor="let validation of validation_messages.lastName"
+            >
+              <div
+                class="error-message alert alert-danger"
+                *ngIf="
                   Form.get('lastName').hasError(validation.type) &&
                   (Form.get('lastName').dirty || Form.get('lastName').touched)
-                ">
-                <i class="fa fa-info-circle text-danger"></i> &nbsp; <span
-                  class="text-danger">{{ validation.message }}</span>
+                "
+              >
+                <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                <span class="text-danger">{{ validation.message }}</span>
               </div>
             </ng-container>
           </div>
@@ -58,16 +85,25 @@
       </div>
       <div class="col-12 px-1 px-md-3">
         <div class="form-group">
-          <input class="form-control" name="phone" id="phone" type="tel" formControlName="phone"
-            placeholder="Phone Number" />
-          <div class="validation-errors">
+          <input
+            class="form-control"
+            name="phone"
+            id="phone"
+            type="tel"
+            formControlName="phone"
+            placeholder="Phone Number"
+          />
+          <div class="validation-errors w-100">
             <ng-container *ngFor="let validation of validation_messages.phone">
-              <div class="error-message alert alert-danger" *ngIf="
+              <div
+                class="error-message alert alert-danger"
+                *ngIf="
                   Form.get('phone').hasError(validation.type) &&
                   (Form.get('phone').dirty || Form.get('phone').touched)
-                ">
-                <i class="fa fa-info-circle text-danger"></i> &nbsp; <span
-                  class="text-danger">{{ validation.message }}</span>
+                "
+              >
+                <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                <span class="text-danger">{{ validation.message }}</span>
               </div>
             </ng-container>
           </div>
@@ -75,65 +111,130 @@
       </div>
       <div class="col-12 px-1 px-md-3">
         <div class="form-group">
-          <input class="form-control" name="email" id="email" type="email" formControlName="email"
-            placeholder="Email" />
-          <div class="validation-errors">
+          <input
+            class="form-control"
+            name="email"
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="Email"
+          />
+          <div class="validation-errors w-100">
             <ng-container *ngFor="let validation of validation_messages.email">
-              <div class="error-message alert alert-danger" *ngIf="
+              <div
+                class="error-message alert alert-danger"
+                *ngIf="
                   Form.get('email').hasError(validation.type) &&
                   (Form.get('email').dirty || Form.get('email').touched)
-                ">
-                <i class="fa fa-info-circle text-danger"></i> &nbsp; <span
-                  class="text-danger">{{ validation.message }}</span>
+                "
+              >
+                <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                <span class="text-danger">{{ validation.message }}</span>
               </div>
             </ng-container>
           </div>
         </div>
       </div>
       <div class="w-100" formArrayName="materialDescription">
-        <div class="row" *ngFor="let control of FormAsArray.controls; let i = index" [formGroupName]="i">
-          <div class="col-12 h3 text-center"> Item <span *ngIf="itemCount > 1">{{ i + 1 }}</span>
+        <div
+          class="row"
+          *ngFor="let control of FormAsArray.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <div class="col-12 h3 text-center">
+            Item <span *ngIf="itemCount > 1">{{ i + 1 }}</span>
           </div>
-          <div class="col-12 d-flex align-items-center justify-content-center mb-md-5 mr-md-5 pb-1 mb-5">
-            <div class="text-center file-upload-div w-md-75 w-100 pt-3" (fileDropped)="onFileDropped($event, i)" appDnd>
+          <div
+            class="col-12 d-flex align-items-center justify-content-center mb-md-5 mr-md-5 pb-1 mb-5"
+          >
+            <div
+              class="text-center file-upload-div w-md-75 w-100 pt-3"
+              (fileDropped)="onFileDropped($event, i)"
+              appDnd
+            >
               <div class="row" *ngIf="files.length > 0">
-                <div class="col-12 col-md-4 p-3" *ngFor="let file of files[i].images; let in = index">
+                <div
+                  class="col-12 col-md-4 p-3"
+                  *ngFor="let file of files[i].images; let in = index"
+                >
                   <img [src]="file.url" class="list-img-preview" />
                   <h4>
                     {{ file?.name }}
                   </h4>
                   <p>Size: {{ formatBytes(file?.size) }}</p>
-                  <button class="btn btn-clear text-center mb-3" (click)="deleteFile(i, in)">
-                    <i class="fa fa-times fa-1x text-danger" aria-hidden="true"></i>
+                  <button
+                    class="btn btn-clear text-center mb-3"
+                    (click)="deleteFile(i, in)"
+                  >
+                    <i
+                      class="fa fa-times fa-1x text-danger"
+                      aria-hidden="true"
+                    ></i>
                   </button>
                 </div>
-                <div class="col-auto offset-9 text-center" *ngIf="files[i].images.length > 2">
-                  <button class="btn btn-clear text-danger" type="button" (click)="removeAll(i)">
+                <div
+                  class="col-auto offset-9 text-center"
+                  *ngIf="files[i].images.length > 2"
+                >
+                  <button
+                    class="btn btn-clear text-danger"
+                    type="button"
+                    (click)="removeAll(i)"
+                  >
                     <i class="fa fa-trash" aria-hidden="true"></i> Remove All
                   </button>
                 </div>
               </div>
-              <input #fileInput type="file" (change)="onFileInput($event, i)" class="d-none" name="listingImages"
-                accept="image/*" multiple />
+              <input
+                #fileInput
+                type="file"
+                (change)="onFileInput($event, i)"
+                class="d-none"
+                name="listingImages"
+                accept="image/*"
+                multiple
+              />
               <!-- <img
                 src="assets/images/multimedia.png"
                 alt="placeholder image"
                 class="file-img"
                 *ngIf="files[i].images.length == 0"
               /> -->
-              <p class="h3 text-center"> Drop image(s) here, or <button class="btn btn-primary solid blank"
-                  (click)="fileInput.click()" type="button" [disabled]="files[i].images.length > 2"> Browse </button>
+              <p class="h3 text-center">
+                Drop image(s) here, or
+                <button
+                  class="btn btn-primary solid blank"
+                  (click)="fileInput.click()"
+                  type="button"
+                  [disabled]="files[i].images.length > 2"
+                >
+                  Browse
+                </button>
               </p>
-              <p class="h5 text-center" *ngIf="validateImages(i) == true"> Supports JPG, JPEG, PNG <br /> Upload a <span
-                  class="text-danger text-bold">maximum of 3</span> images taken at different angles <span
-                  class="text-danger text-bold">not larger than 2MB</span> each. </p>
+              <p class="h5 text-center" *ngIf="validateImages(i) == true">
+                Supports JPG, JPEG, PNG <br />
+                Upload a
+                <span class="text-danger text-bold">maximum of 3</span> images
+                taken at different angles
+                <span class="text-danger text-bold">not larger than 2MB</span>
+                each.
+              </p>
               <div class="validation-errors mx-3">
-                <ng-container *ngFor="
+                <ng-container
+                  *ngFor="
                     let validation of validation_messages.materialLocation
-                  ">
-                  <div class="error-message alert alert-danger" *ngIf="validateImages(i) == false">
-                    <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">Upload at least an
-                      image and a maximum of 3 images not larger than <span class="text-bold h3">2MB</span> each.</span>
+                  "
+                >
+                  <div
+                    class="error-message alert alert-danger"
+                    *ngIf="validateImages(i) == false"
+                  >
+                    <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                    <span class="text-danger"
+                      >Upload at least an image and a maximum of 3 images not
+                      larger than
+                      <span class="text-bold h3">2MB</span> each.</span
+                    >
                   </div>
                 </ng-container>
               </div>
@@ -141,25 +242,38 @@
           </div>
           <div class="col-12 px-1 px-md-3">
             <div class="form-group">
-              <textarea class="form-control" rows="2" formControlName="description"
-                placeholder="Provide a brief description of the item"></textarea>
-              <div class="validation-errors">
-                <ng-container *ngFor="let validation of validation_messages.description">
-                  <div class="error-message alert alert-danger" *ngIf="
+              <textarea
+                class="form-control"
+                rows="2"
+                formControlName="description"
+                placeholder="Provide a brief description of the item"
+              ></textarea>
+              <div class="validation-errors w-100">
+                <ng-container
+                  *ngFor="let validation of validation_messages.description"
+                >
+                  <div
+                    class="error-message alert alert-danger"
+                    *ngIf="
                       control.controls.description.hasError(validation.type) &&
                       (control.controls.description.dirty ||
                         control.controls.description.touched)
-                    ">
-                    <i class="fa fa-info-circle text-danger"></i> &nbsp; <span
-                      class="text-danger">{{ validation.message }}</span>
+                    "
+                  >
+                    <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                    <span class="text-danger">{{ validation.message }}</span>
                   </div>
                 </ng-container>
               </div>
             </div>
           </div>
           <div class="col-12 text-right mb-3" *ngIf="itemCount > 1">
-            <button class="btn btn-clear text-danger" (click)="removeItem(control, i)" type="button"> Remove item <i
-                class="fa fa-trash" aria-hidden="true"></i>
+            <button
+              class="btn btn-clear text-danger"
+              (click)="removeItem(control, i)"
+              type="button"
+            >
+              Remove item <i class="fa fa-trash" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -167,21 +281,33 @@
       <br /><br />
       <div class="col-12 mb-3">
         <button class="btn btn-clear" (click)="addItem()" type="button">
-          <i class="fa fa-plus" aria-hidden="true"></i> Add item </button>
+          <i class="fa fa-plus" aria-hidden="true"></i> Add item
+        </button>
       </div>
       <div class="col-12 px-1 px-md-3">
         <div class="form-group">
-          <textarea class="form-control" name="materialLocation" id="materialLocation" rows="2"
-            formControlName="materialLocation" placeholder="Location"></textarea>
-          <div class="validation-errors">
-            <ng-container *ngFor="let validation of validation_messages.materialLocation">
-              <div class="error-message alert alert-danger" *ngIf="
+          <textarea
+            class="form-control"
+            name="materialLocation"
+            id="materialLocation"
+            rows="2"
+            formControlName="materialLocation"
+            placeholder="Location"
+          ></textarea>
+          <div class="validation-errors w-100">
+            <ng-container
+              *ngFor="let validation of validation_messages.materialLocation"
+            >
+              <div
+                class="error-message alert alert-danger"
+                *ngIf="
                   Form.get('materialLocation').hasError(validation.type) &&
                   (Form.get('materialLocation').dirty ||
                     Form.get('materialLocation').touched)
-                ">
-                <i class="fa fa-info-circle text-danger"></i> &nbsp; <span
-                  class="text-danger">{{ validation.message }}</span>
+                "
+              >
+                <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                <span class="text-danger">{{ validation.message }}</span>
               </div>
             </ng-container>
           </div>
@@ -190,8 +316,13 @@
       <div class="col-12">
         <div class="text-center text-md-right position-relative">
           <br />
-          <button class="btn btn-primary solid blank" type="submit"
-            [disabled]="!Form.valid || imagesSubmitted() == false"> Book an Inspection</button><br />
+          <button
+            class="btn btn-primary solid blank"
+            type="submit"
+            [disabled]="!Form.valid || imagesSubmitted() == false"
+          >
+            Book an Inspection</button
+          ><br />
           <ngx-loading [show]="loading"></ngx-loading>
         </div>
       </div>
@@ -201,7 +332,12 @@
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title">{{ modalTitle }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -209,6 +345,12 @@
     <p>{{ modalBody }}</p>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-light" (click)="modal.close('Close click')"> Close </button>
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
   </div>
 </ng-template>

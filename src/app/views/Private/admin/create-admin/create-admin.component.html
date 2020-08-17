@@ -1,0 +1,203 @@
+<div class="row mt-5 pt-4">
+  <div class="col-12 col-md-8 offset-md-2 pl-md-5 bg-white my-5 pb-4">
+    <div class="w-100 h1 sc-orange my-3 ml-md-5">Create Admin</div>
+    <form [formGroup]="Form" (ngSubmit)="makeAdmin(Form.value)" class="mx-md-5">
+      <div class="row">
+        <div class="col-12 pl-0 signup-sec-header">Contact Details</div>
+        <div class="col-6 pl-0">
+          <input
+            class="form-control"
+            placeholder="First Name"
+            formControlName="firstName"
+          />
+          <div class="validation-errors w-100">
+            <ng-container
+              *ngFor="let validation of validation_messages.firstName"
+            >
+              <div
+                class="error-message alert alert-danger"
+                *ngIf="
+                  Form.get('firstName').hasError(validation.type) &&
+                  (Form.get('firstName').dirty || Form.get('firstName').touched)
+                "
+              >
+                <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                <span class="text-danger">{{ validation.message }}</span>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="col-6 pr-0">
+          <input
+            class="form-control"
+            placeholder="Last Name"
+            formControlName="lastName"
+          />
+          <div class="validation-errors w-100">
+            <ng-container
+              *ngFor="let validation of validation_messages.lastName"
+            >
+              <div
+                class="error-message alert alert-danger"
+                *ngIf="
+                  Form.get('lastName').hasError(validation.type) &&
+                  (Form.get('lastName').dirty || Form.get('lastName').touched)
+                "
+              >
+                <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                <span class="text-danger">{{ validation.message }}</span>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <input
+          type="email"
+          class="form-control"
+          placeholder="Email"
+          formControlName="email"
+        />
+        <div class="validation-errors w-100">
+          <ng-container *ngFor="let validation of validation_messages.email">
+            <div
+              class="error-message alert alert-danger"
+              *ngIf="
+                Form.get('email').hasError(validation.type) &&
+                (Form.get('email').dirty || Form.get('email').touched)
+              "
+            >
+              <i class="fa fa-info-circle text-danger"></i> &nbsp;
+              <span class="text-danger">{{ validation.message }}</span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <input
+          type="tel"
+          class="form-control"
+          placeholder="Phone Number"
+          autocomplete="phone"
+          formControlName="phone"
+        />
+        <div class="validation-errors w-100">
+          <ng-container *ngFor="let validation of validation_messages.phone">
+            <div
+              class="error-message alert alert-danger"
+              *ngIf="
+                Form.get('phone').hasError(validation.type) &&
+                (Form.get('phone').dirty || Form.get('phone').touched)
+              "
+            >
+              <i class="fa fa-info-circle text-danger"></i> &nbsp;
+              <span class="text-danger">{{ validation.message }}</span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="input-group mb-0 mt-3">
+        <input
+          type="password"
+          class="form-control"
+          placeholder="Wallet Pin"
+          formControlName="pin"
+          pattern="[0-9]*"
+          inputmode="numeric"
+        />
+      </div>
+      <div class="validation-errors w-100">
+        <ng-container *ngFor="let validation of validation_messages.pin">
+          <div
+            class="error-message alert alert-danger"
+            *ngIf="
+              Form.get('pin').hasError(validation.type) &&
+              (Form.get('pin').dirty || Form.get('pin').touched)
+            "
+          >
+            <i class="fa fa-info-circle text-danger"></i> &nbsp;
+            <span class="text-danger">{{ validation.message }}</span>
+          </div>
+        </ng-container>
+      </div>
+      <div class="row mt-3">
+        <div class="input-group mb-0">
+          <input
+            type="password"
+            class="form-control"
+            placeholder="Password"
+            autocomplete="new-password"
+            formControlName="password"
+          />
+        </div>
+        <div class="validation-errors w-100">
+          <ng-container *ngFor="let validation of validation_messages.password">
+            <div
+              class="error-message alert alert-danger"
+              *ngIf="
+                Form.get('password').hasError(validation.type) &&
+                (Form.get('password').dirty || Form.get('password').touched)
+              "
+            >
+              <i class="fa fa-info-circle text-danger"></i> &nbsp;
+              <span class="text-danger">{{ validation.message }}</span>
+            </div>
+          </ng-container>
+        </div>
+        <div class="validation-errors w-100" *ngIf="passError != ''">
+          <ng-container>
+            <div class="error-message alert alert-danger">
+              <i class="fa fa-info-circle text-danger"></i> &nbsp;
+              <span class="text-danger">{{ passError }}</span>
+            </div>
+          </ng-container>
+        </div>
+        <div class="input-group mb-0 mt-3">
+          <input
+            type="password"
+            class="form-control"
+            placeholder="Confirm password"
+            autocomplete="new-password"
+            formControlName="password_confirmation"
+          />
+        </div>
+      </div>
+      <div class="w-100 my-5">
+        <button
+          type="submit"
+          class="btn btn-primary bg-orange float-right"
+          [disabled]="!Form.valid"
+        >
+          Create
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ modalTitle }}</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{ modalBody }}</p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+<ngx-loading [show]="loading"></ngx-loading>

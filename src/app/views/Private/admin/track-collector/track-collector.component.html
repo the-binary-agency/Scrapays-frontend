@@ -1,0 +1,107 @@
+<div class="row mt-5 pt-5">
+  <div class="row">
+    <div class="col-12">
+      <h3 class="font-weight-bolder">Track Collectors</h3>
+    </div>
+    <div class="col-5">
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          name="collectorID"
+          placeholder="Collectors ID"
+          [(ngModel)]="collID"
+        />
+      </div>
+    </div>
+    <div class="col-5">
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          name="location"
+          placeholder="Location"
+          [(ngModel)]="collLocation"
+          id="loc-input"
+        />
+      </div>
+    </div>
+    <div class="col-2">
+      <button
+        type="button"
+        class="btn btn-primary solid btn-sm"
+        (click)="getLocation()"
+      >
+        Get <br />
+        Location
+      </button>
+    </div>
+  </div>
+
+  <div class="row px-md-4 mb-4">
+    <div id="map"></div>
+  </div>
+
+  <div class="w-100">
+    <i
+      class="fa fa-spinner fa-2x fa-spin float-right mr-4"
+      aria-hidden="true"
+      *ngIf="loading"
+    ></i>
+  </div>
+
+  <div class="row px-md-4" *ngIf="displayedCollector.firstName">
+    <div class="col-12 bg-orange text-white py-2">
+      {{ displayedCollector.firstName + " "
+      }}{{ displayedCollector.lastName + " " }}(Collector
+      {{ displayedCollector.id }}'s Log)
+    </div>
+    <table class="table text-center table-borderless">
+      <thead class="font-weight-bolder">
+        <tr>
+          <th>Done</th>
+          <th>Producer ID</th>
+          <th>Material Type(s)</th>
+          <th>Address</th>
+          <th>Time To Pickup</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let req of displayedCollectorRequests">
+          <td scope="row">
+            <i
+              class="fa fa-check fa-2x sc-orange"
+              aria-hidden="true"
+              *ngIf="req.status == 'Resolved'"
+            ></i>
+            <i
+              class="fa fa-times fa-2x text-danger"
+              aria-hidden="true"
+              *ngIf="req.status != 'Resolved'"
+            ></i>
+          </td>
+          <td>{{ "0" + req.userID.split("+234")[1] }}</td>
+          <td>{{ formatMaterials(req.materials) }}</td>
+          <td>{{ req.address }}</td>
+          <td>1hr 30mins</td>
+        </tr>
+        <tr *ngIf="!displayedCollectorRequests">
+          <td></td>
+          <td colspan="3" class="text-center">
+            No Pickup Requests has been assigned to this Collector.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="col-12 text-right mt-4">
+      <button
+        type="button"
+        class="btn btn-primary solid"
+        (click)="assignToRequest()"
+      >
+        Assign to <br />
+        new request
+      </button>
+    </div>
+  </div>
+</div>

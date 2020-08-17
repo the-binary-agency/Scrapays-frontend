@@ -1,0 +1,181 @@
+<div class="row mt-5 pt-5">
+  <div class="row px-md-5 pt-md-4">
+    <div class="col-12 col-md-6">
+      <div class="row">
+        <div class="col-6 font-weight-bold h3">Material</div>
+        <div class="col-6 font-weight-bold h3">Price Per KG</div>
+        <ng-container *ngFor="let mat of materialPrices; let i = index">
+          <div class="col-6 mt-5">
+            <img
+              src="{{ URL }}/storage/material_list_images/{{ mat.image }}"
+              alt="material icon"
+              class="mr-4"
+            />
+            {{ mat.name }}
+          </div>
+          <div class="col-6 font-weight-bold">
+            <div class="position-relative w-wrap mt-5">
+              <button class="btn btn-primary solid">{{ mat.price }}/Kg</button>
+              <button
+                type="button"
+                class="btn btn-success btn-circle btn-edit solid"
+                (click)="enablePriceEdit(i)"
+              >
+                <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+        <div
+          class="col-6 offset-1 text-center font-weight-bold mt-5"
+          *ngIf="materialPrices.length == 0"
+        >
+          <i
+            class="fa fa-info-circle fa-1x text-warning mr-2"
+            aria-hidden="true"
+          ></i>
+          No Material has been Added
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 mt-4 mt-md-0">
+      <div *ngIf="edit == false">
+        <form (ngSubmit)="addNewMaterial(matForm)">
+          <div class="form-group">
+            <label for="">Add New Material</label>
+            <input
+              type="text"
+              name="materialName"
+              [(ngModel)]="matForm.name"
+              class="form-control"
+              placeholder=""
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Material Price</label>
+            <input
+              type="text"
+              name="materialPrice"
+              [(ngModel)]="matForm.price"
+              class="form-control"
+              placeholder=""
+              aria-describedby="helpId"
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Add Image</label>
+            <input
+              #fileInput
+              type="file"
+              (change)="onFileInput($event)"
+              class="d-none"
+              name="materialImage"
+              accept="image/*"
+            />
+            <button
+              class="form-control"
+              (click)="fileInput.click()"
+              type="button"
+            >
+              <i class="fa fa-plus float-left" aria-hidden="true"></i>
+              {{ newMatImage.name }}
+            </button>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary solid float-right"
+            [disabled]="!formValid()"
+          >
+            Done
+          </button>
+        </form>
+      </div>
+      <div *ngIf="edit == true">
+        <form (ngSubmit)="editMaterial()">
+          <div class="form-group">
+            <label for="">Edit Material</label>
+            <input
+              type="text"
+              name="materialName"
+              [(ngModel)]="matForm.name"
+              class="form-control"
+              placeholder=""
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Material Price</label>
+            <input
+              type="text"
+              name="materialPrice"
+              [(ngModel)]="matForm.price"
+              class="form-control"
+              placeholder=""
+              aria-describedby="helpId"
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Material Image</label>
+            <input
+              #editFileInput
+              type="file"
+              (change)="onFileInput($event)"
+              class="d-none"
+              name="materialImage"
+              accept="image/*"
+            />
+            <button
+              class="form-control"
+              (click)="editFileInput.click()"
+              type="button"
+            >
+              {{ newMatImage.name }}
+            </button>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary solid float-right"
+            [disabled]="!formValid()"
+          >
+            Done
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger solid float-right mr-3"
+            (click)="cancelMaterialEdit()"
+          >
+            Cancel Edit
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <ngx-loading [show]="loading"></ngx-loading>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">
+      <p>{{ modalTitle }}</p>
+    </h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{ modalBody }}</p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

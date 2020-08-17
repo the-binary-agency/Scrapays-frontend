@@ -1,83 +1,209 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiService } from 'src/app/services/auth/api.service';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { NavService } from 'src/app/services/general/nav.service';
-import { TokenService } from 'src/app/services/auth/token.service';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { ApiService } from "src/app/services/auth/api.service";
+import { AuthService } from "src/app/services/auth/auth.service";
+import { NavService } from "src/app/services/general/nav.service";
+import { TokenService } from "src/app/services/auth/token.service";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
+import { SelectionModel } from "@angular/cdk/collections";
+
+export interface User {
+  avatarImage: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  userable_type: string;
+  totalTonnage: string;
+  totalEarnings: string;
+  totalWithdrawals: string;
+  userable: {};
+}
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  selector: "app-users",
+  templateUrl: "./users.component.html",
+  styleUrls: ["./users.component.css"],
 })
 export class UsersComponent implements OnInit {
+  displayedColumns: string[] = [
+    "select",
+    "companyName",
+    "id",
+    "lastLogin",
+    "totalTonnage",
+    "totalEarnings",
+    "totalWithdrawals",
+    "menu",
+  ];
+  dataSource: MatTableDataSource<User>;
 
-  constructor ( private api: ApiService, private Auth: AuthService, private nav: NavService, private token: TokenService ) {
-      
-  }
-  
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  selection = new SelectionModel<User>(true, []);
+
+  constructor(
+    private api: ApiService,
+    private Auth: AuthService,
+    private nav: NavService,
+    private token: TokenService
+  ) {}
+
   Users: any[] = [];
   Admins: any[] = [];
+  task: any;
+  subtask: any;
+  allComplete: boolean = false;
+  deleteLoading: boolean;
 
   ngOnInit(): void {
     this.getUsers();
   }
 
   getUsers() {
-    this.Auth.getAllUsers(this.token.phone).subscribe(
-        data => this.handleResponse(data),
-        error => this.handleError( error )
+    var form = this.processForm();
+    this.Auth.getAllUsers(form).subscribe(
+      (data) => this.handleResponse(data),
+      (error) => this.handleError(error)
     );
   }
 
-  handleResponse(data){
-    data.map( user => {
-      if ( user.role == 'Admin' ) {
-        this.Admins.push( user );
-      } else {
-      this.Users.push( user );
-      }
-    })
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
-handleError(error){
-  console.log( error );
-}
-  
-  gotoSingleUser( user ) {
-    this.nav.navigate('/dashboard/users/' + user.role + '_' + user.id, user)
+  processForm() {
+    var formData = {
+      id: this.token.phone,
+      userType: "Enterprise",
+      orderBy: "",
+    };
+    return formData;
   }
 
-  gotoSingleAdmin( admin ) {
-    this.nav.navigate('/dashboard/users/Admin_' + admin.id, admin)
+  handleResponse(data) {
+    this.Users = data;
+    // this.Users.map((user) => {
+    //   user["checked"] = false;
+    // });
+    this.dataSource = new MatTableDataSource(this.Users);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
-//   handleNonAdmin(data){
-//       this.Users.push( data );
-//   }
+  handleError(error) {
+    console.log(error);
+  }
 
-//   handleAdmin(data){
-//     this.Admins.push( data );
-//     console.log(data);
-    
-//   }
+  gotoSingleUser(user) {
+    this.nav.navigate(
+      "/dashboard/enterprise/ent_" + user.phone.split("+234")[1],
+      user
+    );
+  }
 
-//   getAllUsers() {
-//     this.getAllAdmins();
-//     this.getAllNonAdmin();
-// }
-  
-//   getAllNonAdmin() {
-//     this.Auth.getAllUsers().subscribe(
-//         data => this.handleNonAdmin(data),
-//         error => this.handleError( error )
-//     );
-//   }
-  
-//   getAllAdmins() {
-//     this.Auth.getAllAdmins().subscribe(
-//         data => this.handleAdmin(data),
-//         error => this.handleError( error )
-//     );
-// }
+  gotoSingleAdmin(admin) {
+    this.nav.navigate("/dashboard/users/Admin_" + admin.id, admin);
+  }
 
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    if (this.Users.length > 0) {
+      const numSelected = this.selection.selected.length;
+      const numRows = this.dataSource.data.length;
+      return numSelected === numRows;
+    }
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach((row) => this.selection.select(row));
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: User): string {
+    if (!row) {
+      return `${this.isAllSelected() ? "select" : "deselect"} all`;
+    }
+    return `${this.selection.isSelected(row) ? "deselect" : "select"} row ${
+      row.id + 1
+    }`;
+  }
+
+  deleteUser(phone) {
+    this.deleteLoading = true;
+    console.log("User " + phone);
+    let form = {
+      adminPhone: this.token.phone,
+      deletePhone: phone,
+    };
+    this.Auth.deleteUser(form).subscribe(
+      (data) => this.handleDeleteResponse(data),
+      (error) => this.handleDeleteError(error)
+    );
+  }
+
+  handleDeleteResponse(data) {
+    this.deleteLoading = false;
+    this.getUsers();
+    console.log(data.success);
+  }
+
+  handleDeleteError(error) {
+    this.deleteLoading = false;
+  }
+
+  updateAllComplete() {
+    this.allComplete = this.Users != null && this.Users.every((t) => t.checked);
+  }
+
+  someComplete(): boolean {
+    return this.Users.filter((t) => t.checked).length > 0 && !this.allComplete;
+  }
+
+  setAll(checked: boolean) {
+    this.allComplete = checked;
+    if (this.Users == null) {
+      return;
+    }
+    this.Users.forEach((t) => (t.checked = checked));
+  }
+
+  //   handleNonAdmin(data){
+  //       this.Users.push( data );
+  //   }
+
+  //   handleAdmin(data){
+  //     this.Admins.push( data );
+  //     console.log(data);
+
+  //   }
+
+  //   getAllUsers() {
+  //     this.getAllAdmins();
+  //     this.getAllNonAdmin();
+  // }
+
+  //   getAllNonAdmin() {
+  //     this.Auth.getAllUsers().subscribe(
+  //         data => this.handleNonAdmin(data),
+  //         error => this.handleError( error )
+  //     );
+  //   }
+
+  //   getAllAdmins() {
+  //     this.Auth.getAllAdmins().subscribe(
+  //         data => this.handleAdmin(data),
+  //         error => this.handleError( error )
+  //     );
+  // }
 }

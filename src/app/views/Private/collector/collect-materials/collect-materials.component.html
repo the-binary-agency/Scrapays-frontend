@@ -1,0 +1,245 @@
+<div class="dashboard-body pt-5 p-1 p-md-4">
+  <div class="row">
+    <div class="col-12 h3 mb-4">Assigned Requests</div>
+    <div class="row" *ngFor="let req of assignedRequests">
+      <div class="col-6 col-md-2">
+        <div class="bolder w-100">
+          ID
+        </div>
+        {{ req.id }}
+      </div>
+      <div class="col-6 col-md-2">
+        <div class="bolder w-100">
+          Producer ID
+        </div>
+        {{ "0" + req.userID.split("+234")[1] }}
+      </div>
+      <div class="col-6 col-md-2">
+        <div class="bolder w-100">
+          Address
+        </div>
+        {{ req.address }}
+      </div>
+      <div class="col-6 col-md-2">
+        <div class="bolder w-100">
+          Materials
+        </div>
+        {{ formatMaterials(req.materials) }}
+      </div>
+      <div class="col-6 col-md-2">
+        <div class="bolder w-100">
+          Schedule
+        </div>
+        {{ formatSchedule(req.schedule) }}
+      </div>
+      <div class="col-6 col-md-2">
+        <div class="bolder w-100">
+          Status
+        </div>
+        {{ req.status }}
+      </div>
+    </div>
+    <div
+      class="col12 col-md-6 offset-md-3 bolder"
+      *ngIf="assignedRequests.length == 0"
+    >
+      You currently have no assigned requests.
+    </div>
+  </div>
+  <div class="gap-40"></div>
+
+  <div class="row font-weight-bold ml-2 h3">
+    Material Estimation
+  </div>
+
+  <form>
+    <div class="row">
+      <div class="col-12 pl-0">
+        <div class="form-group">
+          <div class="position-relative d-inline-block">
+            <input
+              type="tel"
+              class="form-control w-auto"
+              name="producerID"
+              [(ngModel)]="producerPhone"
+              placeholder="Customer ID"
+              (focusout)="PhoneOnFocusOut($event)"
+              *ngIf="!producerName"
+            />
+            <div
+              class="form-control w-auto text-capitalize"
+              *ngIf="producerName"
+            >
+              <img
+                src="assets/images/icons/user-1.png"
+                alt="user icon"
+                class="h-100"
+              />&nbsp;
+              {{ producerName }}
+            </div>
+            <i
+              class="fa fa-times-circle text-danger fake-btn name-cancel fa-lg"
+              aria-hidden="true"
+              *ngIf="producerName"
+              (click)="clearProducer()"
+            ></i>
+          </div>
+          <i
+            class="fa fa-spinner fa-spin ml-2"
+            aria-hidden="true"
+            *ngIf="nameloading"
+          ></i
+          >&nbsp;
+          <span *ngIf="nameError && !nameloading" class="text-danger">{{
+            nameError
+          }}</span>
+        </div>
+      </div>
+      <div class="col-12 pl-0">
+        <div
+          class="row"
+          *ngFor="let material of collectionMaterials; let i = index"
+        >
+          <div class="col-12 col-md pl-0">
+            <div class="form-group">
+              <select
+                class="form-control border small-input"
+                (change)="onSelectMaterial($event, i)"
+                [(ngModel)]="material.name"
+                name="material-select_{{ i }}"
+              >
+                <option [ngValue]="null" disabled>Material class</option>
+                <option value="{{ mat.name }}" *ngFor="let mat of materials">
+                  {{ mat.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-12 col-md">
+            <div class="form-group">
+              <input
+                type="number"
+                class="form-control"
+                name="material-weight_{{ i }}"
+                placeholder="Tonnage"
+                [(ngModel)]="material.weight"
+                (keyup)="weightChange($event.target.value, i)"
+                [disabled]="material.name == null"
+              />
+            </div>
+          </div>
+          <div class="col-12 col-md-3 text-right">
+            <div class="rounded-lg py-1 text-center bg-est text-white">
+              Price Estimate <br />
+              ₦{{ formatToCurrency(material.cost) }}
+            </div>
+            <i
+              *ngIf="collectionMaterials.length > 1"
+              class="fa fa-times fa-2x text-danger fake-btn"
+              aria-hidden="true"
+              (click)="onRemoveMaterial(i)"
+            ></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-9 text-right">
+        <button
+          type="button"
+          class="btn btn-clear mb-5"
+          (click)="addToCollectionMaterial()"
+        >
+          <i class="fa fa-plus" aria-hidden="true"></i> Add More
+        </button>
+      </div>
+      <div class="col-12 pl-0">
+        <div class="row">
+          <div class="col-12 col-md pl-0">
+            <div class="bg-est rounded text-white card-body">
+              <p>Price Estimate per material class</p>
+              <div class="row mb-4">
+                <div class="col">
+                  <div *ngFor="let material of collectionMaterials">
+                    <span *ngIf="material.name"
+                      >{{ material.name }}: ₦{{
+                        formatToCurrency(material.cost)
+                      }}</span
+                    >
+                  </div>
+                  <br />
+                </div>
+                <div class="col">
+                  Total Price Estimate: <br />
+                  <span class="h3"> ₦{{ formatToCurrency(totalCost) }} </span>
+                </div>
+              </div>
+              <div class="row">
+                This price estimate is based on the price of &nbsp;
+                <span *ngFor="let material of materials; let i = index">
+                  {{ material.name }} at ₦{{ material.price }}/kg
+                  <span *ngIf="i + 1 < materials.length">,</span>&nbsp;
+                  <span *ngIf="materials.length - i == 2">and</span>&nbsp;
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            <button
+              type="button"
+              class="btn btn-primary px-1 btn-block solid mt-4 mt-md-0"
+              [disabled]="!formValidated()"
+              (click)="payWithCash()"
+            >
+              <img
+                src="assets/images/icons/cash-icon.png"
+                class="h-90"
+                alt="cash icon"
+              />&nbsp; Direct Cash
+            </button>
+            <br /><br class="d-none d-md-block" />
+            <button
+              type="button"
+              class="btn btn-primary px-1 btn-block solid"
+              [disabled]="!formValidated()"
+              (click)="payWithWallet()"
+            >
+              <img
+                src="assets/images/icons/wallet-icon.png"
+                class="h-90"
+                alt="wallet icon"
+              />&nbsp; Credit User Wallet
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <ngx-loading [show]="loading"></ngx-loading>
+
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">
+        <p>{{ modalTitle }}</p>
+      </h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{ modalBody }}</p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="modal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
+</div>

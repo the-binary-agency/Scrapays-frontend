@@ -1,197 +1,335 @@
 <main class="main d-flex align-items-center" *ngIf="User == 'enterprise'">
   <div class="row my-4 pl-md-5">
-  <div class="col-12 col-md-6">
-    <div class="login-card bg-white p-5 rounded">
-      <h3 class="font-weight-bold mb-5">
-        Enterprise Login
-      </h3>
+    <div class="col-12 col-md-6">
+      <div class="login-card bg-white p-5 rounded">
+        <h3 class="font-weight-bold mb-5">
+          Enterprise Login
+        </h3>
 
-      <p class="mb-4">Welcome Back,</p>
-      <form [formGroup]="EmailForm" (ngSubmit)="loginWithEmail(EmailForm.value)">
-        <div class="form-group mb-1">
-        <label for="">Work Email</label>
-          <input type="email" class="form-control" placeholder="Email" autocomplete="email" formControlName="email">
-        </div>
-       <div class="validation-errors">
-          <ng-container *ngFor="let validation of validation_messages.email">
-            <div class="error-message alert alert-danger" *ngIf="EmailForm.get('email').hasError(validation.type) && (EmailForm.get('email').dirty || EmailForm.get('email').touched)">
-            <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message }}</span>
-            </div>
-          </ng-container>
-        </div>
-        <div class="form-group mt-5 mb-1">
-        <label for="">Password</label>
-          <input type="password" class="form-control" placeholder="Password" autocomplete="current-password" formControlName="password">
-        </div>
-        <div class="validation-errors">
-          <ng-container *ngFor="let validation of validation_messages.password">
-            <div class="error-message alert alert-danger" *ngIf="EmailForm.get('password').hasError(validation.type) && (EmailForm.get('password').dirty || EmailForm.get('password').touched)">
-            <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message }}</span>
-            </div>
-          </ng-container>
-        </div>
-        <div class="row mt-5">
-          <div class="col-auto p-0">
-            <button type="submit" class="btn btn-primary px-4 solid" [disabled]="!EmailForm.valid">Login</button>
+        <p class="mb-4">Welcome Back,</p>
+        <form
+          [formGroup]="EmailForm"
+          (ngSubmit)="loginWithEmail(EmailForm.value)"
+        >
+          <div class="form-group mb-1">
+            <label for="">Work Email</label>
+            <input
+              type="email"
+              class="form-control"
+              placeholder="Email"
+              autocomplete="email"
+              formControlName="email"
+            />
           </div>
-          <div class="col text-right p-0">
-            <a routerLink="/request-password-reset" class="px-0">Forgot password?</a>
-           <div class="small">
-            Don't have an account?  <a routerLink="/enterprise/signup" class="px-0">Signup</a>
-           </div>
+          <div class="validation-errors w-100">
+            <ng-container *ngFor="let validation of validation_messages.email">
+              <div
+                class="error-message alert alert-danger"
+                *ngIf="
+                  EmailForm.get('email').hasError(validation.type) &&
+                  (EmailForm.get('email').dirty ||
+                    EmailForm.get('email').touched)
+                "
+              >
+                <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                <span class="text-danger">{{ validation.message }}</span>
+              </div>
+            </ng-container>
           </div>
-        </div>
-      </form>
+          <div class="form-group mt-5 mb-1">
+            <label for="">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              placeholder="Password"
+              autocomplete="current-password"
+              formControlName="password"
+            />
+          </div>
+          <div class="validation-errors w-100">
+            <ng-container
+              *ngFor="let validation of validation_messages.password"
+            >
+              <div
+                class="error-message alert alert-danger"
+                *ngIf="
+                  EmailForm.get('password').hasError(validation.type) &&
+                  (EmailForm.get('password').dirty ||
+                    EmailForm.get('password').touched)
+                "
+              >
+                <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                <span class="text-danger">{{ validation.message }}</span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="row mt-5">
+            <div class="col-auto p-0">
+              <button
+                type="submit"
+                class="btn btn-primary px-4 solid"
+                [disabled]="!EmailForm.valid"
+              >
+                Login
+              </button>
+            </div>
+            <div class="col text-right p-0">
+              <a routerLink="/request-password-reset" class="px-0"
+                >Forgot password?</a
+              >
+              <div class="small">
+                Don't have an account?
+                <a routerLink="/enterprise/signup" class="px-0">Signup</a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
-  <div class="col-12 col-md-6 d-flex align-items-center enterprise-img-bg">
+    <div class="col-12 col-md-6 d-flex align-items-center enterprise-img-bg">
       <div class="ml-md-5">
         <p class="h3 sc-orange font-weight-bold font-italic">
           You Drive Impact
         </p>
         <p class="h4 text-white">
-            Your responsibility to getting rid of waste properly <br>
-            has gotten thousands of waste off our streets.
+          Your responsibility to getting rid of waste properly <br />
+          has gotten thousands of waste off our streets.
         </p>
       </div>
+    </div>
   </div>
-</div>
 </main>
 
 <!-- Household Login -->
 <main class="main d-flex align-items-center" *ngIf="User == 'household'">
   <div class="row my-4 pl-md-5">
-  <div class="col-12 col-md-6">
-    <div class="login-card bg-white p-5 rounded">
-      <h3 class="font-weight-bold mb-5">
-        Household <br>
-        Producer Login
-      </h3>
+    <div class="col-12 col-md-6">
+      <div class="login-card bg-white p-5 rounded">
+        <h3 class="font-weight-bold mb-5">
+          Household <br />
+          Producer Login
+        </h3>
 
-      <p class="mb-4">Welcome Back,</p>
-      <form [formGroup]="PhoneForm" (ngSubmit)="loginWithPhone(PhoneForm.value)">
-        <div class="form-group mb-1">
-        <label for="">Phone Number</label>
-          <input type="tel" class="form-control" placeholder="Phone Number" autocomplete="phone" formControlName="phone">
-        </div>
-        <div class="validation-errors">
-          <ng-container *ngFor="let validation of validation_messages.phone">
-            <div class="error-message alert alert-danger" *ngIf="PhoneForm.get('phone').hasError(validation.type) && (PhoneForm.get('phone').dirty || PhoneForm.get('phone').touched)">
-            <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message }}</span>
+        <p class="mb-4">Welcome Back,</p>
+        <form
+          [formGroup]="PhoneForm"
+          (ngSubmit)="loginWithPhone(PhoneForm.value)"
+        >
+          <div class="form-group mb-1">
+            <label for="">Phone Number</label>
+            <input
+              type="tel"
+              class="form-control"
+              placeholder="Phone Number"
+              autocomplete="phone"
+              formControlName="phone"
+            />
+          </div>
+          <div class="validation-errors w-100">
+            <ng-container *ngFor="let validation of validation_messages.phone">
+              <div
+                class="error-message alert alert-danger"
+                *ngIf="
+                  PhoneForm.get('phone').hasError(validation.type) &&
+                  (PhoneForm.get('phone').dirty ||
+                    PhoneForm.get('phone').touched)
+                "
+              >
+                <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                <span class="text-danger">{{ validation.message }}</span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="form-group mt-5 mb-1">
+            <label for="">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              placeholder="Password"
+              autocomplete="current-password"
+              formControlName="password"
+            />
+          </div>
+          <div class="validation-errors w-100">
+            <ng-container
+              *ngFor="let validation of validation_messages.password"
+            >
+              <div
+                class="error-message alert alert-danger"
+                *ngIf="
+                  PhoneForm.get('password').hasError(validation.type) &&
+                  (PhoneForm.get('password').dirty ||
+                    PhoneForm.get('password').touched)
+                "
+              >
+                <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                <span class="text-danger">{{ validation.message }}</span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="row mt-5 mb-3">
+            <div class="col-auto p-0">
+              <button
+                type="submit"
+                class="btn btn-primary px-4 solid"
+                [disabled]="!PhoneForm.valid"
+              >
+                Login
+              </button>
             </div>
-          </ng-container>
-          </div>
-        <div class="form-group mt-5 mb-1">
-        <label for="">Password</label>
-          <input type="password" class="form-control" placeholder="Password" autocomplete="current-password" formControlName="password">
-        </div>
-        <div class="validation-errors">
-          <ng-container *ngFor="let validation of validation_messages.password">
-            <div class="error-message alert alert-danger" *ngIf="PhoneForm.get('password').hasError(validation.type) && (PhoneForm.get('password').dirty || PhoneForm.get('password').touched)">
-            <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message }}</span>
+            <div class="col text-right p-0">
+              <a routerLink="/request-password-reset" class="px-0"
+                >Forgot password?</a
+              >
+              <div class="small">
+                Don't have an account?
+                <a routerLink="/household/signup" class="px-0">Signup</a>
+              </div>
             </div>
-          </ng-container>
           </div>
-        <div class="row mt-5">
-          <div class="col-auto p-0">
-            <button type="submit" class="btn btn-primary px-4 solid" [disabled]="!PhoneForm.valid">Login</button>
+          <div class="small text-muted">
+            <i class="fa fa-info-circle text-success" aria-hidden="true"></i> If
+            you signed up via USSD, your default password is
+            <span class="bolder h6">123456</span>. Please sign in with your
+            number and change it as soon as possible.
           </div>
-         <div class="col text-right p-0">
-            <a routerLink="/request-password-reset" class="px-0">Forgot password?</a>
-           <div class="small">
-            Don't have an account?  <a routerLink="/household/signup" class="px-0">Signup</a>
-           </div>
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
-  </div>
-  <div class="col-12 col-md-6 d-flex align-items-center household-img-bg">
+    <div class="col-12 col-md-6 d-flex align-items-center household-img-bg">
       <div class="ml-md-5">
         <p class="h3 sc-orange font-weight-bold font-italic">
-          You go the extra mile! 
+          You go the extra mile!
         </p>
         <p class="h4 text-white">
-            You sort! <br>
-            That’s extra, <br>
-            You deserve every reward thrown at you. <br>
+          You sort! <br />
+          That’s extra, <br />
+          You deserve every reward thrown at you. <br />
         </p>
       </div>
+    </div>
   </div>
-</div>
 </main>
 
 <!-- Partners Login -->
 <main class="main d-flex align-items-center" *ngIf="User == 'partners'">
   <div class="row my-4 pl-md-5">
-  <div class="col-12 col-md-6 order-md-2">
-    <div class="partner-login-card bg-white p-5 rounded">
-      <h3 class="font-weight-bold mb-3">
-        Partner Login
-      </h3>
-      <div class="row font-weight-bold mb-4">
-        <div class="col-4">
-          Host
-        </div>
-        <div class="col-4">
-          Collector
-        </div>
-        <div class="col-4">
+    <div class="col-12 col-md-6 order-md-2">
+      <div class="partner-login-card bg-white p-5 rounded">
+        <h3 class="font-weight-bold mb-3">
+          Partner Login
+        </h3>
+        <div class="row font-weight-bold mb-4">
+          <div class="col-4">
+            Host
+          </div>
+          <div class="col-4">
+            Collector
+          </div>
+          <div class="col-4">
             Agent
+          </div>
         </div>
+        <form
+          [formGroup]="PhoneForm"
+          (ngSubmit)="loginWithPhone(PhoneForm.value)"
+        >
+          <div class="form-group mb-1">
+            <label for="">Phone Number</label>
+            <input
+              type="tel"
+              class="form-control"
+              placeholder="Phone Number"
+              autocomplete="phone"
+              formControlName="phone"
+            />
+          </div>
+          <div class="validation-errors w-100">
+            <ng-container *ngFor="let validation of validation_messages.phone">
+              <div
+                class="error-message alert alert-danger"
+                *ngIf="
+                  PhoneForm.get('phone').hasError(validation.type) &&
+                  (PhoneForm.get('phone').dirty ||
+                    PhoneForm.get('phone').touched)
+                "
+              >
+                <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                <span class="text-danger">{{ validation.message }}</span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="form-group mt-5 mb-1">
+            <label for="">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              placeholder="Password"
+              autocomplete="current-password"
+              formControlName="password"
+            />
+          </div>
+          <div class="validation-errors w-100">
+            <ng-container
+              *ngFor="let validation of validation_messages.password"
+            >
+              <div
+                class="error-message alert alert-danger"
+                *ngIf="
+                  PhoneForm.get('password').hasError(validation.type) &&
+                  (PhoneForm.get('password').dirty ||
+                    PhoneForm.get('password').touched)
+                "
+              >
+                <i class="fa fa-info-circle text-danger"></i> &nbsp;
+                <span class="text-danger">{{ validation.message }}</span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="row mt-5">
+            <div class="col-6">
+              <button
+                type="submit"
+                class="btn btn-primary px-4 solid"
+                [disabled]="!PhoneForm.valid"
+              >
+                Login
+              </button>
+            </div>
+            <div class="col-6 text-right">
+              <a routerLink="/request-password-reset" class="px-0"
+                >Forgot password?</a
+              >
+            </div>
+          </div>
+        </form>
       </div>
-      <form [formGroup]="PhoneForm" (ngSubmit)="loginWithPhone(PhoneForm.value)">
-        <div class="form-group mb-1">
-        <label for="">Phone Number</label>
-          <input type="tel" class="form-control" placeholder="Phone Number" autocomplete="phone" formControlName="phone">
-        </div>
-        <div class="validation-errors">
-          <ng-container *ngFor="let validation of validation_messages.phone">
-            <div class="error-message alert alert-danger" *ngIf="PhoneForm.get('phone').hasError(validation.type) && (PhoneForm.get('phone').dirty || PhoneForm.get('phone').touched)">
-            <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message }}</span>
-            </div>
-          </ng-container>
-          </div>
-        <div class="form-group mt-5 mb-1">
-        <label for="">Password</label>
-          <input type="password" class="form-control" placeholder="Password" autocomplete="current-password" formControlName="password">
-        </div>
-        <div class="validation-errors">
-          <ng-container *ngFor="let validation of validation_messages.password">
-            <div class="error-message alert alert-danger" *ngIf="PhoneForm.get('password').hasError(validation.type) && (PhoneForm.get('password').dirty || PhoneForm.get('password').touched)">
-            <i class="fa fa-info-circle text-danger"></i> &nbsp; <span class="text-danger">{{ validation.message }}</span>
-            </div>
-          </ng-container>
-          </div>
-        <div class="row mt-5">
-          <div class="col-6">
-            <button type="submit" class="btn btn-primary px-4 solid" [disabled]="!PhoneForm.valid">Login</button>
-          </div>
-          <div class="col-6 text-right">
-            <a routerLink="/request-password-reset" class="px-0">Forgot password?</a>
-          </div>
-        </div>
-      </form>
     </div>
-  </div>
-  <div class="col-12 col-md-6 d-flex align-items-center order-md-1 host-img-bg">
+    <div
+      class="col-12 col-md-6 d-flex align-items-center order-md-1 host-img-bg"
+    >
       <div class="login-card">
         <p class="h3 sc-orange font-weight-bold font-italic">
-          Our Partners Rock! 
+          Our Partners Rock!
         </p>
         <p class="h4 text-white">
-          Choose what service you render, host, collector or <br>
+          Choose what service you render, host, collector or <br />
           agent then sign in to continue getting value with scrapays.
         </p>
       </div>
+    </div>
   </div>
-</div>
 </main>
 
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Error</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -199,7 +337,13 @@
     <p>{{ Error }}</p>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
   </div>
 </ng-template>
 

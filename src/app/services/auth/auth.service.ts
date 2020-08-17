@@ -1,21 +1,32 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Subject, Observable } from 'rxjs';
-import { TokenService } from './token.service';
-import { EnvironmentService } from '../env/environment.service';
-import { Router } from '@angular/router';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject, Subject, Observable } from "rxjs";
+import { TokenService } from "./token.service";
+import { EnvironmentService } from "../env/environment.service";
+import { Router } from "@angular/router";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AuthService {
-
-  private loggedIn: Subject<boolean> = new BehaviorSubject<boolean>( this.token.loggedIn() );
-  private Admin: Subject<boolean> = new BehaviorSubject<boolean>( this.token.Admin() );
-  private Household: Subject<boolean> = new BehaviorSubject<boolean>( this.token.Household() );
-  private Enterprise: Subject<boolean> = new BehaviorSubject<boolean>( this.token.Enterprise() );
-  private Vendor: Subject<boolean> = new BehaviorSubject<boolean>( this.token.Vendor() );
-  private Collector: Subject<boolean> = new BehaviorSubject<boolean>( this.token.Collector() );
+  private loggedIn: Subject<boolean> = new BehaviorSubject<boolean>(
+    this.token.loggedIn()
+  );
+  private Admin: Subject<boolean> = new BehaviorSubject<boolean>(
+    this.token.Admin()
+  );
+  private Household: Subject<boolean> = new BehaviorSubject<boolean>(
+    this.token.Household()
+  );
+  private Enterprise: Subject<boolean> = new BehaviorSubject<boolean>(
+    this.token.Enterprise()
+  );
+  private Vendor: Subject<boolean> = new BehaviorSubject<boolean>(
+    this.token.Vendor()
+  );
+  private Collector: Subject<boolean> = new BehaviorSubject<boolean>(
+    this.token.Collector()
+  );
   authStatus = this.loggedIn.asObservable();
   adminStatus = this.Admin.asObservable();
   householdStatus = this.Household.asObservable();
@@ -24,164 +35,214 @@ export class AuthService {
   collectorStatus = this.Collector.asObservable();
 
   URL = this.env.backendUrl;
-  
-  constructor ( private http: HttpClient, private token: TokenService, private env: EnvironmentService, private router: Router ) { }
+
+  constructor(
+    private http: HttpClient,
+    private token: TokenService,
+    private env: EnvironmentService,
+    private router: Router
+  ) {}
 
   changeAuthStatus(value: boolean) {
-    this.loggedIn.next( value );
+    this.loggedIn.next(value);
   }
-  
+
   changeAdminStatus(value: boolean) {
-    this.Admin.next( value );
+    this.Admin.next(value);
   }
-  
+
   changeHouseholdStatus(value: boolean) {
-    this.Household.next( value );
+    this.Household.next(value);
   }
-  
+
   changeEnterpriseStatus(value: boolean) {
-    this.Enterprise.next( value );
+    this.Enterprise.next(value);
   }
-  
+
   changeVendorStatus(value: boolean) {
-    this.Vendor.next( value );
+    this.Vendor.next(value);
   }
-  
+
   changeCollectorStatus(value: boolean) {
-    this.Collector.next( value );
-  }
-  
-  loginWithEmail( Form ) {
-    return this.http.post( `${ this.URL }/loginwithemail`, Form );
+    this.Collector.next(value);
   }
 
-  loginWithPhone( Form ) {
-    return this.http.post( `${ this.URL }/loginwithphone`, Form );
+  loginWithEmail(Form) {
+    return this.http.post(`${this.URL}/loginwithemail`, Form);
   }
-  
-  registerEnterprise( Form ) {
-    return this.http.post( `${ this.URL }/registerEnterprise`, Form );
-  }
-  
-  registerHousehold( Form ) {
-    return this.http.post( `${ this.URL }/registerHousehold`, Form );
-  }
-  
-  registerHost( Form ) {
-    return this.http.post( `${ this.URL }/registerHost`, Form );
-}
 
-  registerCollector( Form ) {
-    return this.http.post( `${ this.URL }/registerCollector`, Form );
-}
-  registerAgent( Form ) {
-    return this.http.post( `${ this.URL }/registerAgent`, Form );
-}
-  
-  getAllUsers(id) {
-    return this.http.get( `${ this.URL }/getAllUsers/${id}` );
+  loginWithPhone(Form) {
+    return this.http.post(`${this.URL}/loginwithphone`, Form);
+  }
+
+  registerEnterprise(Form) {
+    return this.http.post(`${this.URL}/registerEnterprise`, Form);
+  }
+
+  registerHousehold(Form) {
+    return this.http.post(`${this.URL}/registerHousehold`, Form);
+  }
+
+  registerHost(Form) {
+    return this.http.post(`${this.URL}/registerHost`, Form);
+  }
+
+  registerCollector(Form) {
+    return this.http.post(`${this.URL}/registerCollector`, Form);
+  }
+  registerAgent(Form) {
+    return this.http.post(`${this.URL}/registerAgent`, Form);
+  }
+
+  makeAdmin(Form) {
+    return this.http.post(`${this.URL}/registerAdmin`, Form);
+  }
+
+  getAssignedRequests(id) {
+    return this.http.get(`${this.URL}/getAssignedRequests/${id}`);
+  }
+
+  getAllUsers(form) {
+    return this.http.post(`${this.URL}/getAllUsers`, form);
   }
 
   getAllAdmins(id) {
-    return this.http.get( `${ this.URL }/getAllAdmins/${id}` );
+    return this.http.get(`${this.URL}/getAllAdmins/${id}`);
   }
 
-  getUserWithID( id ) {
-    return this.http.get( `${ this.URL }/getUserWithID/${id}`);
+  getUserWithID(form) {
+    return this.http.post(`${this.URL}/getUserWithID`, form);
   }
 
-  getUserWithNotifications( id ) {
-    return this.http.get( `${ this.URL }/getUserWithNotifications/${id}`);
+  getUserDetails(id) {
+    return this.http.get(`${this.URL}/getUserDetails/${id}`);
   }
 
-  getProducedTonnage( id ) {
-    return this.http.get( `${ this.URL }/getUserWithID/${id}`);
+  toggleCollectorStatus(form) {
+    return this.http.post(`${this.URL}/toggleCollectorStatus`, form);
   }
 
-  getUserWithTonnage( id ) {
-    return this.http.get( `${ this.URL }/getUserWithTonnage/${id}`);
+  deleteUser(form) {
+    return this.http.post(`${this.URL}/deleteUser`, form);
   }
 
-  getCollectorWithTonnage( id ) {
-    return this.http.get( `${ this.URL }/getCollectorWithTonnage/${id}`);
+  getUserWithNotifications(id) {
+    return this.http.get(`${this.URL}/getUserWithNotifications/${id}`);
   }
 
-  getDisposedTonnage( id ): Observable<any> {
-    return this.http.get<any>( `${ this.URL }/getDisposedTonnage/${id}`);
+  getProducedTonnage(id) {
+    return this.http.get(`${this.URL}/getUserWithID/${id}`);
   }
 
-  sendPasswordResetLink( Form ) {
-    return this.http.post( `${ this.URL }/sendPasswordResetLink`, Form );
+  getUserWithTonnage(id) {
+    return this.http.get(`${this.URL}/getUserWithTonnage/${id}`);
   }
 
-  changePassword( Form ) {
-    return this.http.post( `${ this.URL }/resetPassword`, Form );
+  getCollectorWithTonnage(id) {
+    return this.http.get(`${this.URL}/getCollectorWithTonnage/${id}`);
   }
 
-  updateUser( id, Form ) {
-    return this.http.post( `${ this.URL }/updateUser/${id}`, Form );
+  getDisposedTonnage(id): Observable<any> {
+    return this.http.get<any>(`${this.URL}/getDisposedTonnage/${id}`);
   }
 
-  registerVendor( Form ) {
-    return this.http.post( `${ this.URL }/registerVendor`, Form );
+  sendPasswordResetLink(Form) {
+    return this.http.post(`${this.URL}/sendPasswordResetLink`, Form);
   }
 
-  getApprovedCollectors( id ) {
-    return this.http.get( `${ this.URL }/getApprovedCollectors/${id}` );
+  changePassword(Form) {
+    return this.http.post(`${this.URL}/resetPassword`, Form);
   }
 
-  approveCollector( Form ) {
-    return this.http.post( `${ this.URL }/approveCollector`, Form );
+  updateUser(id, Form) {
+    return this.http.post(`${this.URL}/updateUser/${id}`, Form);
   }
 
-  getUserCount( id ) {
-    return this.http.get( `${ this.URL }/getUserCount/${id}`);
+  registerVendor(Form) {
+    return this.http.post(`${this.URL}/registerVendor`, Form);
   }
 
-  getMaterialPrices( id ) {
-    return this.http.get( `${ this.URL }/getMaterialPrices/${id}`);
+  getApprovedCollectors(id) {
+    return this.http.get(`${this.URL}/getApprovedCollectors/${id}`);
   }
 
-  editMaterialPrices( id, form ) {
-    return this.http.post( `${ this.URL }/editMaterialPrices/${id}`, form);
+  approveCollector(Form) {
+    return this.http.post(`${this.URL}/approveCollector`, Form);
   }
 
-  setMaterialPrices( id, form ) {
-    return this.http.post( `${ this.URL }/setMaterialPrices/${id}`, form);
+  getUserCount(id) {
+    return this.http.get(`${this.URL}/getUserCount/${id}`);
   }
 
-  requestPickup( form ) {
-    return this.http.post( `${ this.URL }/requestPickup`, form);
+  getMaterialPrices(id) {
+    return this.http.get(`${this.URL}/getMaterialPrices/${id}`);
   }
 
-  cancelPickup( form ) {
-    return this.http.post( `${ this.URL }/cancelPickup`, form);
+  editMaterialPrices(id, form) {
+    return this.http.post(`${this.URL}/editMaterialPrices/${id}`, form);
   }
 
-  automatePickup( form ) {
-    return this.http.post( `${ this.URL }/automatePickup`, form);
+  setMaterialPrices(id, form) {
+    return this.http.post(`${this.URL}/setMaterialPrices/${id}`, form);
   }
 
-  unAutomatePickup( id ) {
-    return this.http.post( `${ this.URL }/unAutomatePickup`, id);
+  requestPickup(form) {
+    return this.http.post(`${this.URL}/requestPickup`, form);
   }
 
-  submitInventory( form ) {
-    return this.http.post( `${ this.URL }/submitInventory`, form);
+  cancelPickup(form) {
+    return this.http.post(`${this.URL}/cancelPickup`, form);
   }
 
-  deleteNotifications( notifications ) {
-    return this.http.post( `${ this.URL }/deleteNotifications`, notifications);
+  automatePickup(form) {
+    return this.http.post(`${this.URL}/automatePickup`, form);
   }
 
-  toggleNotifications( notifications ) {
-    return this.http.post( `${ this.URL }/toggleNotifications`, notifications);
-  }
-  
-  getUserName( form ) {
-    return this.http.post( `${ this.URL }/getUserName`, form);
+  unAutomatePickup(id) {
+    return this.http.post(`${this.URL}/unAutomatePickup`, id);
   }
 
+  getAllPickupRequests(id) {
+    return this.http.get(`${this.URL}/getAllPickupRequests/${id}`);
+  }
 
+  getPickupRequestCounts(id) {
+    return this.http.get(`${this.URL}/getPickupRequestCounts/${id}`);
+  }
+
+  getCollectorWithLog(form) {
+    return this.http.post(`${this.URL}/getCollectorWithLog`, form);
+  }
+
+  assignToCollector(form) {
+    return this.http.post(`${this.URL}/assignToCollector`, form);
+  }
+
+  submitInventory(form) {
+    return this.http.post(`${this.URL}/submitInventory`, form);
+  }
+
+  deleteNotifications(notifications) {
+    return this.http.post(`${this.URL}/deleteNotifications`, notifications);
+  }
+
+  toggleNotifications(notifications) {
+    return this.http.post(`${this.URL}/toggleNotifications`, notifications);
+  }
+
+  getUserName(form) {
+    return this.http.post(`${this.URL}/getUserName`, form);
+  }
+
+  pingServerWithLocation(location) {
+    return this.http.post(`${this.URL}/ping`, location);
+  }
+
+  getCollectorCollections(phone) {
+    return this.http.get(`${this.URL}/getCollectorCollections/${phone}`);
+  }
+
+  getCollections(phone) {
+    return this.http.get(`${this.URL}/getCollections/${phone}`);
+  }
 }
-``

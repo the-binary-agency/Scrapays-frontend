@@ -1,14 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class EnvironmentService {
+  constructor() {}
 
-  constructor () { }
-  
-  // public backendUrl = "https://api.scrapays.com";  
-  public backendUrl = "http://localhost:8000";
-  public API_KEY ="RoHclc0n3WYL9l4oLK8APfU3mjkTwRQj5bt5WDkSyFXOLIobj3exJl3v+/n1c"
-
+  public backendUrl = "https://api.scrapays.com";
+  // public backendUrl = "http://localhost:8000";
+  public API_KEY =
+    "RoHclc0n3WYL9l4oLK8APfU3mjkTwRQj5bt5WDkSyFXOLIobj3exJl3v+/n1c";
 }

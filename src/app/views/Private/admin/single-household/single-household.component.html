@@ -1,0 +1,321 @@
+<div class="dashboard-body pt-5 p-1 p-md-5">
+  <div class="row">
+    <div class="col-6 col-md-auto">
+      <img src="assets/images/icons/user-1.png" class="thumb" alt="User Icon" />
+    </div>
+    <div class="col-6 col-md pt-2">
+      <div class="row bolder">Company Name</div>
+      {{ User.userable.companyName }}
+    </div>
+    <div class="col-6 col-md pt-2">
+      <div class="row bolder">Email</div>
+      {{ User.email }}
+    </div>
+    <div class="col-6 col-md pt-2">
+      <div class="row bolder">Phone Number</div>
+      {{ "0" + User.phone.split("+234")[1] }}
+    </div>
+    <div class="col-6 col-md pt-2">
+      <div class="row bolder">User ID</div>
+      {{ User.id }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 bolder mt-5 mb-3 h4">Total Tonnage Disposed</div>
+    <div class="col-12 col-md-6">
+      <div class="chart-wrapper">
+        <canvas
+          baseChart
+          class="chart"
+          [datasets]="lineChartData"
+          [labels]="lineChartLabels"
+          [options]="lineChartOptions"
+          [colors]="lineChartColours"
+          [legend]="lineChartLegend"
+          [chartType]="lineChartType"
+          (chartHover)="chartHovered($event)"
+          (chartClick)="chartClicked($event)"
+          style="height: 100%px !important;"
+        ></canvas>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <div class="bolder">
+        Transactions
+        <span class="float-right text-muted">(11/07/20)</span>
+      </div>
+      <div
+        *ngFor="let trans of Collections; let i = index"
+        (click)="selectTransaction(trans)"
+        class="fake-btn"
+        [ngClass]="{
+          'bg-white': trans.id == SelectedTransaction.id,
+          'p-3': trans.id == SelectedTransaction.id
+        }"
+      >
+        <span class="bolder">{{ i + 1 + ". " }}</span
+        >Transaction {{ " " + trans.id }}
+        <span class="float-right">{{ trans.created_at }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="gap-40"></div>
+  <div class="row" *ngIf="SelectedTransaction.id">
+    <div class="col-12">
+      <button
+        type="button"
+        class="btn btn-clear float-right"
+        (click)="SelectedTransaction = {}"
+      >
+        <i class="fa fa-times-circle text-danger" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="col-12 col-md-6">
+      <div class="row">
+        <div class="col-6 pb-md-4 bolder">
+          Transaction ID
+        </div>
+        <div class="col-6 pb-md-4">:{{ " " + SelectedTransaction.id }}</div>
+        <div class="col-6 pb-md-4 bolder">Producer ID</div>
+        <div class="col-6 pb-md-4">
+          :{{ " " + SelectedTransaction.producerPhone }}
+        </div>
+        <div class="col-6 pb-md-4 bolder">Material(s) Collected</div>
+        <div class="col-6 pb-md-4">
+          :{{ " " + formatMaterials(SelectedTransaction.materials) }}
+        </div>
+        <div class="col-6 pb-md-4 bolder">Tonnage Per Material Class</div>
+        <div class="col-6 pb-md-4">
+          :
+          <span
+            [ngClass]="{ 'ml-2': i != 0 }"
+            *ngFor="
+              let mat of evaluateMaterials(SelectedTransaction.materials);
+              let i = index
+            "
+          >
+            {{ mat.name + ": ₦" + formatToCurrency(mat.price) }} <br
+          /></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <div class="row">
+        <div class="col-6 pb-md-4 bolder">
+          Total Tonnage
+        </div>
+        <div class="col-6 pb-md-4">
+          :{{ " " + SelectedTransaction.totalTonnage }}kg
+        </div>
+        <div class="col-6 pb-md-4 bolder">Payment Approved</div>
+        <div class="col-6 pb-md-4">
+          :{{ " ₦" + formatToCurrency(SelectedTransaction.cost) }}
+        </div>
+        <div class="col-6 pb-md-4 bolder">Payment Type</div>
+        <div class="col-6 pb-md-4">
+          :{{ " " + SelectedTransaction.paymentMethod }}
+        </div>
+        <div class="col-6 pb-md-4 bolder">Time Stamp</div>
+        <div class="col-6 pb-md-4">
+          :{{ " " + SelectedTransaction.created_at }}
+        </div>
+        <div class="col-6 pb-md-4 bolder">Address</div>
+        <div class="col-6 pb-md-4">
+          :{{ " " + SelectedTransaction.address }}
+        </div>
+        <div class="col-6 pb-md-4 bolder">Location</div>
+        <div class="col-6 pb-md-4"></div>
+      </div>
+    </div>
+  </div>
+  <div class="gap-40"></div>
+  <div class="row">
+    <div class="left-b h4">
+      Payment History
+    </div>
+  </div>
+  <div class="row">
+    <div class="w-100">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            ID
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.id }}
+          </td>
+        </ng-container>
+
+        <!-- Progress Column -->
+        <ng-container matColumnDef="producerPhone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Producer ID</th>
+          <td mat-cell *matCellDef="let row">{{ row.producerPhone }}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="collectorID">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Collector ID
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ "0" + row.collectorID.split("+234")[1] }}
+          </td>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="materials">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Materials
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ formatMaterials(row.materials) }}
+          </td>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="cost">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Cost
+          </th>
+          <td mat-cell *matCellDef="let row">
+            ₦{{ formatToCurrency(row.cost) }}
+          </td>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="paymentMethod">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Payment Type
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.paymentMethod }}
+          </td>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="time">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.created_at | date: "shortTime" }}
+          </td>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.created_at.split(" ")[0] }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="6">
+            <!-- No data matching the filter "{{ input.value }}" -->
+          </td>
+        </tr>
+      </table>
+
+      <mat-paginator pageSize="25"></mat-paginator>
+    </div>
+  </div>
+  <div class="gap-40"></div>
+  <div class="row">
+    <div class="left-b h4">
+      Cash Withdrawal History
+    </div>
+  </div>
+  <div class="row">
+    <div class="w-100">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            ID
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.id }}
+          </td>
+        </ng-container>
+
+        <!-- Progress Column -->
+        <ng-container matColumnDef="producerPhone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Producer ID</th>
+          <td mat-cell *matCellDef="let row">{{ row.producerPhone }}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="collectorID">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Collector ID
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ "0" + row.collectorID.split("+234")[1] }}
+          </td>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="materials">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Materials
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ formatMaterials(row.materials) }}
+          </td>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="cost">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Cost
+          </th>
+          <td mat-cell *matCellDef="let row">
+            ₦{{ formatToCurrency(row.cost) }}
+          </td>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="paymentMethod">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Payment Type
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.paymentMethod }}
+          </td>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="time">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.created_at | date: "shortTime" }}
+          </td>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.created_at.split(" ")[0] }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="6">
+            <!-- No data matching the filter "{{ input.value }}" -->
+          </td>
+        </tr>
+      </table>
+
+      <mat-paginator pageSize="25"></mat-paginator>
+    </div>
+  </div>
+</div>
