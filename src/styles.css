@@ -190,6 +190,7 @@ ngb-datepicker {
 .mat-checkbox-checked.mat-accent .mat-checkbox-background {
   background-color: #ff7900 !important;
 }
+.n-popover .arrow,
 .delete-popover .arrow {
   display: none !important;
 }
@@ -203,6 +204,11 @@ ngb-datepicker {
 .user-type-popover .mat-list-item-content {
   font-family: "Poppins", sans-serif !important;
 }
+.n-popover {
+  box-shadow: -8px -2px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 15px !important;
+  max-width: 80vw !important;
+}
 .delete-popover {
   box-shadow: -8px -2px 8px rgba(0, 0, 0, 0.25);
   border-radius: 15px !important;
@@ -212,4 +218,71 @@ ngb-datepicker {
 .mat-sort-header-container {
   font-weight: 600;
   justify-content: center !important;
+}
+.h-wrap {
+  height: fit-content !important;
+}
+/*This cause the division content 
+        to be displayed from right to left */
+.flipped {
+  direction: rtl;
+}
+
+/* Designing for scroll-bar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: gainsboro;
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ff7900;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #9f4c00;
+}
+.btn-smol {
+  font-size: 11px !important;
+}
+.display-6 {
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+.note-icon {
+  height: 19px;
+  width: auto;
+}
+.mat-sort-header-button {
+  font-family: "Poppins" !important;
+  font-weight: 600 !important;
+}
+.custom-day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2rem;
+  width: 100%;
+}
+.custom-day.focused {
+  background-color: #e6e6e6;
+}
+.custom-day.range,
+.custom-day:hover {
+  background-color: rgb(255, 121, 0);
+  color: white;
+}
+.custom-day.faded {
+  background-color: rgba(255, 121, 0, 0.5);
+}
+.ngb-dp-day.disabled {
+  color: #6c757d !important;
 }

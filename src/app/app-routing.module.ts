@@ -91,7 +91,7 @@ const routes: Routes = [
   {
     path: "dashboard/create-admin",
     component: CreateAdminComponent,
-    // canActivate: [AfterLoginService, IsAdminService],
+    canActivate: [AfterLoginService, IsAdminService],
   },
   {
     path: "dashboard/track-collector",

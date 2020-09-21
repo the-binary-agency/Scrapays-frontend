@@ -453,6 +453,11 @@ export class ProducerDashboardComponent implements OnInit {
         for (let price of data.prices) {
           this.materials.push(price);
         }
+        this.materials.push({
+          id: 500,
+          name: "Composite",
+          image: "composite-icon.png",
+        });
         this.displayMaterials();
       },
       (error) => console.log(error)

@@ -1,0 +1,41 @@
+table {
+  width: 100%;
+  font-weight: 600 !important;
+}
+
+table,
+.table,
+thead,
+tr,
+td {
+  border-top: none !important;
+}
+.m-body {
+  width: 450px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.item-link:hover {
+  cursor: pointer;
+  background-color: #efeaea;
+}
+.popover-body {
+  padding: 0;
+}
+.reply-sec {
+  background-color: rgba(224, 224, 224, 1);
+}
+.reply-input {
+  border: none;
+  font-size: 18px;
+  background-color: rgba(224, 224, 224, 1);
+}
+
+.reply-input:focus {
+  border: none !important;
+}
+
+.reply-textarea {
+  height: 272px;
+}

@@ -131,6 +131,7 @@ export class EnterpriseDashboardComponent implements OnInit {
   materialSelect: string = null;
   requestDescription: string;
   requestComment: string;
+  requestAddress: string;
   markDisabled;
 
   ngOnInit(): void {
@@ -486,7 +487,6 @@ export class EnterpriseDashboardComponent implements OnInit {
     if (
       this.requestMaterials.length == 0 ||
       !this.requestDescription ||
-      !this.requestComment ||
       !this.model ||
       !this.selectedTime
     ) {
@@ -503,7 +503,9 @@ export class EnterpriseDashboardComponent implements OnInit {
       description: this.requestDescription,
       comment: this.requestComment,
       scheduleDate: this.model,
-      address: this.User.userable.address,
+      address: this.requestAddress
+        ? this.requestAddress
+        : this.User.userable.address,
       scheduleTime: this.selectedTime,
     };
     this.auth.requestPickup(form).subscribe(
@@ -524,6 +526,11 @@ export class EnterpriseDashboardComponent implements OnInit {
         for (let price of data.prices) {
           this.materials.push(price);
         }
+        this.materials.push({
+          id: 500,
+          name: "Composite",
+          image: "composite-icon.png",
+        });
         this.displayMaterials();
       },
       (error) => console.log(error)
@@ -539,5 +546,9 @@ export class EnterpriseDashboardComponent implements OnInit {
       classes["border-bottom"] = true;
     }
     return classes;
+  }
+
+  testChange(ev) {
+    console.log(ev.day);
   }
 }

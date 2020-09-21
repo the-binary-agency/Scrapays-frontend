@@ -36,6 +36,7 @@ export class HouseholdsComponent implements OnInit {
     "totalTonnage",
     "totalEarnings",
     "totalWithdrawals",
+    "created_at",
     "menu",
   ];
   dataSource: MatTableDataSource<User>;

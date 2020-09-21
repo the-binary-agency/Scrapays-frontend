@@ -1,177 +1,222 @@
 <div class="dashboard-body pt-5 p-1 py-md-4 px-md-1">
-
-<div class="row">
-<div class="col-12">
-
-</div>
-   <div class="col-12 mb-5 px-0">
+  <div class="row">
+    <div class="col-12"></div>
+    <div class="col-12 mb-5 px-0">
       <div class="row">
         <div class="col-12 col-md-3">
-            <span class="h3 text-primary ml-2 bb-blue">Overview</span>
+          <span class="h3 text-primary ml-2 bb-blue">Overview</span>
         </div>
-                <button class="btn btn-primary solid" type="button" (click)="openSellBulkModal()">
-                  Sell your BULK scrap materials now 
-                </button>
+        <button
+          class="btn btn-primary solid"
+          type="button"
+          (click)="openSellBulkModal()"
+        >
+          Sell your BULK scrap materials now
+        </button>
       </div>
       <div class="col-12 col-md-9 offset-md-3 px-1 px-md-3">
-      <br><br>
+        <br /><br />
 
-       <p class="text-center h3">
-        Dial <span class="sc-orange">*123*00#</span> to request pickup.
-       </p>
-       
-      </div>
-
-  </div>
-
-<div class="col-12 col-md-8 order-md-2 pl-md-0">
-
- <div class="row h-100 p-md-4 p-2">
- 
-   <div class="col-12 col-md-4 px-0 px-md-2 mb-4">
-     <div class="card h-100 bg-orange text-white rounded-card">
-      <div class="card-body">
-        <div class="card-title">
-          <img src="assets/images/icons/weight-icon.png" alt="weight icon">
-        </div>
-          <span class="display-4">
-            {{ totalTonnage }}
-          </span>
-          KG <br>
-          Total weight disposed
+        <p class="text-center h3">
+          Dial <span class="sc-orange">*347*477#</span> to request pickup.
+        </p>
       </div>
     </div>
-  </div>
 
-<div class="col-12 col-md-8 px-0 px-md-4 mb-4">
-  <div class="card h-100 rounded-card">
-    <div class="card-body px-0 pl-md-3 pr-md-2">
-      <div class="row">
-      <div class="col-12 text-center px-0">
-        <div class="card-title row">
-          <div class="col px-0">
-            Total weight disposed per material class 
-          </div>
-          <div class="col-2 px-0">
-             <button type="button" class="btn btn-clear float-right py-0" [ngbPopover]="popContent" container="body">
-              <i class="fa fa-caret-down fa-2x sc-orange" aria-hidden="true"></i>
-            </button>
-          </div>
-        </div>
-
-        <ng-template #popContent class="px-0"> 
-          <ul class="select-material pl-0">
-            <li *ngFor="let material of materials; let i = index"  class="border-bottom fake-btn py-2" (click)="addToDisplayedMaterials( material, i )">
-              <span class="mx-3">
-                  {{ material.name }}
+    <div class="col-12 col-md-8 order-md-2 pl-md-0">
+      <div class="row h-100 p-md-4 p-2">
+        <div class="col-12 col-md-4 px-0 px-md-2 mb-4">
+          <div class="card h-100 bg-orange text-white rounded-card">
+            <div class="card-body">
+              <div class="card-title">
+                <img
+                  src="assets/images/icons/weight-icon.png"
+                  alt="weight icon"
+                />
+              </div>
+              <span class="display-4">
+                {{ totalTonnage.toFixed(2) }}
               </span>
-            </li>
-          </ul>
-        </ng-template>
-        
-      </div>
-      <div class="row">
-         <div class="col-6 d-flex pb-2" *ngFor="let display of displayedMaterials; let i = index" [ngClass]="addBorder(i)">
-           <img src="{{ URL }}/storage/material_list_images/{{ display.image }}" alt="metal icon" *ngIf="display">
-          <span class="ml-2 ml-md-4 font-weight-bold text-capitalize" *ngIf="display">
-            {{ display.name }} <br>
-            {{ getDisplayedPrice( display.name ) }}kg
-          </span>
-         </div>
-      </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<div class="col-12 px-0 px-md-4 mb-4">
-  <div class="card shadow-sm h-100">
-     <div class="card-header bg-white">
-      <span class="font-weight-bold mt-3">Disposal <br class="d-block d-md-none"> History</span>
-
-      <select class="custom-select custom-select-sm w-auto float-right border-0">
-          <option value="1" selected> Monthly </option>
-          <option value="2"> Weekly </option>
-          <option value="3"> Yearly </option>
-      </select>                 
-      <span class="float-right text-blue mt-1 mr-1">Show:</span>
-     </div>
-    <div class="card-body">
-     <div class="chart-wrapper">
-            <canvas baseChart class="chart"
-            [datasets]="lineChartData"
-            [labels]="lineChartLabels"
-            [options]="lineChartOptions"
-            [colors]="lineChartColours"
-            [legend]="lineChartLegend"
-            [chartType]="lineChartType"
-            (chartHover)="chartHovered($event)"
-            (chartClick)="chartClicked($event)" style="height:100%px !important;"></canvas>
+              KG <br />
+              Total weight disposed
+            </div>
           </div>
-    </div>
-  </div>
-</div>
-
- </div>
-
-</div>
-
-<!-- Last Column -->
-<div class="col-12 col-md-4 px-3 mb-4 order-md-3">
-  <div class="card h-100 bg-orange text-white rounded-card">
-    <div class="card-header bg-transparent">
-      Wallet
-    </div>
-    <div class="card-body">
-     <div class="row mb-5">
-       <div class="h5 bb-white">
-        Total Earnings 
-       </div>
-         <div class="h4 w-100">
-          ₦ 0
-         </div>
-     </div>
-     <div class="row mb-5">
-      <div class="w-100">
-         <div class="h5 bb-white">
-           Earnings
-         </div>
-          <div class="space-filler"></div>
-          <span class=" small mt-1 mr-1">Show:</span>
-          <select class="custom-select custom-select-sm w-auto border-0 bg-orange float-right">
-              <option value="1" selected>This Month</option>
-              <option value="2">This Week </option>
-              <option value="3">This Year </option>
-          </select>
-      </div>          
-        <div class="h4 w-100">
-          ₦ 0
         </div>
-     </div>
-     <div class="row">
-         
-       <div class="row w-100 mb-5">
-         <a class="text-white h4 pl-0" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-          <i class="fa fa-chevron-right" aria-hidden="true"></i>
-          Recharge
-        </a>
-      <div class="collapse w-100" id="collapseExample">
-        <button type="button" class="btn bg-green btn-lg text-white ml-4">Recharge</button>
-      </div>
-       </div>
 
-       <div class="row w-100 mb-5">
-         <a class="text-white h4 pl-0" data-toggle="collapse" href="#transferFunds" role="button" aria-expanded="false" aria-controls="transferFunds">
-          <i class="fa fa-chevron-right" aria-hidden="true"></i>
-          Transfer Funds
-        </a>
-      <div class="collapse w-100" id="transferFunds">
-          <button type="button" class="btn bg-green btn-lg text-white ml-4">Transfer</button>
-      </div>
-       </div>
+        <div class="col-12 col-md-8 px-0 px-md-4 mb-4">
+          <div class="card h-100 rounded-card">
+            <div class="card-body px-0 pl-md-3 pr-md-2">
+              <div class="row">
+                <div class="col-12 text-center px-0">
+                  <div class="card-title row">
+                    <div class="col px-0">
+                      Total weight disposed per material class
+                    </div>
+                    <div class="col-2 px-0">
+                      <button
+                        type="button"
+                        class="btn btn-clear float-right py-0"
+                        [ngbPopover]="popContent"
+                        container="body"
+                      >
+                        <i
+                          class="fa fa-caret-down fa-2x sc-orange"
+                          aria-hidden="true"
+                        ></i>
+                      </button>
+                    </div>
+                  </div>
 
-       <!-- <div class="row w-100 mb-5" *ngIf="User.type == 'Business'">
+                  <ng-template #popContent class="px-0">
+                    <ul class="select-material pl-0">
+                      <li
+                        *ngFor="let material of materials; let i = index"
+                        class="border-bottom fake-btn py-2"
+                        (click)="addToDisplayedMaterials(material, i)"
+                      >
+                        <span class="mx-3">
+                          {{ material.name }}
+                        </span>
+                      </li>
+                    </ul>
+                  </ng-template>
+                </div>
+                <div class="row">
+                  <div
+                    class="col-6 d-flex pb-2"
+                    *ngFor="let display of displayedMaterials; let i = index"
+                    [ngClass]="addBorder(i)"
+                  >
+                    <img
+                      src="{{ URL }}/storage/material_list_images/{{
+                        display.image
+                      }}"
+                      alt="metal icon"
+                      *ngIf="display"
+                    />
+                    <span
+                      class="ml-2 ml-md-4 font-weight-bold text-capitalize"
+                      *ngIf="display"
+                    >
+                      {{ display.name }} <br />
+                      {{ getDisplayedPrice(display.name) }}kg
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 px-0 px-md-4 mb-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+              <span class="font-weight-bold mt-3"
+                >Disposal <br class="d-block d-md-none" />
+                History</span
+              >
+
+              <select
+                class="custom-select custom-select-sm w-auto float-right border-0"
+              >
+                <option value="1" selected>Monthly</option>
+                <option value="2">Weekly</option>
+                <option value="3">Yearly</option>
+              </select>
+              <span class="float-right text-blue mt-1 mr-1">Show:</span>
+            </div>
+            <div class="card-body">
+              <div class="chart-wrapper">
+                <canvas
+                  baseChart
+                  class="chart"
+                  [datasets]="lineChartData"
+                  [labels]="lineChartLabels"
+                  [options]="lineChartOptions"
+                  [colors]="lineChartColours"
+                  [legend]="lineChartLegend"
+                  [chartType]="lineChartType"
+                  (chartHover)="chartHovered($event)"
+                  (chartClick)="chartClicked($event)"
+                  style="height: 100%px !important"
+                ></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Last Column -->
+    <div class="col-12 col-md-4 px-3 mb-4 order-md-3">
+      <div class="card h-100 bg-orange text-white rounded-card">
+        <div class="card-header bg-transparent">Wallet</div>
+        <div class="card-body">
+          <div class="row mb-5">
+            <div class="h5 bb-white">Total Earnings</div>
+            <div class="h4 w-100">₦ 0</div>
+          </div>
+          <div class="row mb-5">
+            <div class="w-100">
+              <div class="h5 bb-white">Earnings</div>
+              <div class="space-filler"></div>
+              <span class="small mt-1 mr-1">Show:</span>
+              <select
+                class="custom-select custom-select-sm w-auto border-0 bg-orange float-right"
+              >
+                <option value="1" selected>This Month</option>
+                <option value="2">This Week</option>
+                <option value="3">This Year</option>
+              </select>
+            </div>
+            <div class="h4 w-100">₦ 0</div>
+          </div>
+          <div class="row">
+            <div class="row w-100 mb-5">
+              <a
+                class="text-white h4 pl-0"
+                data-toggle="collapse"
+                href="#collapseExample"
+                role="button"
+                aria-expanded="false"
+                aria-controls="collapseExample"
+              >
+                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                Recharge
+              </a>
+              <div class="collapse w-100" id="collapseExample">
+                <button
+                  type="button"
+                  class="btn bg-green btn-lg text-white ml-4"
+                >
+                  Recharge
+                </button>
+              </div>
+            </div>
+
+            <div class="row w-100 mb-5">
+              <a
+                class="text-white h4 pl-0"
+                data-toggle="collapse"
+                href="#transferFunds"
+                role="button"
+                aria-expanded="false"
+                aria-controls="transferFunds"
+              >
+                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                Transfer Funds
+              </a>
+              <div class="collapse w-100" id="transferFunds">
+                <button
+                  type="button"
+                  class="btn bg-green btn-lg text-white ml-4"
+                >
+                  Transfer
+                </button>
+              </div>
+            </div>
+
+            <!-- <div class="row w-100 mb-5" *ngIf="User.type == 'Business'">
          <a class="text-white h4 pl-0" data-toggle="collapse" href="#barterOptions" role="button" aria-expanded="false" aria-controls="barterOptions">
           <i class="fa fa-chevron-right" aria-hidden="true"></i>
           Barter Option
@@ -182,27 +227,35 @@
       </div>
        </div> -->
 
-       <div class="row w-100 mb-5">
-         <a class="text-white h4 pl-0" data-toggle="collapse" href="#fundsWidthHistory" role="button" aria-expanded="false" aria-controls="fundsWidthHistory">
-          <i class="fa fa-chevron-right" aria-hidden="true"></i>
-          Funds Withdrawal History
-        </a>
-      <div class="collapse" id="fundsWidthHistory">
-        
-          <table class="table table-responsive-sm table-hover table-outline mb-0">
-            <thead class="thead-light">
-              <tr>
-                <th>Date and Time</th>
-                <th>Transaction Type</th>
-                <th class="text-right">Amount</th>
-              </tr>
-            </thead>
-            <tbody class="bg-light">
-            <!-- <tr *ngIf="Users.length == 0">
+            <div class="row w-100 mb-5">
+              <a
+                class="text-white h4 pl-0"
+                data-toggle="collapse"
+                href="#fundsWidthHistory"
+                role="button"
+                aria-expanded="false"
+                aria-controls="fundsWidthHistory"
+              >
+                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                Funds Withdrawal History
+              </a>
+              <div class="collapse" id="fundsWidthHistory">
+                <table
+                  class="table table-responsive-sm table-hover table-outline mb-0"
+                >
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Date and Time</th>
+                      <th>Transaction Type</th>
+                      <th class="text-right">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-light">
+                    <!-- <tr *ngIf="Users.length == 0">
             <td></td>
             <td>No Registered Users</td>
             </tr> -->
-              <!-- <tr>
+                    <!-- <tr>
                 <td>
                   <div>10-4-2020</div>
                   <div class="small text-muted">
@@ -216,44 +269,50 @@
                   + ₦<span class="text-bold">0</span>
                 </td>
               </tr> -->
-            </tbody>
-          </table>
-        
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-       </div>
-
-     </div>
     </div>
   </div>
 </div>
 
-</div>
-
-</div>
-
 <ng-template #content let-modal>
-    <div class="modal-header">
-        <h4 class="modal-title">{{ modalTitle }}</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <p>{{ modalBody }}</p>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-light" (click)="modal.close('Close click')"> Close </button>
-    </div>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ modalTitle }}</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{ modalBody }}</p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
 </ng-template>
 <ngx-loading [show]="loading"></ngx-loading>
 
 <div #scheduleModal class="schedule-modal">
-
   <!-- Modal content -->
   <div class="modal-content w-80 w-md-60">
     <!-- Model Header -->
     <h3 class="text-white w-100">
-      Pick Up Scheduling 
+      Pick Up Scheduling
       <div class="float-right">
         <span class="close" (click)="closeScheduleModal()">&times;</span>
       </div>
@@ -262,90 +321,136 @@
     <div class="modal-cal">
       <p class="font-weight-bold">Choose a pickup date</p>
 
-      <ngb-datepicker #dp [(ngModel)]="model" (navigate)="navigateEvent($event)" navigation="arrows" outsideDays="hidden" class="w-100" [markDisabled]="markDisabled"></ngb-datepicker>
-      
+      <ngb-datepicker
+        #dp
+        [(ngModel)]="model"
+        (navigate)="navigateEvent($event)"
+        navigation="arrows"
+        outsideDays="hidden"
+        class="w-100"
+        [markDisabled]="markDisabled"
+      ></ngb-datepicker>
     </div>
 
-    <div class="mt-2 mt-md-3   time-container bg-white">
+    <div class="mt-2 mt-md-3 time-container bg-white">
       <div class="w-100 font-weight mb-3">Shcedule pickup time</div>
 
       <div class="row">
         <div class="col-3 col-md-2 px-1 px-md-3" *ngFor="let time of times">
-          <button type="button" class="btn btn-outline-sc my-2 btn-sm" [ngClass]="{ 'time-selected': selectedTime ==  time.name }" (click)="selectedTime = time.name">{{ time.name }}</button>
+          <button
+            type="button"
+            class="btn btn-outline-sc my-2 btn-sm"
+            [ngClass]="{ 'time-selected': selectedTime == time.name }"
+            (click)="selectedTime = time.name"
+          >
+            {{ time.name }}
+          </button>
         </div>
       </div>
     </div>
 
-    <div class="mt-2 mt-md-3   time-container bg-white">
-      <div class="w-100 font-weight mb-3">Select to add material type you want to dispose</div>
+    <div class="mt-2 mt-md-3 time-container bg-white">
+      <div class="w-100 font-weight mb-3">
+        Select to add material type you want to dispose
+      </div>
 
       <div class="row">
         <div class="col-12 col-md-4 pl-0">
-          <select class="form-control border small-input" (change)="onSelectMaterial($event)" [(ngModel)]="materialSelect">
+          <select
+            class="form-control border small-input"
+            (change)="onSelectMaterial($event)"
+            [(ngModel)]="materialSelect"
+          >
             <option [ngValue]="null">Choose material class</option>
-            <option value="{{ material }}" *ngFor="let material of originalMaterials; let i = index"> {{ material }} </option>
+            <option
+              value="{{ material }}"
+              *ngFor="let material of originalMaterials; let i = index"
+            >
+              {{ material }}
+            </option>
           </select>
         </div>
 
         <div class="col-12 col-md-8">
           <div class="row">
-            <div class="col-6 col-md-4" *ngFor="let request of requestMaterials">
-              <i class="fa fa-times text-danger mr-2 fake-btn" aria-hidden="true" (click)="onRemoveMaterial( request )"></i> {{ request }}
+            <div
+              class="col-6 col-md-4"
+              *ngFor="let request of requestMaterials"
+            >
+              <i
+                class="fa fa-times text-danger mr-2 fake-btn"
+                aria-hidden="true"
+                (click)="onRemoveMaterial(request)"
+              ></i>
+              {{ request }}
             </div>
           </div>
-       
         </div>
       </div>
       <div class="row mt-3">
         <div class="form-group w-100">
-          <input type="text" class="form-control w-100" [(ngModel)]="requestDescription" placeholder="Kindly provide us with a brief desscription of the item(s) so we can serve you better.">
+          <input
+            type="text"
+            class="form-control w-100"
+            [(ngModel)]="requestDescription"
+            placeholder="Kindly provide us with a brief desscription of the item(s) so we can serve you better."
+          />
         </div>
       </div>
     </div>
 
-    <div class="mt-2 mt-md-3   time-container bg-white">
+    <div class="mt-2 mt-md-3 time-container bg-white">
       <div class="row">
         <div class="col-12">
           <label class="font-weight-bold">Comment</label>
         </div>
         <div class="col-12 col-md-10">
           <div class="form-group">
-            <input type="text" class="form-control small-input" [(ngModel)]="requestComment">
+            <input
+              type="text"
+              class="form-control small-input"
+              [(ngModel)]="requestComment"
+            />
           </div>
         </div>
         <div class="col-12 col-md-2 text-right text-md-left">
-          <button type="button" class="btn btn-primary solid small-input" (click)="requestPickup()" [disabled]="requestIncomplete()">Done</button>
+          <button
+            type="button"
+            class="btn btn-primary solid small-input"
+            (click)="requestPickup()"
+            [disabled]="requestIncomplete()"
+          >
+            Done
+          </button>
         </div>
       </div>
     </div>
-
   </div>
-
 </div>
 
-
 <div #sellBulk class="schedule-modal">
-
   <!-- Modal content -->
   <div class="modal-content w-80 w-md-60">
     <!-- Model Header -->
     <h3 class="text-white w-100">
-      Sell Now 
+      Sell Now
       <div class="float-right">
         <span class="close" (click)="closeSellBulkModal()">&times;</span>
       </div>
     </h3>
 
     <div class="mt-2 mt-md-3 time-container bg-white">
-      <div class="w-100 font-weight-bold sc-orange h2 mb-3 text-center">SELL YOUR BULKY MATERIALS NOW</div>
-      <div class="mx-5 w-100 font-weight-bold h3 mb-3">List it, get priced, get paid</div>
+      <div class="w-100 font-weight-bold sc-orange h2 mb-3 text-center">
+        SELL YOUR BULKY MATERIALS NOW
+      </div>
+      <div class="mx-5 w-100 font-weight-bold h3 mb-3">
+        List it, get priced, get paid
+      </div>
       <div class="mx-5 w-100 text-muted h4 mb-3">
-        List your out-of-use items for free, warehouse clearance, old factory equipments, machines, cars, trucks, batteries, containers etc. 
+        List your out-of-use items for free, warehouse clearance, old factory
+        equipments, machines, cars, trucks, batteries, containers etc.
       </div>
       <app-listing></app-listing>
-
     </div>
-
   </div>
-
 </div>

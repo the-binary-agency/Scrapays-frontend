@@ -3,39 +3,27 @@
     <div class="col-12 h3 mb-4">Assigned Requests</div>
     <div class="row" *ngFor="let req of assignedRequests">
       <div class="col-6 col-md-2">
-        <div class="bolder w-100">
-          ID
-        </div>
+        <div class="bolder w-100">ID</div>
         {{ req.id }}
       </div>
       <div class="col-6 col-md-2">
-        <div class="bolder w-100">
-          Producer ID
-        </div>
+        <div class="bolder w-100">Producer ID</div>
         {{ "0" + req.userID.split("+234")[1] }}
       </div>
       <div class="col-6 col-md-2">
-        <div class="bolder w-100">
-          Address
-        </div>
+        <div class="bolder w-100">Address</div>
         {{ req.address }}
       </div>
       <div class="col-6 col-md-2">
-        <div class="bolder w-100">
-          Materials
-        </div>
+        <div class="bolder w-100">Materials</div>
         {{ formatMaterials(req.materials) }}
       </div>
       <div class="col-6 col-md-2">
-        <div class="bolder w-100">
-          Schedule
-        </div>
+        <div class="bolder w-100">Schedule</div>
         {{ formatSchedule(req.schedule) }}
       </div>
       <div class="col-6 col-md-2">
-        <div class="bolder w-100">
-          Status
-        </div>
+        <div class="bolder w-100">Status</div>
         {{ req.status }}
       </div>
     </div>
@@ -48,54 +36,91 @@
   </div>
   <div class="gap-40"></div>
 
-  <div class="row font-weight-bold ml-2 h3">
-    Material Estimation
-  </div>
-
   <form>
     <div class="row">
       <div class="col-12 pl-0">
-        <div class="form-group">
-          <div class="position-relative d-inline-block">
-            <input
-              type="tel"
-              class="form-control w-auto"
-              name="producerID"
-              [(ngModel)]="producerPhone"
-              placeholder="Customer ID"
-              (focusout)="PhoneOnFocusOut($event)"
-              *ngIf="!producerName"
-            />
-            <div
-              class="form-control w-auto text-capitalize"
-              *ngIf="producerName"
-            >
-              <img
-                src="assets/images/icons/user-1.png"
-                alt="user icon"
-                class="h-100"
-              />&nbsp;
-              {{ producerName }}
+        <div class="row">
+          <div class="col-12 col-md-4 pl-md-0">
+            <div class="form-group">
+              <div class="position-relative d-inline-block w-100">
+                <input
+                  type="tel"
+                  class="form-control w-md-auto"
+                  name="producerID"
+                  [(ngModel)]="producerPhone"
+                  placeholder="Customer ID"
+                  (focusout)="PhoneOnFocusOut($event)"
+                  *ngIf="!producerName"
+                />
+                <div
+                  class="form-control w-md-auto text-capitalize"
+                  *ngIf="producerName"
+                >
+                  <img
+                    src="assets/images/icons/user-1.png"
+                    alt="user icon"
+                    class="h-100"
+                  />&nbsp;
+                  {{ producerName }}
+                </div>
+                <i
+                  class="fa fa-times-circle text-danger fake-btn name-cancel fa-lg"
+                  aria-hidden="true"
+                  *ngIf="producerName"
+                  (click)="clearProducer()"
+                ></i>
+              </div>
+              <i
+                class="fa fa-spinner fa-spin ml-2"
+                aria-hidden="true"
+                *ngIf="nameloading"
+              ></i
+              >&nbsp;
+              <span *ngIf="nameError && !nameloading" class="text-danger">{{
+                nameError
+              }}</span>
             </div>
-            <i
-              class="fa fa-times-circle text-danger fake-btn name-cancel fa-lg"
-              aria-hidden="true"
-              *ngIf="producerName"
-              (click)="clearProducer()"
-            ></i>
           </div>
-          <i
-            class="fa fa-spinner fa-spin ml-2"
-            aria-hidden="true"
-            *ngIf="nameloading"
-          ></i
-          >&nbsp;
-          <span *ngIf="nameError && !nameloading" class="text-danger">{{
-            nameError
-          }}</span>
+          <div class="col-12 col-md-8 mt-4 mt-md-0 pl-md-5">
+            <div class="row">
+              <div class="col-12 col-md-4 px-0 px-md-2" *ngIf="registerNew">
+                <div class="form-group">
+                  <input
+                    type="text"
+                    name="producerName"
+                    [(ngModel)]="newProducer.firstName"
+                    class="form-control"
+                    placeholder="Customer First Name"
+                  />
+                </div>
+              </div>
+              <div class="col-12 col-md-4 px-0 px-md-2" *ngIf="registerNew">
+                <div class="form-group ml-md-3">
+                  <input
+                    type="text"
+                    name="producerName"
+                    [(ngModel)]="newProducer.lastName"
+                    class="form-control"
+                    placeholder="Customer Last Name"
+                  />
+                </div>
+              </div>
+              <div class="col-12 align-items-center pb-4 pb-md-0">
+                <mat-checkbox
+                  [(ngModel)]="registerNew"
+                  name="check-new"
+                  class="h4 bolder"
+                  [disabled]="producerName != null"
+                >
+                  New User
+                </mat-checkbox>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-12 pl-0">
+      <div class="col-12 pl-3 pl-md-0">
+        <div class="row font-weight-bold ml-4 h3">Material Estimation</div>
         <div
           class="row"
           *ngFor="let material of collectionMaterials; let i = index"
@@ -115,9 +140,10 @@
               </select>
             </div>
           </div>
-          <div class="col-12 col-md">
+          <div class="col-12 col-md pl-0">
             <div class="form-group">
               <input
+                *ngIf="material.name != 'Composite'"
                 type="number"
                 class="form-control"
                 name="material-weight_{{ i }}"
@@ -126,9 +152,19 @@
                 (keyup)="weightChange($event.target.value, i)"
                 [disabled]="material.name == null"
               />
+              <input
+                *ngIf="material.name == 'Composite'"
+                type="number"
+                class="form-control"
+                name="material-weight_{{ i }}"
+                placeholder="Cost"
+                [(ngModel)]="material.cost"
+                (keyup)="weightChange($event.target.value, i)"
+                [disabled]="material.name == null"
+              />
             </div>
           </div>
-          <div class="col-12 col-md-3 text-right">
+          <div class="col-12 col-md-3 text-right pl-0">
             <div class="rounded-lg py-1 text-center bg-est text-white">
               Price Estimate <br />
               ₦{{ formatToCurrency(material.cost) }}
@@ -153,7 +189,7 @@
       </div>
       <div class="col-12 pl-0">
         <div class="row">
-          <div class="col-12 col-md pl-0">
+          <div class="col-12 col-md pl-md-0 pl-3">
             <div class="bg-est rounded text-white card-body">
               <p>Price Estimate per material class</p>
               <div class="row mb-4">
@@ -175,7 +211,14 @@
               <div class="row">
                 This price estimate is based on the price of &nbsp;
                 <span *ngFor="let material of materials; let i = index">
-                  {{ material.name }} at ₦{{ material.price }}/kg
+                  <span *ngIf="material.name == 'Composite'">
+                    {{ "a " + material.name + " material" }} at ₦{{
+                      material.cost
+                    }}
+                  </span>
+                  <span *ngIf="material.name != 'Composite'">
+                    {{ material.name }} at ₦{{ material.price }}/kg
+                  </span>
                   <span *ngIf="i + 1 < materials.length">,</span>&nbsp;
                   <span *ngIf="materials.length - i == 2">and</span>&nbsp;
                 </span>
@@ -186,7 +229,7 @@
             <button
               type="button"
               class="btn btn-primary px-1 btn-block solid mt-4 mt-md-0"
-              [disabled]="!formValidated()"
+              [disabled]="!cashFormValidated()"
               (click)="payWithCash()"
             >
               <img
@@ -199,7 +242,7 @@
             <button
               type="button"
               class="btn btn-primary px-1 btn-block solid"
-              [disabled]="!formValidated()"
+              [disabled]="!walletFormValidated()"
               (click)="payWithWallet()"
             >
               <img

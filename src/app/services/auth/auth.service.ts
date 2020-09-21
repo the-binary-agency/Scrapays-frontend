@@ -182,6 +182,10 @@ export class AuthService {
     return this.http.post(`${this.URL}/editMaterialPrices/${id}`, form);
   }
 
+  deleteMaterialPrices(id, form) {
+    return this.http.post(`${this.URL}/deleteMaterialPrices/${id}`, form);
+  }
+
   setMaterialPrices(id, form) {
     return this.http.post(`${this.URL}/setMaterialPrices/${id}`, form);
   }
@@ -244,5 +248,48 @@ export class AuthService {
 
   getCollections(phone) {
     return this.http.get(`${this.URL}/getCollections/${phone}`);
+  }
+
+  getAddressWithCoordinates(loc) {
+    return this.http.get(`${this.URL}/getAddressWithCoordinates/${loc}`);
+  }
+
+  getCollectionsHistory(users = "") {
+    return this.http.get(`${this.URL}/getCollectionsHistory${users}`);
+  }
+
+  getCollectionsHistoryWithQuery(phone, query = "") {
+    return this.http.get(
+      `${this.URL}/getCollectionsHistoryWithQuery/${phone}${query}`
+    );
+  }
+  getCollectorCollectionsHistoryWithQuery(phone, query = "") {
+    return this.http.get(
+      `${this.URL}/getCollectorCollectionsHistoryWithQuery/${phone}${query}`
+    );
+  }
+
+  getCollectorCollectionsHistory(phone) {
+    return this.http.get(`${this.URL}/getCollectorCollectionsHistory/${phone}`);
+  }
+
+  getProducerCollectionsHistory(phone) {
+    return this.http.get(`${this.URL}/getProducerCollectionsHistory/${phone}`);
+  }
+
+  getSingleScrap(id) {
+    return this.http.get(`${this.URL}/getSingleScrap/${id}`);
+  }
+
+  getAllContactMessages(id) {
+    return this.http.get(`${this.URL}/getAllContactMessages`);
+  }
+
+  replyContactMessage(form) {
+    return this.http.post(`${this.URL}/replyContactMessage`, form);
+  }
+
+  deleteContactMessage(id) {
+    return this.http.delete(`${this.URL}/deleteContactMessage/${id}`);
   }
 }

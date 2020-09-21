@@ -1,0 +1,85 @@
+.form-control {
+  background: #f3f1f1;
+  border: 1px solid #888686;
+}
+table {
+  width: 100%;
+  font-weight: 600 !important;
+}
+
+table,
+.table,
+thead,
+tr,
+td {
+  border-top: none !important;
+}
+.img-icon {
+  float: left;
+  width: 36px;
+  height: auto;
+}
+.pop-icon {
+  width: 89px;
+  height: auto;
+}
+td:not(.first) {
+  vertical-align: middle;
+  text-align: center;
+}
+.line-h-s {
+  line-height: 17px;
+  text-align: left;
+}
+.pop-tit {
+  font-size: 16px;
+}
+.pop-bod {
+  font-size: 14px;
+}
+.mat-table {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.inner-addon {
+  position: relative;
+}
+
+/* style icon */
+.inner-addon .right-icon {
+  position: absolute;
+  padding-top: 3px;
+  padding-right: 7px;
+}
+
+/* align icon */
+.left-addon .right-icon {
+  left: 0px;
+}
+.right-addon .right-icon {
+  top: 4px;
+  right: 16px;
+  transform: rotate(20deg);
+}
+
+/* add padding  */
+.left-addon input {
+  /* padding-left: 30px; */
+}
+.right-addon input {
+  padding-right: 29px;
+}
+
+.tiny-input {
+  display: block;
+  width: 90%;
+  background: #f3f1f1;
+  border: 1px solid #dede;
+  box-sizing: border-box;
+  border-radius: 5px;
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 9px;
+  color: #495057;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}

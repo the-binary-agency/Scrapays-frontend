@@ -23,7 +23,16 @@ export class CollectMaterialsComponent implements OnInit {
 
   totalCost = "0.00";
   totalTonnage = "0.00";
-  producerName: string;
+  producerName: string = null;
+  registerNew = false;
+  newProducer = {
+    firstName: "",
+    lastName: "",
+  };
+  loc = {
+    lat: 0,
+    lng: 0,
+  };
   pickupID: string;
   nameloading = false;
   Scrap: any = {};
@@ -37,11 +46,12 @@ export class CollectMaterialsComponent implements OnInit {
   materials = [];
   assignedRequests = [];
   collectionMaterials = [
-    { name: null, price: "", cost: "0.00", weight: "0.00" },
+    { name: null, price: "0.00", cost: "0.00", weight: "0.00" },
   ];
   materialSelect: string = null;
 
   ngOnInit(): void {
+    this.initiateTracking();
     this.getPrices();
     this.getAssignedRequests();
   }
@@ -52,6 +62,13 @@ export class CollectMaterialsComponent implements OnInit {
         for (let price of data.prices) {
           this.materials.push(price);
         }
+        this.materials.push({
+          id: 500,
+          name: "Composite",
+          price: 0.0,
+          cost: 0.0,
+          weight: 0.0,
+        });
       },
       (error) => console.log(error)
     );
@@ -64,6 +81,15 @@ export class CollectMaterialsComponent implements OnInit {
       },
       (error) => console.log(error)
     );
+  }
+
+  initiateTracking() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.watchPosition((position) => {
+        this.loc.lat = position.coords.latitude;
+        this.loc.lng = position.coords.longitude;
+      });
+    }
   }
 
   PhoneOnFocusOut(event) {
@@ -90,23 +116,32 @@ export class CollectMaterialsComponent implements OnInit {
 
   weightChange(weight: any, i) {
     let selected = this.collectionMaterials[i];
-    let tempPrice: number;
-
-    if (weight) {
-      tempPrice = parseFloat(selected.price) * parseFloat(weight);
-    } else {
-      tempPrice = parseFloat(selected.price) * parseFloat("0");
-    }
-    let rawCost = tempPrice.toString();
-    selected.cost = rawCost;
-
+    let tempCost = 0;
     let temptotal = 0;
     let tempTotalTonnage = 0;
+
+    if (selected.name == "Composite") {
+      if (weight) {
+        tempCost += parseFloat(weight);
+      } else {
+        tempCost = parseFloat("0.00");
+        weight = "0";
+      }
+    } else {
+      if (weight) {
+        tempCost = parseFloat(selected.price) * parseFloat(weight);
+      } else {
+        tempCost = parseFloat(selected.price) * parseFloat("0.00");
+      }
+    }
+    selected.cost = tempCost.toString();
+
     for (let coll of this.collectionMaterials) {
+      console.log(coll.cost);
+
       temptotal += parseFloat(coll.cost);
       tempTotalTonnage += parseFloat(coll.weight);
     }
-
     this.totalCost = temptotal.toString();
     this.totalTonnage = tempTotalTonnage.toString();
   }
@@ -136,52 +171,139 @@ export class CollectMaterialsComponent implements OnInit {
     this.collectionMaterials.splice(i, 1);
   }
 
-  formValidated() {
-    if (this.producerName == null) {
-      return false;
-    }
-    for (let mat of this.collectionMaterials) {
-      if (mat.name == "" || mat.weight == "") {
+  cashFormValidated() {
+    if (this.registerNew) {
+      for (let mat of this.collectionMaterials) {
+        if (mat.name == "" || mat.weight == "" || mat.weight == "0.00") {
+          return false;
+        }
+      }
+      if (this.newProducer.firstName == "" || this.newProducer.lastName == "") {
         return false;
       }
+      return true;
+    } else {
+      if (this.producerName == null) {
+        return false;
+      }
+      for (let mat of this.collectionMaterials) {
+        if (mat.name == "Composite") {
+          if (mat.name == "" || mat.cost == "" || mat.cost == "0") {
+            return false;
+          }
+        } else {
+          if (mat.name == "" || mat.weight == "" || mat.weight == "0.00") {
+            return false;
+          }
+        }
+      }
+      return true;
     }
-    return true;
+  }
+
+  walletFormValidated() {
+    if (this.registerNew) {
+      return false;
+    } else {
+      if (this.producerName == null) {
+        return false;
+      }
+      for (let mat of this.collectionMaterials) {
+        if (mat.name == "Composite") {
+          if (mat.name == "" || mat.cost == "" || mat.cost == "0") {
+            return false;
+          }
+        } else {
+          if (mat.name == "" || mat.weight == "" || mat.weight == "0.00") {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
   }
 
   payWithCash() {
     this.loading = true;
-    var form = this.processForm("Cash");
-    this.api.listCollectedScrap(form).subscribe(
-      (data) => this.handleSuccess(data),
-      (error) => this.handleError(error)
+    var form: any = this.processForm("Cash");
+    this.Auth.getAddressWithCoordinates(JSON.stringify(this.loc)).subscribe(
+      (res: any) => {
+        if (this.registerNew) {
+          form.newUser.requestAddress = res.address;
+        } else {
+          form.requestAddress = res.address;
+        }
+        this.api.listCollectedScrap(form).subscribe(
+          (data) => this.handleSuccess(data),
+          (error) => this.handleError(error)
+        );
+      },
+      (err) => this.handleError(err)
     );
   }
   payWithWallet() {
     this.loading = true;
-    var form = this.processForm("Wallet");
-    this.api.listCollectedScrap(form).subscribe(
-      (data) => this.handleSuccess(data),
-      (error) => this.handleError(error)
+    var form: any = this.processForm("Wallet");
+    this.Auth.getAddressWithCoordinates(JSON.stringify(this.loc)).subscribe(
+      (res: any) => {
+        if (this.registerNew) {
+          form.newUser.requestAddress = res.address;
+        } else {
+          form.requestAddress = res.address;
+        }
+        this.api.listCollectedScrap(form).subscribe(
+          (data) => this.handleSuccess(data),
+          (error) => this.handleError(error)
+        );
+      },
+      (err) => this.handleError(err)
     );
   }
 
   clearProducer() {
-    this.producerName = "";
+    this.producerName = null;
     this.producerPhone = "";
+    this.newProducer = {
+      firstName: "",
+      lastName: "",
+    };
+    this.loc = {
+      lat: 0,
+      lng: 0,
+    };
   }
 
   processForm(mode: string) {
-    const formData = {
-      mode: mode,
-      producerPhone: this.producerPhone,
-      collectorID: this.token.phone,
-      materials: this.collectionMaterials,
-      totalCost: this.totalCost,
-      totalTonnage: this.totalTonnage,
-      pickupID: this.pickupID,
-    };
-
-    return formData;
+    if (this.registerNew == false) {
+      const formData = {
+        mode: mode,
+        producerPhone: this.producerPhone,
+        collectorID: this.token.phone,
+        materials: this.collectionMaterials,
+        totalCost: this.totalCost,
+        totalTonnage: this.totalTonnage,
+        pickupID: this.pickupID,
+        requestAddress: "",
+      };
+      return formData;
+    } else {
+      let formData = {
+        mode: mode,
+        producerPhone: this.producerPhone,
+        collectorID: this.token.phone,
+        materials: this.collectionMaterials,
+        totalCost: this.totalCost,
+        totalTonnage: this.totalTonnage,
+        pickupID: this.pickupID,
+        newUser: {
+          firstName: this.newProducer.firstName,
+          lastName: this.newProducer.lastName,
+          phone: this.producerPhone,
+          requestAddress: "",
+        },
+      };
+      return formData;
+    }
   }
 
   handleSuccess(data) {

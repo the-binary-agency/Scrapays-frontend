@@ -131,20 +131,31 @@
               {{ newMatImage.name }}
             </button>
           </div>
-          <button
-            type="submit"
-            class="btn btn-primary solid float-right"
-            [disabled]="!formValid()"
-          >
-            Done
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger solid float-right mr-3"
-            (click)="cancelMaterialEdit()"
-          >
-            Cancel Edit
-          </button>
+          <div class="row justify-content-between">
+            <button
+              type="button"
+              class="btn btn-danger solid mr-3"
+              (click)="deleteMaterial()"
+            >
+              <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+            </button>
+            <div>
+              <button
+                type="button"
+                class="btn btn-danger solid mr-3"
+                (click)="cancelMaterialEdit()"
+              >
+                Cancel Edit
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary solid"
+                [disabled]="!formValid()"
+              >
+                Done
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     </div>

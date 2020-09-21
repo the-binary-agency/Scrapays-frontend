@@ -34,9 +34,7 @@
             <a mat-list-item routerLink="/dashboard/enterprises">
               Enterprises
             </a>
-            <a mat-list-item routerLink="/dashboard/households">
-              Households
-            </a>
+            <a mat-list-item routerLink="/dashboard/households"> Households </a>
           </mat-nav-list>
           <!-- <div class="row"></div>
           <div class="row"></div> -->
@@ -111,36 +109,55 @@
           Category
         </div>
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-6 px-md-0">
         <a
           class="btn sc-orange unautomate-alert mt-5"
           routerLink="/dashboard/pickup-requests"
         >
-          New Pickup Request ({{ PickupCount }})</a
+          New Pickup Request
+          <span *ngIf="PickupCount > 0">({{ PickupCount }})</span></a
         ><br />
-        <img src="assets/images/icons/mover-truck.png" alt="truck icon" />
+        <img
+          src="assets/images/icons/mover-truck.png"
+          alt="truck icon"
+          class="xx-small"
+        />
         <br />
         <button
           type="button"
-          class="btn btn-primary btn-sm solid pl-1 pr-2"
+          class="btn btn-primary btn-sm solid pl-1 pr-2 text-nowrap mb-2 w-100"
           routerLink="/dashboard/edit-materials"
         >
           <img
             src="assets/images/icons/recycle1.png"
-            class="mr-2"
+            class=""
             alt="recycle icon"
           />
           Edit Material Class
         </button>
         <br />
-        <br />
-        <button type="button" class="btn btn-primary btn-sm solid pl-1 pr-2">
+        <button
+          type="button"
+          class="btn btn-primary btn-sm solid pl-1 pr-2 text-nowrap mb-2 w-100"
+        >
           <img
             src="assets/images/icons/calculator1.png"
-            class="mr-2"
+            class=""
             alt="calculator icon"
           />
-          Material Estimation
+          Material Estimation</button
+        ><br />
+        <button
+          type="button"
+          class="btn btn-white btn-sm solid pl-1 pr-2 text-nowrap mb-2 w-100 small"
+          (click)="openCollHistModal()"
+        >
+          <img
+            src="assets/images/icons/clock-history.png"
+            class=""
+            alt="history icon"
+          />
+          View Collection history
         </button>
       </div>
     </div>
@@ -173,7 +190,7 @@
               [chartType]="lineChartType"
               (chartHover)="chartHovered($event)"
               (chartClick)="chartClicked($event)"
-              style="height: 100%px !important;"
+              style="height: 100%px !important"
             ></canvas>
           </div>
         </div>
@@ -186,8 +203,8 @@
         <span class="mt-1">Listing Request</span>
         <select class="custom-select w-auto float-right">
           <option value="1" selected>This Month</option>
-          <option value="2">This Week </option>
-          <option value="3">This Year </option>
+          <option value="2">This Week</option>
+          <option value="3">This Year</option>
         </select>
         <span class="float-right text-blue mt-1 mr-1">Show:</span>
       </div>
@@ -213,23 +230,236 @@
         <span class="mt-2">Revenue</span>
         <select class="custom-select w-auto float-right">
           <option value="1" selected>This Month</option>
-          <option value="2">This Week </option>
-          <option value="3">This Year </option>
+          <option value="2">This Week</option>
+          <option value="3">This Year</option>
         </select>
         <span class="float-right text-blue mt-1 mr-1"></span>
       </div>
       <div class="card-body p-0">
         <div class="card-text pl-4">
           Total Revenue Generated <br /><br />
-          <span class="badge bg-orange text-light h5">₦ 300,000,000</span
+          <span class="badge bg-orange text-light h5"
+            >₦
+            {{
+              matHist.totalcost ? formatToCurrency(matHist.totalcost) : 0
+            }}</span
           ><br /><br />
           Total Tonnage recovered <br /><br />
-          <span class="badge bg-orange text-light h5"> 10,000,000 KG</span>
+          <span class="badge bg-orange text-light h5">
+            {{
+              matHist.totaltonnage ? formatToCurrency(matHist.totaltonnage) : 0
+            }}
+            KG</span
+          >
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #collHist let-modal>
+  <div class="modal-body pt-1">
+    <div class="row justify-content-between">
+      <div>
+        <span class="badge bg-orange text-white p-2 h-wrap mt-4">
+          Collection History
+        </span>
+        <i
+          class="fa fa-circle-o-notch fa-spin fa-lg ml-4"
+          aria-hidden="true"
+          *ngIf="historyLoading"
+        ></i>
+      </div>
+      <div class="w-wrap text-right">
+        <span
+          aria-hidden="true"
+          class="text-danger text-right fake-btn"
+          (click)="modal.dismiss('Cross click')"
+          >&times;</span
+        ><br />
+        <div class="text-right">
+          <span class="text-right text-blue mt-1 mr-1">Show:</span>
+          <select
+            class="custom-select custom-select-sm w-auto text-right border-0"
+          >
+            <option value="1" selected>Monthly</option>
+            <option value="2">Weekly</option>
+            <option value="3">Yearly</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <ul class="nav nav-pills nav-fill mb-3 mt-4" id="pills-tab" role="tablist">
+      <li class="nav-item">
+        <a
+          class="nav-link active"
+          id="pills-home-tab"
+          data-toggle="pill"
+          href="#pills-home"
+          role="tab"
+          aria-controls="pills-home"
+          aria-selected="true"
+          (click)="getCollectionshistory('Enterprise')"
+          >Enterprise</a
+        >
+      </li>
+      <li class="nav-item mx-4">
+        <a
+          class="nav-link"
+          id="pills-profile-tab"
+          data-toggle="pill"
+          href="#pills-profile"
+          role="tab"
+          aria-controls="pills-profile"
+          aria-selected="false"
+          (click)="getCollectionshistory('Household')"
+          >Household</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="pills-contact-tab"
+          data-toggle="pill"
+          href="#pills-contact"
+          role="tab"
+          aria-controls="pills-contact"
+          aria-selected="false"
+          (click)="getCollectionshistory()"
+          >Collectors</a
+        >
+      </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+      <div
+        class="tab-pane fade show active"
+        id="pills-home"
+        role="tabpanel"
+        aria-labelledby="pills-home-tab"
+      >
+        <div class="bb-green w-wrap">
+          <span class="bolder h5">Total Tonnage Disposed:</span>
+          &nbsp;
+          <span class="sc-green"
+            >{{
+              matHist.totaltonnage ? matHist.totaltonnage : 0
+            }}
+            &nbsp;kg</span
+          >
+        </div>
+        <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
+          <div *ngFor="let mat of matHist.materials">
+            {{ mat.name + ": " + mat.weight }} kg <&nbsp;
+          </div>
+          <br />
+        </div>
+        <div class="bb-green w-wrap">
+          <span class="bolder h5">Total amount paid out:</span>
+          &nbsp;
+          <span class="sc-green"
+            >₦
+            {{
+              formatToCurrency(matHist.totalcost)
+                ? formatToCurrency(matHist.totalcost)
+                : 0
+            }}
+            &nbsp;</span
+          >
+        </div>
+        <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
+          <div *ngFor="let mat of matHist.materials">
+            {{ mat.name + ": ₦ " + formatToCurrency(mat.cost) }}&nbsp;<
+          </div>
+          <br />
+        </div>
+      </div>
+      <div
+        class="tab-pane fade"
+        id="pills-profile"
+        role="tabpanel"
+        aria-labelledby="pills-profile-tab"
+      >
+        <div class="bb-green w-wrap">
+          <span class="bolder h5">Total Tonnage Disposed:</span>
+          &nbsp;
+          <span class="sc-green"
+            >{{
+              matHist.totaltonnage ? matHist.totaltonnage : 0
+            }}
+            &nbsp;kg</span
+          >
+        </div>
+        <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
+          <div *ngFor="let mat of matHist.materials">
+            {{ mat.name + ": " + mat.weight }} kg <&nbsp;
+          </div>
+          <br />
+        </div>
+        <div class="bb-green w-wrap">
+          <span class="bolder h5">Total amount paid out:</span>
+          &nbsp;
+          <span class="sc-green"
+            >₦
+            {{
+              formatToCurrency(matHist.totalcost)
+                ? formatToCurrency(matHist.totalcost)
+                : 0
+            }}
+            &nbsp;</span
+          >
+        </div>
+        <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
+          <div *ngFor="let mat of matHist.materials">
+            {{ mat.name + ": ₦ " + formatToCurrency(mat.cost) }}&nbsp;<
+          </div>
+          <br />
+        </div>
+      </div>
+      <div
+        class="tab-pane fade"
+        id="pills-contact"
+        role="tabpanel"
+        aria-labelledby="pills-contact-tab"
+      >
+        <div class="bb-green w-wrap">
+          <span class="bolder h5">Total Tonnage Disposed:</span>
+          &nbsp;
+          <span class="sc-green"
+            >{{
+              matHist.totaltonnage ? matHist.totaltonnage : 0
+            }}
+            &nbsp;kg</span
+          >
+        </div>
+        <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
+          <div *ngFor="let mat of matHist.materials">
+            {{ mat.name + ": " + mat.weight }} kg <&nbsp;
+          </div>
+          <br />
+        </div>
+        <div class="bb-green w-wrap">
+          <span class="bolder h5">Total amount paid out:</span>
+          &nbsp;
+          <span class="sc-green"
+            >₦
+            {{
+              formatToCurrency(matHist.totalcost)
+                ? formatToCurrency(matHist.totalcost)
+                : 0
+            }}
+            &nbsp;</span
+          >
+        </div>
+        <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
+          <div *ngFor="let mat of matHist.materials">
+            {{ mat.name + ": ₦ " + formatToCurrency(mat.cost) }}&nbsp;<
+          </div>
+          <br />
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
 
 <ng-template #content let-modal>
   <div class="modal-header">

@@ -27,14 +27,14 @@ jQuery(function ($) {
   /* ----------------------------------------------------------- */
   /*  Style Switcher
   /* ----------------------------------------------------------- */
-    $(document).ready(function () {
-      $('.style-switch-button').click(function () {
-        $('.style-switch-wrapper').toggleClass('active');
-      });
-      $('a.close-styler').click(function () {
-        $('.style-switch-wrapper').removeClass('active');
-      });
+  $(document).ready(function () {
+    $('.style-switch-button').click(function () {
+      $('.style-switch-wrapper').toggleClass('active');
     });
+    $('a.close-styler').click(function () {
+      $('.style-switch-wrapper').removeClass('active');
+    });
+  });
 
 
 
@@ -172,20 +172,20 @@ jQuery(function ($) {
     margin: 10,
     responsiveClass: true,
     responsive:{
-        0:{
-            items:2,
-            nav:true
-        },
-        400:{
-            items:2,
-            nav:false
-        },
-        768:{
-            items:3,
-            nav:true,
-        }
+      0:{
+        items:2,
+        nav:true
+      },
+      400:{
+        items:2,
+        nav:false
+      },
+      768:{
+        items:3,
+        nav:true,
+      }
     }
-  } )
+  } );
   
   $( '.owl-carousel' ).owlCarousel( {
     autoplay:true,
@@ -195,35 +195,35 @@ jQuery(function ($) {
     nav:true,
     responsiveClass:true,
     responsive:{
-        0:{
-            items:2,
-            loop:true,
-            nav:true
-        },
-        480:{
-            items:3,
-            loop:true,
-            nav:true
-        },
-        768:{
-            items:3,
-            loop:true,
-            nav:true,
-        }
+      0:{
+        items:2,
+        loop:true,
+        nav:true
+      },
+      480:{
+        items:3,
+        loop:true,
+        nav:true
+      },
+      768:{
+        items:3,
+        loop:true,
+        nav:true,
+      }
     }
-})
+  });
 
   /* ----------------------------------------------------------- */
   /*  Flex slider
   /* ----------------------------------------------------------- */
 
   //Second item slider
-    $('.flexSlideshow').flexslider({
-      animation: 'fade',
-      controlNav: false,
-      directionNav: true,
-      slideshowSpeed: 8000
-    });
+  $('.flexSlideshow').flexslider({
+    animation: 'fade',
+    controlNav: false,
+    directionNav: true,
+    slideshowSpeed: 8000
+  });
 
   //Portfolio item slider
   $(window).load(function () {
@@ -321,60 +321,60 @@ jQuery(function ($) {
   /* ----------------------------------------------------------- */
 
 
-var images = ["home-scrap-carousel-6.png", "home-scrap-carousel-3.png", "home-scrap-carousel-7.png", "home-scrap-carousel-1.png", "home-scrap-carousel-2.png", "home-scrap-carousel-4.png", "home-scrap-carousel-5.png"];
-    $(function () {
-        var i = 0;
-        $("#dvImage").css("background-image", "url(assets/images/carousels/" + images[i] + ")");
-        setInterval(function () {
-            i++;
-            if (i == images.length) {
-                i = 0;
-            }
-            $("#dvImage").fadeOut("slow", function () {
-                $(this).css("background-image", "url(assets/images/carousels/" + images[i] + ")");
-                $(this).fadeIn("slow");
-            });
-        }, 5000);
-    });
+  var images = ['home-scrap-carousel-6.png', 'home-scrap-carousel-3.png', 'home-scrap-carousel-7.png', 'home-scrap-carousel-1.png', 'home-scrap-carousel-2.png', 'home-scrap-carousel-4.png', 'home-scrap-carousel-5.png'];
+  $(function () {
+    var i = 0;
+    $('#dvImage').css('background-image', 'url(assets/images/carousels/' + images[i] + ')');
+    setInterval(function () {
+      i++;
+      if (i == images.length) {
+        i = 0;
+      }
+      $('#dvImage').fadeOut('slow', function () {
+        $(this).css('background-image', 'url(assets/images/carousels/' + images[i] + ')');
+        $(this).fadeIn('slow');
+      });
+    }, 5000);
+  });
 
   $( '#loginModalToggler' ).click( function () {
-    $( '#loginModal' ).show()
+    $( '#loginModal' ).show();
   } );
   $( '.loginModalCloser' ).click( function () {
-    $( '#loginModal' ).hide()
+    $( '#loginModal' ).hide();
   } );
 
   $( '#signupModalToggler' ).click( function () {
-    $( '#signupModal' ).show()
+    $( '#signupModal' ).show();
   } );
   $( '.signupModalCloser' ).click( function () {
-    $( '#signupModal' ).hide()
+    $( '#signupModal' ).hide();
   } );
 
   $( '.notificationsModalToggler' ).click( function () {
-    $( '.notificationsModal' ).show()
+    $( '.notificationsModal' ).show();
   } );
   $( '.notificationsModalCloser' ).click( function () {
-    $( '#notificationsModal' ).hide()
+    $( '#notificationsModal' ).hide();
   } );
   $( '.notificationsModalCloser2' ).click( function () {
-    $( '#notificationsModal' ).hide()
+    $( '#notificationsModal' ).hide();
   } );
   $( '.notificationsModalCloser3' ).click( function () {
-    $( '#notificationsModal' ).hide()
+    $( '#notificationsModal' ).hide();
   } );
 
   $( '.modal-link' ).click( function () {
-    $( '#loginModal' ).hide()
-    $( '#signupModal' ).hide()
-  })
+    $( '#loginModal' ).hide();
+    $( '#signupModal' ).hide();
+  });
 
   $( window ).click( function ( event ){
-    if (  '#' + event.target.id == $( '#loginModal' ).selector || '#' + event.target.id == $( '#signupModal' ).selector || '#' + event.target.id == $( '#notificationsModal' ).selector ) {
-      $( '#loginModal' ).hide()
-      $( '#signupModal' ).hide()
-      $( '#notificationsModal' ).hide()
+    if ( '#' + event.target.id == $( '#loginModal' ).selector || '#' + event.target.id == $( '#signupModal' ).selector || '#' + event.target.id == $( '#notificationsModal' ).selector ) {
+      $( '#loginModal' ).hide();
+      $( '#signupModal' ).hide();
+      $( '#notificationsModal' ).hide();
     }
-  })
+  });
 
 } );

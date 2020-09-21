@@ -8,6 +8,7 @@ import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { Router } from "@angular/router";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 export interface Pickup {
   id: string;
@@ -29,6 +30,7 @@ export class PickupRequestsComponent implements OnInit {
   displayedColumns: string[] = [
     "id",
     "userID",
+    "producerName",
     "assignedCollector",
     "address",
     "materials",
@@ -40,12 +42,14 @@ export class PickupRequestsComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild("assignModal") private assignModal;
   selection = new SelectionModel<Pickup>(true, []);
 
   constructor(
     private api: ApiService,
     private Auth: AuthService,
     private nav: NavService,
+    private modal: NgbModal,
     private token: TokenService,
     private router: Router
   ) {}
@@ -58,6 +62,10 @@ export class PickupRequestsComponent implements OnInit {
   deleteLoading: boolean;
   collectorToAssign: any = {};
   loading: boolean;
+  assignNotification = {
+    title: "",
+    body: "",
+  };
 
   ngOnInit(): void {
     this.getPickups();
@@ -120,7 +128,7 @@ export class PickupRequestsComponent implements OnInit {
 
   getCollectorToAssign() {
     let collID = this.router.url.split("assign_to_");
-    if (collID) {
+    if (collID[1]) {
       let form = this.processCollForm(collID[1]);
       this.Auth.getCollectorWithLog(form).subscribe(
         (res) => this.handleCollFormResponse(res),
@@ -146,17 +154,20 @@ export class PickupRequestsComponent implements OnInit {
   }
 
   assignToCollector(pickup) {
-    if (pickup.assignedCollector == null) {
-      this.loading = true;
-      let form = this.processAssignForm(pickup);
-      this.Auth.assignToCollector(form).subscribe(
-        (res) => this.handleAssignResponse(res),
-        (err) => this.handleAssignError(err)
-      );
+    if (this.collectorToAssign.id) {
+      if (pickup.assignedCollector == null) {
+        this.loading = true;
+        let form = this.processAssignForm(pickup);
+        this.Auth.assignToCollector(form).subscribe(
+          (res) => this.handleAssignResponse(res),
+          (err) => this.handleAssignError(err)
+        );
+      }
     }
   }
 
   handleAssignResponse(res) {
+    this.showAssignAlert(res);
     this.getPickups();
   }
 
@@ -250,5 +261,11 @@ export class PickupRequestsComponent implements OnInit {
       return;
     }
     this.Pickups.forEach((t) => (t.checked = checked));
+  }
+
+  showAssignAlert(res) {
+    this.assignNotification.title = "Success";
+    this.assignNotification.body = res;
+    this.modal.open(this.assignModal, { centered: true, size: "md" });
   }
 }

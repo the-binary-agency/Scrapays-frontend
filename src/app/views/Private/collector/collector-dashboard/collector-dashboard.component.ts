@@ -24,6 +24,7 @@ import { EnvironmentService } from "src/app/services/env/environment.service";
   styleUrls: ["./collector-dashboard.component.css"],
 })
 export class CollectorDashboardComponent implements OnInit {
+  @ViewChild("collHist") private collHist;
   constructor(
     private formBuilder: FormBuilder,
     private modal: NgbModal,
@@ -48,6 +49,8 @@ export class CollectorDashboardComponent implements OnInit {
   CollectedScrap: any = [];
   producerPhone: string;
   totalTonnage: number = 0;
+  historyLoading: boolean;
+  matHist: any = { materials: [] };
 
   public loading = false;
   materials = [];
@@ -58,6 +61,7 @@ export class CollectorDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.getUser();
     this.getPrices();
+    this.getCollectionshistory();
   }
 
   initiateTracking() {
@@ -97,6 +101,11 @@ export class CollectorDashboardComponent implements OnInit {
         for (let price of data.prices) {
           this.materials.push(price);
         }
+        this.materials.push({
+          id: 500,
+          name: "Composite",
+          image: "composite-icon.png",
+        });
         this.displayMaterials();
       },
       (error) => console.log(error)
@@ -251,5 +260,30 @@ export class CollectorDashboardComponent implements OnInit {
       classes["border-bottom"] = true;
     }
     return classes;
+  }
+
+  openCollHistModal() {
+    this.modal.open(this.collHist, { centered: true, size: "lg" });
+  }
+
+  getCollectionshistory() {
+    this.historyLoading = true;
+    this.Auth.getCollectorCollectionsHistory(this.token.phone).subscribe(
+      (res: any) => {
+        this.matHist = res.history;
+        this.historyLoading = false;
+      },
+      (err) => {
+        this.historyLoading = false;
+        console.log(err);
+      }
+    );
+  }
+
+  formatToCurrency(amount) {
+    if (amount)
+      return parseFloat(amount)
+        .toFixed(2)
+        .replace(/\d(?=(\d{3})+\.)/g, "$&,");
   }
 }

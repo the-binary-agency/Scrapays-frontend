@@ -1,21 +1,23 @@
-<div class="dashboard-body pt-5 p-1 p-md-4">
+<div class="dashboard-body pt-5 p-1 py-md-4 px-md-0">
   <div class="row">
-    <div class="col-12 mb-5">
-      <span class="h3 text-primary ml-2 bb-blue">Overview</span>
+    <div class="col-12 mb-2">
+      <div class="w-wrap">
+        <span class="h5 text-primary ml-2 bb-blue">Overview</span>
+      </div>
     </div>
-    <div class="col-12 col-md-7">
+    <div class="col-12 col-md-6 px-md-0">
       <div class="row h-100">
-        <div class="col-12 col-md-4 px-0 px-md-2 mb-4">
+        <div class="col-12 col-md-4 px-0 px-md-2 mb-2">
           <div class="card h-100 bg-orange text-white rounded-card">
-            <div class="card-body">
+            <div class="card-body px-md-2 pb-md-0 pb-xl-3">
               <div class="card-title">
                 <img
                   src="assets/images/icons/weight-icon.png"
                   alt="weight icon"
                 />
               </div>
-              <span class="display-4">
-                {{ totalTonnage }}
+              <span class="display-6">
+                {{ totalTonnage.toFixed(2) }}
               </span>
               KG <br />
               Total weight of materials disposed
@@ -23,9 +25,9 @@
           </div>
         </div>
 
-        <div class="col-12 col-md-8 px-0 px-md-4 mb-4">
+        <div class="col-12 col-md-8 px-0 px-md-2 mb-2">
           <div class="card h-100 rounded-card">
-            <div class="card-body px-0 pl-md-3 pr-md-2">
+            <div class="card-body px-0 p-md-2 d-flex align-items-center">
               <div class="row">
                 <div class="col-12 text-center px-0">
                   <div class="card-title row">
@@ -71,7 +73,7 @@
                       src="{{ URL }}/storage/material_list_images/{{
                         display.image
                       }}"
-                      alt="metal icon"
+                      alt="mat icon"
                       *ngIf="display"
                     />
                     <span
@@ -88,7 +90,7 @@
           </div>
         </div>
 
-        <div class="col-12 px-0 px-md-4 mb-4">
+        <div class="col-12 px-0 px-md-2 mb-4">
           <div class="card shadow-sm h-100">
             <div class="card-header bg-white">
               <span class="font-weight-bold mt-3"
@@ -99,13 +101,13 @@
               <select
                 class="custom-select custom-select-sm w-auto float-right border-0"
               >
-                <option value="1" selected> Monthly </option>
-                <option value="2"> Weekly </option>
-                <option value="3"> Yearly </option>
+                <option value="1" selected>Monthly</option>
+                <option value="2">Weekly</option>
+                <option value="3">Yearly</option>
               </select>
               <span class="float-right text-blue mt-1 mr-1">Show:</span>
             </div>
-            <div class="card-body">
+            <div class="card-body p-md-1">
               <div class="chart-wrapper">
                 <canvas
                   baseChart
@@ -118,7 +120,7 @@
                   [chartType]="lineChartType"
                   (chartHover)="chartHovered($event)"
                   (chartClick)="chartClicked($event)"
-                  style="height: 100%px !important;"
+                  style="height: 100%px !important"
                 ></canvas>
               </div>
             </div>
@@ -126,41 +128,56 @@
         </div>
       </div>
     </div>
-    <div class="col-12 col-md-5 px-2 px-md-4 mb-4">
+    <div class="col-12 col-md-2 px-md-0 pt-md-5">
+      <button
+        type="button"
+        class="btn btn-white btn-sm solid pl-1 pr-2 text-nowrap mb-2 w-100 small btn-smol"
+      >
+        <img
+          src="assets/images/icons/note.png"
+          class="note-icon"
+          alt="note icon"
+        />
+        View Collection Log</button
+      ><br />
+      <button
+        type="button"
+        class="btn btn-primary btn-sm solid px-1 pr-2 text-nowrap mb-2 w-100 btn-smol"
+        (click)="openCollHistModal()"
+      >
+        <img
+          src="assets/images/icons/clock-history.png"
+          class=""
+          alt="history icon"
+        />
+        View Collection history
+      </button>
+    </div>
+    <div class="col-12 col-md-4 px-2 pr-md-2 mb-4 pl-md-1">
       <div class="card h-100 bg-orange text-white rounded-card">
-        <div class="card-header bg-transparent">
-          Wallet
-        </div>
-        <div class="card-body">
-          <div class="row mb-5">
-            <div class="h5 bb-white">
-              Total Earnings
-            </div>
-            <div class="h4 w-100">
-              ₦ 0
-            </div>
+        <div class="card-header bg-transparent">Wallet</div>
+        <div class="card-body p-md-2 align-content-between">
+          <div class="row mb-2">
+            <div class="h5 bb-white">Total Earnings</div>
+            <div class="h4 w-100">₦ 0</div>
           </div>
-          <div class="row mb-5">
+          <div class="row mb-2">
             <div class="w-100 d-flex">
-              <div class="h5 bb-white">
-                Earnings
-              </div>
+              <div class="h5 bb-white">Earnings</div>
               <div class="space-filler"></div>
               <span class="small mt-1 mr-1">Show:</span>
               <select
                 class="custom-select custom-select-sm w-auto border-0 bg-orange"
               >
                 <option value="1" selected>This Month</option>
-                <option value="2">This Week </option>
-                <option value="3">This Year </option>
+                <option value="2">This Week</option>
+                <option value="3">This Year</option>
               </select>
             </div>
-            <div class="h4 w-100">
-              ₦ 0
-            </div>
+            <div class="h4 w-100">₦ 0</div>
           </div>
           <div class="row">
-            <div class="row w-100 mb-5">
+            <div class="row w-100 mb-2">
               <a
                 class="text-white h4 pl-0"
                 data-toggle="collapse"
@@ -182,7 +199,7 @@
               </div>
             </div>
 
-            <div class="row w-100 mb-5">
+            <div class="row w-100 mb-2">
               <a
                 class="text-white h4 pl-0"
                 data-toggle="collapse"
@@ -283,4 +300,72 @@
       </div>
     </div>
   </div>
+
+  <ng-template #collHist let-modal>
+    <div class="modal-body pt-1">
+      <div class="row justify-content-between">
+        <div>
+          <span class="badge bg-orange text-white p-2 h-wrap mt-4">
+            Collection History
+          </span>
+          <i
+            class="fa fa-circle-o-notch fa-spin fa-lg ml-4"
+            aria-hidden="true"
+            *ngIf="historyLoading"
+          ></i>
+        </div>
+        <div class="w-wrap text-right">
+          <span
+            aria-hidden="true"
+            class="text-danger text-right fake-btn"
+            (click)="modal.dismiss('Cross click')"
+            >&times;</span
+          ><br />
+          <div class="text-right">
+            <span class="text-right text-blue mt-1 mr-1">Show:</span>
+            <select
+              class="custom-select custom-select-sm w-auto text-right border-0"
+            >
+              <option value="1" selected>Monthly</option>
+              <option value="2">Weekly</option>
+              <option value="3">Yearly</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="bb-green w-wrap">
+        <span class="bolder h5">Total Tonnage Disposed:</span>
+        &nbsp;
+        <span class="sc-green"
+          >{{ matHist.totaltonnage ? matHist.totaltonnage : 0 }} &nbsp;kg</span
+        >
+      </div>
+      <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
+        <div *ngFor="let mat of matHist.materials">
+          {{ mat.name + ": " + mat.weight }} kg <&nbsp;
+        </div>
+        <br />
+      </div>
+      <div class="bb-green w-wrap">
+        <span class="bolder h5">Total amount paid out:</span>
+        &nbsp;
+        <span class="sc-green"
+          >₦
+          {{
+            formatToCurrency(matHist.totalcost)
+              ? formatToCurrency(matHist.totalcost)
+              : 0
+          }}
+          &nbsp;</span
+        >
+      </div>
+      <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
+        <div *ngFor="let mat of matHist.materials">
+          {{ mat.name + ": ₦ " + formatToCurrency(mat.cost) }}&nbsp;<
+        </div>
+        <br />
+      </div>
+    </div>
+  </ng-template>
 </div>

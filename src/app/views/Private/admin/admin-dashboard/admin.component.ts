@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { TokenService } from "src/app/services/auth/token.service";
 import { Router } from "@angular/router";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "app-admin",
@@ -9,18 +10,22 @@ import { Router } from "@angular/router";
   styleUrls: ["./admin.component.css"],
 })
 export class AdminComponent implements OnInit {
+  @ViewChild("collHist") private collHist;
   constructor(
     private Auth: AuthService,
     private token: TokenService,
-    private router: Router
+    private router: Router,
+    private modal: NgbModal
   ) {}
 
   ngOnInit(): void {
     this.getUserCount();
     this.getPickupRequestCounts();
+    this.getCollectionshistory("Enterprise");
   }
 
   public loading = false;
+  historyLoading: boolean;
   modalTitle: string;
   modalBody: string;
   lastUpdated: any;
@@ -30,7 +35,7 @@ export class AdminComponent implements OnInit {
     collectors: 0,
   };
   PickupCount = 0;
-
+  matHist: any = { materials: [] };
   //  lineChart
   public lineChartData: Array<any> = [
     {
@@ -138,5 +143,34 @@ export class AdminComponent implements OnInit {
       },
       (error) => console.log(error)
     );
+  }
+
+  openCollHistModal() {
+    this.modal.open(this.collHist, { centered: true, size: "lg" });
+  }
+
+  getCollectionshistory(users?) {
+    this.historyLoading = true;
+    let queryArg = "";
+    if (users) {
+      queryArg = `?users=${users}`;
+    }
+    this.Auth.getCollectionsHistory(queryArg).subscribe(
+      (res: any) => {
+        this.matHist = res.history;
+        this.historyLoading = false;
+      },
+      (err) => {
+        this.historyLoading = false;
+        console.log(err);
+      }
+    );
+  }
+
+  formatToCurrency(amount) {
+    if (amount)
+      return parseFloat(amount)
+        .toFixed(2)
+        .replace(/\d(?=(\d{3})+\.)/g, "$&,");
   }
 }

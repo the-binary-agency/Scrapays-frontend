@@ -25,7 +25,7 @@ export class EditMaterialsComponent implements OnInit {
   materialPrices: any[] = [];
   editedMaterials: any = [];
   matForm = {
-    id: "",
+    id: "test",
     name: "",
     price: "",
   };
@@ -104,7 +104,7 @@ export class EditMaterialsComponent implements OnInit {
   }
 
   resetForm() {
-    this.matForm.id = "";
+    this.matForm.id = "test";
     this.matForm.name = "";
     this.matForm.price = "";
     this.newMatImage = { name: "", type: "test" };
@@ -127,15 +127,40 @@ export class EditMaterialsComponent implements OnInit {
     );
   }
 
+  deleteMaterial() {
+    this.loading = true;
+    var editForm = this.processFormData();
+    this.Auth.deleteMaterialPrices(this.token.phone, editForm).subscribe(
+      (data) => this.handleSuccess(data),
+      (error) => this.handleError(error)
+    );
+  }
+
   cancelMaterialEdit() {
     this.edit = false;
     this.resetForm();
   }
 
   formValid() {
-    if (this.matForm.id == "" || this.matForm.name == "") {
-      return false;
+    if (this.edit == true) {
+      if (
+        this.matForm.id == "" ||
+        this.matForm.name == "" ||
+        this.matForm.price == "" ||
+        this.newMatImage.name == ""
+      ) {
+        return false;
+      }
+      return true;
+    } else {
+      if (
+        this.matForm.name == "" ||
+        this.matForm.price == "" ||
+        this.newMatImage.name == ""
+      ) {
+        return false;
+      }
+      return true;
     }
-    return true;
   }
 }

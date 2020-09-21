@@ -35,14 +35,21 @@
           [chartType]="lineChartType"
           (chartHover)="chartHovered($event)"
           (chartClick)="chartClicked($event)"
-          style="height: 100%px !important;"
+          style="height: 100%px !important"
         ></canvas>
       </div>
     </div>
     <div class="col-12 col-md-6">
       <div class="bolder">
         Transactions
-        <span class="float-right text-muted">(11/07/20)</span>
+        <span class="float-right text-muted"
+          >{{
+            Collections.length > 0
+              ? "( " + (Collections[0].created_at | date: "shortDate") + " )"
+              : ""
+          }}
+          }})</span
+        >
       </div>
       <div
         *ngFor="let trans of Collections; let i = index"
@@ -72,9 +79,7 @@
     </div>
     <div class="col-12 col-md-6">
       <div class="row">
-        <div class="col-6 pb-md-4 bolder">
-          Transaction ID
-        </div>
+        <div class="col-6 pb-md-4 bolder">Transaction ID</div>
         <div class="col-6 pb-md-4">:{{ " " + SelectedTransaction.id }}</div>
         <div class="col-6 pb-md-4 bolder">Producer ID</div>
         <div class="col-6 pb-md-4">
@@ -101,9 +106,7 @@
     </div>
     <div class="col-12 col-md-6">
       <div class="row">
-        <div class="col-6 pb-md-4 bolder">
-          Total Tonnage
-        </div>
+        <div class="col-6 pb-md-4 bolder">Total Tonnage</div>
         <div class="col-6 pb-md-4">
           :{{ " " + SelectedTransaction.totalTonnage }}kg
         </div>
@@ -130,18 +133,14 @@
   </div>
   <div class="gap-40"></div>
   <div class="row">
-    <div class="left-b h4">
-      Payment History
-    </div>
+    <div class="left-b h4">Payment History</div>
   </div>
   <div class="row">
     <div class="w-100">
       <table mat-table [dataSource]="dataSource" matSort>
         <!-- ID Column -->
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            ID
-          </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
           <td mat-cell *matCellDef="let row">
             {{ row.id }}
           </td>
@@ -165,9 +164,7 @@
 
         <!-- Color Column -->
         <ng-container matColumnDef="materials">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Materials
-          </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Materials</th>
           <td mat-cell *matCellDef="let row">
             {{ formatMaterials(row.materials) }}
           </td>
@@ -175,9 +172,7 @@
 
         <!-- Color Column -->
         <ng-container matColumnDef="cost">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Cost
-          </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cost</th>
           <td mat-cell *matCellDef="let row">
             ₦{{ formatToCurrency(row.cost) }}
           </td>
@@ -225,18 +220,14 @@
   </div>
   <div class="gap-40"></div>
   <div class="row">
-    <div class="left-b h4">
-      Cash Withdrawal History
-    </div>
+    <div class="left-b h4">Cash Withdrawal History</div>
   </div>
   <div class="row">
     <div class="w-100">
       <table mat-table [dataSource]="dataSource" matSort>
         <!-- ID Column -->
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            ID
-          </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
           <td mat-cell *matCellDef="let row">
             {{ row.id }}
           </td>
@@ -260,9 +251,7 @@
 
         <!-- Color Column -->
         <ng-container matColumnDef="materials">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Materials
-          </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Materials</th>
           <td mat-cell *matCellDef="let row">
             {{ formatMaterials(row.materials) }}
           </td>
@@ -270,9 +259,7 @@
 
         <!-- Color Column -->
         <ng-container matColumnDef="cost">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Cost
-          </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cost</th>
           <td mat-cell *matCellDef="let row">
             ₦{{ formatToCurrency(row.cost) }}
           </td>

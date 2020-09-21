@@ -59,14 +59,14 @@ import { EnterpriseProfileComponent } from "./views/Private/enterprise/enterpris
 import { EditMaterialsComponent } from "./views/Private/admin/edit-materials/edit-materials.component";
 import { CreateAdminComponent } from "./views/Private/admin/create-admin/create-admin.component";
 import { TrackCollectorComponent } from "./views/Private/admin/track-collector/track-collector.component";
-import { CollectMaterialsComponent } from './views/Private/collector/collect-materials/collect-materials.component';
-import { HouseholdsComponent } from './views/Private/admin/households/households.component';
-import { CollectorsComponent } from './views/Private/admin/collectors/collectors.component';
-import { VendorsComponent } from './views/Private/admin/vendors/vendors.component';
-import { SingleHouseholdComponent } from './views/Private/admin/single-household/single-household.component';
-import { SingleCollectorComponent } from './views/Private/admin/single-collector/single-collector.component';
-import { SingleHostComponent } from './views/Private/admin/single-host/single-host.component';
-import { PickupRequestsComponent } from './views/Private/admin/pickup-requests/pickup-requests.component';
+import { CollectMaterialsComponent } from "./views/Private/collector/collect-materials/collect-materials.component";
+import { HouseholdsComponent } from "./views/Private/admin/households/households.component";
+import { CollectorsComponent } from "./views/Private/admin/collectors/collectors.component";
+import { VendorsComponent } from "./views/Private/admin/vendors/vendors.component";
+import { SingleHouseholdComponent } from "./views/Private/admin/single-household/single-household.component";
+import { SingleCollectorComponent } from "./views/Private/admin/single-collector/single-collector.component";
+import { SingleHostComponent } from "./views/Private/admin/single-host/single-host.component";
+import { PickupRequestsComponent } from "./views/Private/admin/pickup-requests/pickup-requests.component";
 
 @NgModule({
   declarations: [

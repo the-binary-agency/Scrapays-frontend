@@ -36,6 +36,7 @@ export class CollectorsComponent implements OnInit {
     "totalTonnage",
     "status",
     "toggle",
+    "created_at",
     "menu",
   ];
   dataSource: MatTableDataSource<User>;

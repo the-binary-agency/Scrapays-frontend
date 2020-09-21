@@ -81,15 +81,15 @@ h2.entry-title a:hover {
 /* Icon pentagon */
 
 .icon-pentagon {
-  background: none repeat scroll 0 0 black;
+  background: none repeat scroll 0 0 #ff7900;
 }
 
 .icon-pentagon:before {
-  border-bottom: 10px solid black;
+  border-bottom: 10px solid#ff7900;
 }
 
 .icon-pentagon:after {
-  border-top: 10px solid black;
+  border-top: 10px solid#ff7900;
 }
 
 .service-icon:before {

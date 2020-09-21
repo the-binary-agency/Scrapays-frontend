@@ -33,9 +33,12 @@ export class AdminProfileComponent implements OnInit {
     this.initForm();
   }
 
+  avatar = "assets/images/icons/user-icon.png";
+  avatarImage: any;
   modalTitle: any;
   modalBody: any;
   loading: boolean;
+  URL = this.env.backendUrl;
   edit = false;
   User: any = {};
   public Form: FormGroup;
@@ -46,10 +49,6 @@ export class AdminProfileComponent implements OnInit {
       { type: "required", message: "An email is required." },
       { type: "pattern", message: "Please enter a valid email" },
     ],
-    phone: [
-      { type: "required", message: "A Phone Number is required." },
-      { type: "pattern", message: "Please enter a valid Phone Number." },
-    ],
     password: [
       { type: "required", message: "A Password is required." },
       { type: "minlength", message: "Minimum of 6 characters" },
@@ -58,6 +57,7 @@ export class AdminProfileComponent implements OnInit {
 
   initForm() {
     this.Form = this.formBuilder.group({
+      avatarImage: new FormControl(""),
       firstName: new FormControl(
         "",
         Validators.compose([
@@ -80,10 +80,6 @@ export class AdminProfileComponent implements OnInit {
           Validators.required,
           Validators.pattern("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"),
         ])
-      ),
-      phone: new FormControl(
-        "",
-        Validators.compose([Validators.pattern("[0-9 ]*"), Validators.required])
       ),
     });
   }
@@ -137,5 +133,14 @@ export class AdminProfileComponent implements OnInit {
 
   openModal(content) {
     this.modal.open(content, { centered: true });
+  }
+
+  onFileInput(event) {
+    let reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = (e: any) => {
+      this.avatar = e.target.result;
+    };
+    this.avatarImage = event.target.files[0];
   }
 }

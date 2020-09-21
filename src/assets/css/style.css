@@ -152,6 +152,19 @@ h5,
   color: #ff7900;
 }
 
+.btn.btn-white {
+  color: #ff7900;
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 10px 30px;
+  font-size: 14px;
+  transition: all 0.3s ease 0s;
+}
+
+.btn.btn-white:hover {
+  border: 2px solid #ff7900;
+}
+
 html {
   overflow-x: hidden !important;
   width: 100%;
@@ -165,7 +178,7 @@ body {
   border: 0;
   margin: 0;
   padding: 0;
-  font-size: 15px;
+  font-size: 12px;
   color: black;
   background: #fff;
 }
@@ -470,6 +483,7 @@ blockquote {
 
 /* Icon pentagon */
 .icon-pentagon {
+  background-color: #ff7900;
   display: inline-block;
   height: 24px;
   width: 40px;
@@ -1295,6 +1309,15 @@ blockquote {
   border-radius: 60px;
   position: absolute;
 }
+
+.bb-green:after {
+  content: "";
+  display: block;
+  width: 71%;
+  padding-top: 10px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #049b41;
+}
 .w-auto {
   width: fit-content;
 }
@@ -1536,8 +1559,7 @@ blockquote {
 .bb-blue:after {
   content: "";
   display: block;
-  width: 32%;
-  padding-top: 10px;
+  width: 100%;
   margin-bottom: 10px;
   border-bottom: 1px solid blue;
 }
@@ -1651,6 +1673,21 @@ blockquote {
 }
 .bolder {
   font-weight: 600 !important;
+}
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #049b41;
+}
+.nav-pills .nav-link:not(.active) {
+  color: #049b41;
+  border: 2px solid #049b41 !important;
+}
+.nav-pills .nav-link:hover:not(.active) {
+  color: #049b41 !important;
+}
+.nav-pills .nav-link.active:hover {
+  color: #fff !important;
 }
 /* End Custom css */
 .q-list-item {

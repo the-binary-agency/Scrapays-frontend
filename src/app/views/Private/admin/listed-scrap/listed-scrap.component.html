@@ -1,42 +1,240 @@
-<div class="dashboard-body pt-5 p-1 p-md-5">
-<h1 class="text-center">
-Listed Scrap
-</h1>
-<table class="table table-responsive-sm table-hover table-outline mb-0">
-            <thead class="thead-light">
-              <tr>
-                <th>Producer</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Items</th>
-                <th>Material Location</th>
-              </tr>
-            </thead>
-            <tbody>
-            <tr *ngIf="ListedScraps.length == 0">
-            <td></td>
-            <td>No Scrap Listed</td>
-            </tr>
-              <tr *ngFor="let listedscrap of ListedScraps; let i = index" (click)="gotoSingle(listedscrap)">
-                <td>
-                  {{ listedscrap.firstName }} &nbsp; {{ listedscrap.lastName }}
-                  <div class="small text-muted">
-                   Date: {{ listedscrap.created_at }}
+<div class="row mt-5 pt-md-5">
+  <div class="w-100">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <!-- Checkbox Column -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox
+            (change)="$event ? masterToggle() : null"
+            [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()"
+          >
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)"
+          >
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.lastName + " " + row.firstName }}
+        </td>
+      </ng-container>
+
+      <!-- Progress Column -->
+      <ng-container matColumnDef="location">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.materialLocation }}
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone Number</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.phone }}
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Material Description
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.materialDescription }}
+        </td>
+      </ng-container>
+
+      <!-- Color Column -->
+      <ng-container matColumnDef="accept">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+        <td mat-cell *matCellDef="let row">
+          <button type="button" class="btn btn-primary solid">Accept</button>
+        </td>
+      </ng-container>
+
+      <!-- Color Column -->
+      <ng-container matColumnDef="reject">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+        <td mat-cell *matCellDef="let row">
+          <button type="button" class="btn btn-danger solid">Reject</button>
+        </td>
+      </ng-container>
+
+      <!-- Color Column -->
+      <ng-container matColumnDef="more">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+        <td mat-cell *matCellDef="let row">
+          <button
+            type="button"
+            class="btn btn-clear"
+            [ngbPopover]="popContent"
+            [popoverTitle]="popTitle"
+            autoClose="outside"
+            placement="left"
+            popoverClass="delete-popover"
+            #p="ngbPopover"
+            container="body"
+          >
+            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+          </button>
+          <ng-template #popTitle
+            >&nbsp;
+            <i
+              class="fa fa-times float-right mt-2 fake-btn"
+              aria-hidden="true"
+              (click)="p.close()"
+            ></i>
+          </ng-template>
+          <ng-template #popContent>
+            <div class="row justify-content-center">
+              <img
+                src="assets/images/icons/user-1.png"
+                alt="user icon"
+                class="pop-icon mr-2 mb-2"
+              />
+            </div>
+            <div class="row text-left mb-2">
+              <div class="col-6">
+                <div class="bolder pop-tit w-100">First Name</div>
+                <span class="pop-bod">{{ row.firstName }}</span>
+              </div>
+              <div class="col-6">
+                <div class="bolder pop-tit w-100">Last Name</div>
+                <span class="pop-bod">{{ row.lastName }}</span>
+              </div>
+            </div>
+            <div class="row text-left mb-2">
+              <div class="col-6">
+                <div class="bolder pop-tit w-100">Phone Number</div>
+                <span class="pop-bod"> {{ row.phone }}</span>
+              </div>
+              <div class="col-6">
+                <div class="bolder pop-tit w-100">Email</div>
+                <span class="pop-bod">{{ row.email }}</span>
+              </div>
+            </div>
+            <div class="row text-left mb-2 px-3">
+              <div class="bolder pop-tit w-100">Material Description</div>
+              <div class="pop-bod">{{ row.materialDescription }}</div>
+            </div>
+            <div class="row text-left mb-2 px-3">
+              <a
+                href="javascript:void(0)"
+                role="button"
+                (click)="gotoSingle(row)"
+                >Click to view Images</a
+              >
+            </div>
+            <div class="row text-left mb-2 pl-3">
+              <div class="bolder pop-tit w-100">Location</div>
+              <span class="pop-bod">{{ row.materialLocation }}</span>
+            </div>
+            <div class="row text-center mb-2 pl-3">
+              <div class="col-4 mb-4 pl-0">
+                <div class="bolder w-100 small mb-2">Listings Initiated</div>
+                <div class="">
+                  <mat-checkbox
+                    [(ngModel)]="row.nw"
+                    name="lis-inited"
+                    class="h4 bolder"
+                  ></mat-checkbox>
+                </div>
+              </div>
+              <div class="col-4 mb-4 px-0">
+                <div class="bolder w-100 small mb-2">
+                  Physical Evaluation Report
+                </div>
+                <div class="">
+                  <mat-checkbox
+                    [(ngModel)]="row.nw"
+                    name="phy-eval"
+                    class="h4 bolder"
+                  ></mat-checkbox>
+                </div>
+              </div>
+              <div class="col-4 mb-4 px-0">
+                <div class="bolder w-100 small mb-2">Price Offer</div>
+                <div class="">
+                  <div class="inner-addon right-addon">
+                    <input type="number" name="" id="" class="tiny-input" />
+                    <i
+                      class="fa fa-paper-plane sc-orange right-icon fake-btn"
+                      aria-hidden="true"
+                      (click)="offerPrice()"
+                    ></i>
                   </div>
-                </td>
-                <td>
-                  {{ listedscrap.phone }}
-                </td>
-                <td>
-                  {{ listedscrap.email }}
-                </td>
-                <td>
-                  {{ listedscrap.materialDescription.length }}
-                </td>
-                <td>
-                {{ listedscrap.materialLocation }}
-                </td>
-              </tr >
-            </tbody>
-          </table>
+                </div>
+              </div>
+              <div class="col-4 mb-4 pl-0">
+                <div class="bolder w-100 small mb-2">Operations Started</div>
+                <div class="">
+                  <mat-checkbox
+                    [(ngModel)]="row.nw"
+                    name="op-started"
+                    class="h4 bolder"
+                  ></mat-checkbox>
+                </div>
+              </div>
+              <div class="col-4 mb-4 px-0">
+                <div class="bolder w-100 small mb-2">Operations Finalised</div>
+                <div class="">
+                  <mat-checkbox
+                    [(ngModel)]="row.nw"
+                    name="op-finslised"
+                    class="h4 bolder"
+                  ></mat-checkbox>
+                </div>
+              </div>
+              <div class="col-4 mb-4 px-0">
+                <div class="bolder w-100 small mb-2">Logistics Processing</div>
+                <div class="">
+                  <mat-checkbox
+                    [(ngModel)]="row.nw"
+                    name="log-proc"
+                    class="h4 bolder"
+                  ></mat-checkbox>
+                </div>
+              </div>
+              <div class="col-4 pl-0">
+                <div class="bolder w-100 small mb-2">
+                  Payment Disbursement Data Range
+                </div>
+                <div class="">
+                  <mat-checkbox
+                    [(ngModel)]="row.nw"
+                    name="payment-range"
+                    class="h4 bolder"
+                  ></mat-checkbox>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="6">
+          <!-- No data matching the filter "{{ input.value }}" -->
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator pageSize="25"></mat-paginator>
+
+    <ngx-loading [show]="loading"></ngx-loading>
+  </div>
 </div>

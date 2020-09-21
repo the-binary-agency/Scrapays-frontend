@@ -9,6 +9,12 @@ import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { materialize } from "rxjs/operators";
+import {
+  NgbCalendar,
+  NgbDate,
+  NgbDateStruct,
+  NgbModal,
+} from "@ng-bootstrap/ng-bootstrap";
 
 export interface Collection {
   id: string;
@@ -41,18 +47,22 @@ export class SingleCollectorComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild("collHist") private collHist;
 
   constructor(
     private nav: NavService,
     private auth: AuthService,
     private router: Router,
+    private modal: NgbModal,
     private env: EnvironmentService,
-    private token: TokenService
+    private token: TokenService,
+    private calender: NgbCalendar
   ) {}
 
   edit = false;
 
   ngOnInit(): void {
+    this.configureDate();
     this.populateUser();
   }
 
@@ -63,6 +73,21 @@ export class SingleCollectorComponent implements OnInit {
   CollectedScrap = [];
   Collections = [];
   totalTonnage: number = 0;
+  historyLoading: boolean;
+  matHist: any = { materials: [] };
+  model: NgbDateStruct;
+
+  hoveredDate: NgbDate | null = null;
+
+  fromDate: NgbDate;
+  toDate: NgbDate | null = null;
+  maxDate: NgbDateStruct;
+
+  configureDate() {
+    this.fromDate = this.calender.getPrev(this.calender.getToday(), "d", 6);
+    this.maxDate = this.calender.getToday();
+    this.toDate = this.calender.getToday();
+  }
 
   populateUser() {
     if (this.nav.get() == null) {
@@ -95,6 +120,7 @@ export class SingleCollectorComponent implements OnInit {
   }
 
   getCollectorWithTonnage(phone) {
+    this.getCollectionshistory(phone);
     this.loading = true;
     this.auth.getCollectorWithTonnage(phone).subscribe(
       (data: any) => {
@@ -225,5 +251,79 @@ export class SingleCollectorComponent implements OnInit {
 
   evaluateMaterials(materials) {
     return JSON.parse(materials);
+  }
+
+  openCollHistModal() {
+    this.modal.open(this.collHist, { centered: true, size: "lg" });
+  }
+
+  getCollectionshistory(phone) {
+    this.historyLoading = true;
+    this.auth.getCollectorCollectionsHistory(phone).subscribe(
+      (res: any) => {
+        this.matHist = res.history;
+        this.historyLoading = false;
+      },
+      (err) => {
+        this.historyLoading = false;
+        console.log(err);
+      }
+    );
+  }
+
+  onDateSelection(date: NgbDate) {
+    if (!this.fromDate && !this.toDate) {
+      this.fromDate = date;
+    } else if (this.fromDate && !this.toDate && date.after(this.fromDate)) {
+      this.toDate = date;
+    } else {
+      this.toDate = null;
+      this.fromDate = date;
+    }
+  }
+
+  isHovered(date: NgbDate) {
+    return (
+      this.fromDate &&
+      !this.toDate &&
+      this.hoveredDate &&
+      date.after(this.fromDate) &&
+      date.before(this.hoveredDate)
+    );
+  }
+
+  isInside(date: NgbDate) {
+    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
+  }
+
+  isRange(date: NgbDate) {
+    return (
+      date.equals(this.fromDate) ||
+      (this.toDate && date.equals(this.toDate)) ||
+      this.isInside(date) ||
+      this.isHovered(date)
+    );
+  }
+
+  filterByDate() {
+    this.historyLoading = true;
+    if (this.toDate == null) {
+      this.toDate = this.calender.getNext(this.fromDate, "d", 1);
+    }
+    let query = `?from=${JSON.stringify(this.fromDate)}&to=${JSON.stringify(
+      this.toDate
+    )}`;
+    this.auth
+      .getCollectorCollectionsHistoryWithQuery(this.User.phone, query)
+      .subscribe(
+        (res: any) => {
+          this.matHist = res.history;
+          this.historyLoading = false;
+        },
+        (err: any) => {
+          this.historyLoading = false;
+          console.log(err);
+        }
+      );
   }
 }
