@@ -1,49 +1,38 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
-  Component,
-  OnInit,
-  ViewChild,
-  NgZone,
-  ChangeDetectorRef,
-} from "@angular/core";
-import {
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators,
-} from "@angular/forms";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { ApiService } from "src/app/services/auth/api.service";
-import { TokenService } from "src/app/services/auth/token.service";
-import { AuthService } from "src/app/services/auth/auth.service";
-import { FormsModule } from "@angular/forms";
-import { EnvironmentService } from "src/app/services/env/environment.service";
+  NgbCalendar,
+  NgbDate,
+  NgbDateStruct,
+  NgbModal,
+} from '@ng-bootstrap/ng-bootstrap';
+import { TokenService } from 'src/app/services/auth/token.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { EnvironmentService } from 'src/app/services/env/environment.service';
 
 @Component({
-  selector: "app-collector-dashboard",
-  templateUrl: "./collector-dashboard.component.html",
-  styleUrls: ["./collector-dashboard.component.css"],
+  selector: 'app-collector-dashboard',
+  templateUrl: './collector-dashboard.component.html',
+  styleUrls: ['./collector-dashboard.component.css'],
 })
 export class CollectorDashboardComponent implements OnInit {
-  @ViewChild("collHist") private collHist;
+  @ViewChild('collHist') private collHist;
   constructor(
-    private formBuilder: FormBuilder,
     private modal: NgbModal,
-    private api: ApiService,
-    private Token: TokenService,
     private Auth: AuthService,
     private token: TokenService,
-    private env: EnvironmentService
+    private env: EnvironmentService,
+    private calender: NgbCalendar
   ) {}
 
   URL = this.env.backendUrl;
   User: any = {
-    id: "",
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    role: "",
-    created_at: "",
+    id: '',
+    first_name: '',
+    last_name: '',
+    phone: '',
+    email: '',
+    role: '',
+    created_at: '',
   };
   Scrap: any = {};
   CollectedScrap: any = [];
@@ -58,14 +47,23 @@ export class CollectorDashboardComponent implements OnInit {
   displayedMaterials = [];
   collectionMaterials = [];
 
+  model: NgbDateStruct;
+
+  hoveredDate: NgbDate | null = null;
+
+  fromDate: NgbDate;
+  toDate: NgbDate | null = null;
+  maxDate: NgbDateStruct;
+
   ngOnInit(): void {
+    this.configureDate();
     this.getUser();
     this.getPrices();
     this.getCollectionshistory();
   }
 
   initiateTracking() {
-    if ("geolocation" in navigator) {
+    if ('geolocation' in navigator) {
       navigator.geolocation.watchPosition((position) => {
         this.pingServer({
           lat: position.coords.latitude,
@@ -83,12 +81,27 @@ export class CollectorDashboardComponent implements OnInit {
     );
   }
 
+  configureDate() {
+    this.fromDate = this.calender.getPrev(this.calender.getToday(), 'd', 6);
+    this.maxDate = this.calender.getToday();
+    this.toDate = this.calender.getToday();
+  }
+
   getUser() {
-    this.Auth.getCollectorWithTonnage(this.token.phone).subscribe(
-      (data: any) => {
+    this.Auth.getLoggedInUser().subscribe(
+      (res: any) => {
+        this.User = res.data;
+        this.getTonnage();
+      },
+      (error) => console.log(error)
+    );
+  }
+
+  getTonnage() {
+    this.Auth.getCollectedTonnage(this.token._id).subscribe(
+      (res: any) => {
         this.initiateTracking();
-        this.User = data.user;
-        this.CollectedScrap = data.tonnage;
+        this.CollectedScrap = res.data;
         this.processTonnage();
       },
       (error) => console.log(error)
@@ -96,44 +109,21 @@ export class CollectorDashboardComponent implements OnInit {
   }
 
   getPrices() {
-    this.Auth.getMaterialPrices(this.token.phone).subscribe(
-      (data: any) => {
-        for (let price of data.prices) {
+    this.Auth.getMaterialPrices(this.token._id).subscribe(
+      (res: any) => {
+        for (let price of res.data) {
           this.materials.push(price);
         }
         this.materials.push({
           id: 500,
-          name: "Composite",
-          image: "composite-icon.png",
+          name: 'Composite',
+          image: 'composite-icon.png',
         });
         this.displayMaterials();
       },
       (error) => console.log(error)
     );
   }
-
-  // getScrap(data) {
-  //   this.CollectedScrap = data.tonnage;
-  //   // // for ( let mat of data.tonnage ) {
-  //   // //   this.CollectedScrap.push( JSON.parse( mat ) );
-  //   // // }
-  //   // var holder = {};
-
-  //   // this.CollectedScrap.forEach(function(d) {
-  //   //   if (holder.hasOwnProperty(d.name)) {
-  //   //     holder[d.name] = holder[d.name] + d.weight;
-  //   //   } else {
-  //   //     holder[d.name] = d.weight;
-  //   //   }
-  //   // });
-
-  //   // var obj2 = [];
-
-  //   // for (var prop in holder) {
-  //   //   obj2.push({ name: prop, weight: holder[prop] });
-  //   // }
-  //   // console.log(holder, obj2);
-  // }
 
   processTonnage() {
     for (let scrap of this.CollectedScrap) {
@@ -142,7 +132,7 @@ export class CollectorDashboardComponent implements OnInit {
     this.lineChartData = [
       {
         data: this.getSingleScrapForGraph(),
-        label: "Scrap",
+        label: 'Scrap',
       },
     ];
   }
@@ -173,13 +163,13 @@ export class CollectorDashboardComponent implements OnInit {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  radioModel: string = "Month";
+  radioModel: string = 'Month';
 
   // lineChart
   public lineChartData: Array<any> = [
     {
       data: [0, 0, 0, 0, 0],
-      label: "Scrap",
+      label: 'Scrap',
     },
   ];
 
@@ -191,34 +181,34 @@ export class CollectorDashboardComponent implements OnInit {
   public lineChartColours: Array<any> = [
     {
       // grey
-      backgroundColor: "rgba(148,159,177,0.2)",
-      borderColor: "rgba(148,159,177,1)",
-      pointBackgroundColor: "rgba(148,159,177,1)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(148,159,177,0.8)",
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)',
     },
     {
       // dark grey
-      backgroundColor: "rgba(77,83,96,0.2)",
-      borderColor: "rgba(77,83,96,1)",
-      pointBackgroundColor: "rgba(77,83,96,1)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(77,83,96,1)",
+      backgroundColor: 'rgba(77,83,96,0.2)',
+      borderColor: 'rgba(77,83,96,1)',
+      pointBackgroundColor: 'rgba(77,83,96,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(77,83,96,1)',
     },
     {
       // grey
-      backgroundColor: "rgba(148,159,177,0.2)",
-      borderColor: "rgba(148,159,177,1)",
-      pointBackgroundColor: "rgba(148,159,177,1)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(148,159,177,0.8)",
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)',
     },
   ];
   public lineChartLegend = true;
-  public lineChartType = "line";
+  public lineChartType = 'line';
 
   // events
   public chartClicked(e: any): void {
@@ -254,23 +244,23 @@ export class CollectorDashboardComponent implements OnInit {
   addBorder(i) {
     var classes = {};
     if (i == 0 || i == 2) {
-      classes["border-right"] = true;
+      classes['border-right'] = true;
     }
     if (i == 0 || i == 1) {
-      classes["border-bottom"] = true;
+      classes['border-bottom'] = true;
     }
     return classes;
   }
 
   openCollHistModal() {
-    this.modal.open(this.collHist, { centered: true, size: "lg" });
+    this.modal.open(this.collHist, { centered: true, size: 'lg' });
   }
 
   getCollectionshistory() {
     this.historyLoading = true;
-    this.Auth.getCollectorCollectionsHistory(this.token.phone).subscribe(
+    this.Auth.getSingleUserCollectionHistory(this.token._id).subscribe(
       (res: any) => {
-        this.matHist = res.history;
+        this.matHist = res.data;
         this.historyLoading = false;
       },
       (err) => {
@@ -284,6 +274,108 @@ export class CollectorDashboardComponent implements OnInit {
     if (amount)
       return parseFloat(amount)
         .toFixed(2)
-        .replace(/\d(?=(\d{3})+\.)/g, "$&,");
+        .replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  }
+
+  onDateSelection(date: NgbDate) {
+    if (!this.fromDate && !this.toDate) {
+      this.fromDate = date;
+    } else if (this.fromDate && !this.toDate && date.after(this.fromDate)) {
+      this.toDate = date;
+    } else {
+      this.toDate = null;
+      this.fromDate = date;
+    }
+  }
+
+  isHovered(date: NgbDate) {
+    return (
+      this.fromDate &&
+      !this.toDate &&
+      this.hoveredDate &&
+      date.after(this.fromDate) &&
+      date.before(this.hoveredDate)
+    );
+  }
+
+  isInside(date: NgbDate) {
+    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
+  }
+
+  isRange(date: NgbDate) {
+    return (
+      date.equals(this.fromDate) ||
+      (this.toDate && date.equals(this.toDate)) ||
+      this.isInside(date) ||
+      this.isHovered(date)
+    );
+  }
+
+  getHistory(from, to) {
+    this.historyLoading = true;
+    let query = `from=${JSON.stringify(from)}&to=${JSON.stringify(to)}`;
+    this.Auth.getSingleUserCollectionHistory(this.User.id, query).subscribe(
+      (res: any) => {
+        this.matHist = res.data;
+        this.historyLoading = false;
+      },
+      (err: any) => {
+        this.historyLoading = false;
+        console.log(err);
+      }
+    );
+  }
+
+  filterByDate() {
+    this.historyLoading = true;
+    if (this.toDate == null) {
+      this.toDate = this.calender.getNext(this.fromDate, 'd', 1);
+    } else {
+      this.toDate = this.calender.getNext(this.toDate, 'd', 1);
+    }
+    this.getHistory(this.fromDate, this.toDate);
+  }
+
+  selectSort(e) {
+    switch (e.target.value) {
+      case 'week':
+        this.getWeeklyHistory();
+        break;
+      case 'month':
+        this.getMonthlyHistory();
+        break;
+      case 'year':
+        this.getYearlyHistory();
+        break;
+      default:
+        break;
+    }
+  }
+
+  getWeeklyHistory() {
+    let today = this.calender.getToday();
+    let currentWeekDay = this.calender.getWeekday(today);
+    let Mon = this.calender.getPrev(today, 'd', currentWeekDay - 1);
+    let Sat = this.calender.getNext(today, 'd', 6 - currentWeekDay + 1);
+    this.getHistory(Mon, Sat);
+  }
+
+  getMonthlyHistory() {
+    let today = this.calender.getToday();
+    let endOfLastMonth = this.calender.getPrev(today, 'm', 1);
+    let endOfNextMonth = this.calender.getNext(today, 'm', 1);
+    let startOfNextMonth = this.calender.getPrev(
+      endOfNextMonth,
+      'd',
+      endOfNextMonth.day - 1
+    );
+    this.getHistory(endOfLastMonth, startOfNextMonth);
+  }
+
+  getYearlyHistory() {
+    let today = this.calender.getToday();
+    let endOfLastYear = { year: today.year - 1, month: 11, day: 31 };
+    let startOfNextYear = { year: today.year + 1, month: 0, day: 1 };
+    this.getHistory(endOfLastYear, startOfNextYear);
   }
 }

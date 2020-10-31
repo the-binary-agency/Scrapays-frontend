@@ -1,45 +1,44 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { ApiService } from "src/app/services/auth/api.service";
-import { AuthService } from "src/app/services/auth/auth.service";
-import { NavService } from "src/app/services/general/nav.service";
-import { TokenService } from "src/app/services/auth/token.service";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
-import { SelectionModel } from "@angular/cdk/collections";
-import { Router } from "@angular/router";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ApiService } from 'src/app/services/auth/api.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { NavService } from 'src/app/services/general/nav.service';
+import { TokenService } from 'src/app/services/auth/token.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
+import { Router } from '@angular/router';
 
 export interface Pickup {
   id: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   phone: number;
   email: string;
-  materialImages: string;
-  materialLocation: string;
-  materialDescription: string;
+  material_images: string;
+  material_location: string;
+  material_description: string;
   created_at: string;
 }
 
 @Component({
-  selector: "app-listed-scrap",
-  templateUrl: "./listed-scrap.component.html",
-  styleUrls: ["./listed-scrap.component.css"],
+  selector: 'app-listed-scrap',
+  templateUrl: './listed-scrap.component.html',
+  styleUrls: ['./listed-scrap.component.css'],
 })
 export class ListedScrapComponent implements OnInit {
   displayedColumns: string[] = [
-    "select",
-    "name",
-    "location",
-    "phone",
-    "description",
-    "accept",
-    "reject",
-    "more",
+    'select',
+    'name',
+    'location',
+    'phone',
+    'description',
+    'accept',
+    'reject',
+    'more',
   ];
   dataSource: MatTableDataSource<Pickup>;
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   selection = new SelectionModel<Pickup>(true, []);
 
@@ -64,42 +63,47 @@ export class ListedScrapComponent implements OnInit {
   deleteLoading: boolean;
   collectorToAssign: any = {};
   loading: boolean;
+  currentPage = 1;
+  collectionSize = 0;
+  pageSize = 1;
 
-  getAllListedSrap() {
-    this.api.getListedScrap().subscribe(
+  getAllListedSrap(query?) {
+    this.api.getListedScrap(query).subscribe(
       (res) => {
         this.handleResponse(res);
       },
-      (err) => console.log(err)
+      (err) => console.log(err.error.error)
     );
   }
 
   gotoSingle(listedscrap) {
     this.nav.navigate(
-      "/dashboard/listedScrap/scrap_" + listedscrap.id,
+      '/dashboard/listedScrap/scrap_' + listedscrap.id,
       listedscrap
     );
   }
 
-  handleResponse(data) {
-    data.map((list) => {
-      var images = JSON.parse(list.materialImages);
-      var descriptions = JSON.parse(list.materialDescription);
+  handleResponse(res) {
+    this.currentPage = res.current_page;
+    this.collectionSize = res.total;
+    this.pageSize = res.per_page;
+    res.data.map((list) => {
+      var images = JSON.parse(list.material_images);
+      var descriptions = JSON.parse(list.material_description);
       let lscrap = {
         id: list.id,
-        firstName: list.firstName,
-        lastName: list.lastName,
+        first_name: list.first_name,
+        last_name: list.last_name,
         phone: list.phone,
         email: list.email,
-        materialImages: images,
-        materialLocation: list.materialLocation,
-        materialDescription: descriptions,
+        material_images: images,
+        material_location: list.material_location,
+        material_description: descriptions,
         created_at: list.created_at,
       };
       this.ListedScraps.push(lscrap);
     });
     this.dataSource = new MatTableDataSource(this.ListedScraps);
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.loading = false;
   }
@@ -115,13 +119,13 @@ export class ListedScrapComponent implements OnInit {
   formatSchedule(sch) {
     let schedule = JSON.parse(sch);
     return (
-      schedule.scheduleTime +
-      " | " +
-      schedule.scheduleDate.day +
-      "-" +
-      schedule.scheduleDate.month +
-      "-" +
-      schedule.scheduleDate.year
+      schedule.schedule_time +
+      ' | ' +
+      schedule.schedule_date.day +
+      '-' +
+      schedule.schedule_date.month +
+      '-' +
+      schedule.schedule_date.year
     );
   }
 
@@ -135,7 +139,7 @@ export class ListedScrapComponent implements OnInit {
 
   processCollForm(id) {
     let formDataa = {
-      adminPhone: this.token.phone,
+      adminPhone: this.token._id,
       collectorID: id,
     };
     return formDataa;
@@ -152,7 +156,7 @@ export class ListedScrapComponent implements OnInit {
 
   processAssignForm(pickup) {
     let formData = {
-      adminPhone: this.token.phone,
+      adminPhone: this.token._id,
       collectorID: this.collectorToAssign.id,
       pickup: pickup,
     };
@@ -161,13 +165,13 @@ export class ListedScrapComponent implements OnInit {
 
   gotoSingleUser(user) {
     this.nav.navigate(
-      "/dashboard/enterprise/ent_" + user.phone.split("+234")[1],
+      '/dashboard/enterprise/ent_' + user.phone.split('+234')[1],
       user
     );
   }
 
   gotoSingleAdmin(admin) {
-    this.nav.navigate("/dashboard/users/Admin_" + admin.id, admin);
+    this.nav.navigate('/dashboard/users/Admin_' + admin.id, admin);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -186,14 +190,9 @@ export class ListedScrapComponent implements OnInit {
       : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
-  deleteUser(phone) {
+  deleteUser(id) {
     this.deleteLoading = true;
-    console.log("User " + phone);
-    let form = {
-      adminPhone: this.token.phone,
-      deletePhone: phone,
-    };
-    this.Auth.deleteUser(form).subscribe(
+    this.Auth.deleteUser('users', id).subscribe(
       (data) => this.handleDeleteResponse(data),
       (error) => this.handleDeleteError(error)
     );
@@ -228,4 +227,9 @@ export class ListedScrapComponent implements OnInit {
   }
 
   offerPrice() {}
+
+  changePage() {
+    let query = `&page=${this.currentPage}`;
+    this.getAllListedSrap(query);
+  }
 }

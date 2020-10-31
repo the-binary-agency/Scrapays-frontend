@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="col-12 col-md-6 text-center text-md-right font-weight-bold h4">
-      {{ Users.length + " " }} Users
+      {{ collectionSize + ' ' }} Users
     </div>
   </div>
 
@@ -55,9 +55,9 @@
       </ng-container>
 
       <!-- ID Column -->
-      <ng-container matColumnDef="companyName">
+      <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          Company's Name
+          Collector's Name
         </th>
         <td
           mat-cell
@@ -73,7 +73,7 @@
           />
           <div class="line-h-s">
             <div class="bolder">
-              {{ row.firstName + " " }} {{ row.lastName }}
+              {{ row.first_name + ' ' }} {{ row.last_name }}
             </div>
             <span class="small text-muted">
               {{ row.email }}
@@ -96,7 +96,7 @@
       </ng-container>
 
       <!-- Name Column -->
-      <ng-container matColumnDef="lastLogin">
+      <ng-container matColumnDef="last_login">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Login</th>
         <td
           mat-cell
@@ -104,12 +104,12 @@
           (click)="gotoSingleUser(row)"
           class="fake-btn"
         >
-          {{ row.lastLogin | dateAgo }}
+          {{ row.last_login | dateAgo }}
         </td>
       </ng-container>
 
       <!-- Color Column -->
-      <ng-container matColumnDef="totalTonnage">
+      <ng-container matColumnDef="total_tonnage">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Total Volume Collected
         </th>
@@ -119,7 +119,7 @@
           (click)="gotoSingleUser(row)"
           class="fake-btn"
         >
-          {{ row.totalTonnage }}
+          {{ row.total_tonnage }}
         </td>
       </ng-container>
 
@@ -133,7 +133,9 @@
           class="fake-btn"
         >
           {{
-            row.userable.approvedAsCollector == 0 ? "Deactivated" : "Activated"
+            row.userable.approved_as_collector == 0
+              ? 'Deactivated'
+              : 'Activated'
           }}
         </td>
       </ng-container>
@@ -145,16 +147,16 @@
           <button
             type="button"
             class="btn btn-primary solid btn-sm toggle-btn"
-            *ngIf="row.userable.approvedAsCollector == 0"
-            (click)="activateCollector(row.phone)"
+            *ngIf="row.userable.approved_as_collector == 0"
+            (click)="activateCollector(row.id)"
           >
             Activate
           </button>
           <button
             type="button"
             class="btn btn-primary solid btn-sm toggle-btn"
-            *ngIf="row.userable.approvedAsCollector == 1"
-            (click)="deactivateCollector(row.phone)"
+            *ngIf="row.userable.approved_as_collector == 1"
+            (click)="deactivateCollector(row.id)"
           >
             Deactivate
           </button>
@@ -167,7 +169,7 @@
           Registration Date
         </th>
         <td mat-cell *matCellDef="let row" (click)="gotoSingleUser(row)">
-          {{ row.created_at | date: "medium" }}
+          {{ row.created_at | date: 'medium' }}
         </td>
       </ng-container>
 
@@ -206,19 +208,17 @@
             <div class="row text-left mb-4">
               <div class="col-6">
                 <div class="bolder pop-tit w-100">First Name</div>
-                <span class="pop-bod">{{ row.firstName }}</span>
+                <span class="pop-bod">{{ row.first_name }}</span>
               </div>
               <div class="col-6">
                 <div class="bolder pop-tit w-100">Last Name</div>
-                <span class="pop-bod">{{ row.lastName }}</span>
+                <span class="pop-bod">{{ row.last_name }}</span>
               </div>
             </div>
             <div class="row text-left mb-4">
               <div class="col-6">
                 <div class="bolder pop-tit w-100">Phone Number</div>
-                <span class="pop-bod">{{
-                  "0" + row.phone.split("+234")[1]
-                }}</span>
+                <span class="pop-bod">{{ row.phone }}</span>
               </div>
               <div class="col-6">
                 <div class="bolder pop-tit w-100">Email</div>
@@ -242,23 +242,23 @@
                 <div class="bolder pop-tit w-100">Status</div>
                 <span class="pop-bod">
                   {{
-                    row.userable.approvedAsCollector == 0
-                      ? "Deactivated"
-                      : "Activated"
+                    row.userable.approved_as_collector == 0
+                      ? 'Deactivated'
+                      : 'Activated'
                   }}
                 </span>
               </div>
               <div class="col-6">
                 <div class="bolder pop-tit w-100">Total Tonnage Collected</div>
-                <span class="pop-bod">{{ row.totalTonnage }}kg</span>
+                <span class="pop-bod">{{ row.total_tonnage }}kg</span>
               </div>
             </div>
             <div class="row text-left mb-4 pl-3">
               <div class="bolder pop-tit w-100">Last Withdrawal Date</div>
               <div class="w-100">
-                <span class="pop-bod">{{ row.totalWithdrawals }}</span>
+                <span class="pop-bod">{{ row.total_withdrawals }}</span>
                 <button
-                  (click)="deleteUser(row.phone)"
+                  (click)="deleteUser(row.id)"
                   type="button"
                   class="btn btn-clear float-right text-danger"
                 >
@@ -281,7 +281,23 @@
       </tr>
     </table>
 
-    <mat-paginator pageSize="25"></mat-paginator>
+    <div class="mt-5 d-flex justify-content-end">
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="currentPage"
+        [pageSize]="pageSize"
+        [rotate]="true"
+        [maxSize]="5"
+        [rotate]="true"
+        (pageChange)="changePage()"
+      >
+        <ng-template ngbPaginationPrevious
+          ><i class="fa fa-caret-left" aria-hidden="true"></i
+        ></ng-template>
+        <ng-template ngbPaginationNext
+          ><i class="fa fa-caret-right" aria-hidden="true"></i></ng-template
+      ></ngb-pagination>
+    </div>
   </div>
 </div>
 <ngx-loading [show]="deleteLoading"></ngx-loading>

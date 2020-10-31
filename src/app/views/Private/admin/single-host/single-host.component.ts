@@ -1,13 +1,13 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { NavService } from "src/app/services/general/nav.service";
-import { AuthService } from "src/app/services/auth/auth.service";
-import { Router } from "@angular/router";
-import { EnvironmentService } from "src/app/services/env/environment.service";
-import { TokenService } from "src/app/services/auth/token.service";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
-import { SelectionModel } from "@angular/cdk/collections";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NavService } from 'src/app/services/general/nav.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { Router } from '@angular/router';
+import { EnvironmentService } from 'src/app/services/env/environment.service';
+import { TokenService } from 'src/app/services/auth/token.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
 
 export interface User {
   id: string;
@@ -20,20 +20,20 @@ export interface User {
   transType: string;
 }
 @Component({
-  selector: "app-single-host",
-  templateUrl: "./single-host.component.html",
-  styleUrls: ["./single-host.component.css"],
+  selector: 'app-single-host',
+  templateUrl: './single-host.component.html',
+  styleUrls: ['./single-host.component.css'],
 })
 export class SingleHostComponent implements OnInit {
   displayedColumns: string[] = [
-    "id",
-    "producerPhone",
-    "collectorID",
-    "materials",
-    "cost",
-    "transType",
-    "time",
-    "date",
+    'id',
+    'producerPhone',
+    'collectorID',
+    'materials',
+    'cost',
+    'transType',
+    'time',
+    'date',
   ];
   dataSource: MatTableDataSource<User>;
 
@@ -54,7 +54,7 @@ export class SingleHostComponent implements OnInit {
     this.populateUser();
   }
 
-  User: any = { phone: "", userable: {} };
+  User: any = { phone: '', userable: {} };
   loading = false;
   Scrap: any = {};
   SelectedTransaction: any = {};
@@ -64,11 +64,11 @@ export class SingleHostComponent implements OnInit {
 
   populateUser() {
     if (this.nav.get() == null) {
-      var id = this.router.url.split("_")[1];
+      var id = this.router.url.split('_')[1];
       var payload = {
-        adminPhone: this.token.phone,
-        userID: "+234" + id,
-        userType: "Host",
+        adminPhone: this.token._id,
+        userID: '+234' + id,
+        userType: 'Host',
       };
       this.getSingleUser(payload);
     } else {
@@ -94,16 +94,16 @@ export class SingleHostComponent implements OnInit {
 
   getUserWithTonnage(phone) {
     this.loading = true;
-    this.auth.getUserWithTonnage(phone).subscribe(
-      (data: any) => {
-        this.CollectedScrap = data.tonnage;
-        this.processTonnage();
-      },
-      (error) => {
-        this.loading = false;
-        console.log(error);
-      }
-    );
+    // this.auth.getUserWithTonnage(phone).subscribe(
+    //   (data: any) => {
+    //     this.CollectedScrap = data.tonnage;
+    //     this.processTonnage();
+    //   },
+    //   (error) => {
+    //     this.loading = false;
+    //     console.log(error);
+    //   }
+    // );
   }
 
   processTonnage() {
@@ -113,7 +113,7 @@ export class SingleHostComponent implements OnInit {
     this.lineChartData = [
       {
         data: this.getSingleScrapForGraph(),
-        label: "Scrap",
+        label: 'Scrap',
       },
     ];
   }
@@ -137,7 +137,7 @@ export class SingleHostComponent implements OnInit {
   public lineChartData: Array<any> = [
     {
       data: [],
-      label: "Scrap",
+      label: 'Scrap',
     },
   ];
 
@@ -149,34 +149,34 @@ export class SingleHostComponent implements OnInit {
   public lineChartColours: Array<any> = [
     {
       // grey
-      backgroundColor: "rgba(148,159,177,0.2)",
-      borderColor: "rgba(148,159,177,1)",
-      pointBackgroundColor: "rgba(148,159,177,1)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(148,159,177,0.8)",
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)',
     },
     {
       // dark grey
-      backgroundColor: "rgba(77,83,96,0.2)",
-      borderColor: "rgba(77,83,96,1)",
-      pointBackgroundColor: "rgba(77,83,96,1)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(77,83,96,1)",
+      backgroundColor: 'rgba(77,83,96,0.2)',
+      borderColor: 'rgba(77,83,96,1)',
+      pointBackgroundColor: 'rgba(77,83,96,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(77,83,96,1)',
     },
     {
       // grey
-      backgroundColor: "rgba(148,159,177,0.2)",
-      borderColor: "rgba(148,159,177,1)",
-      pointBackgroundColor: "rgba(148,159,177,1)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(148,159,177,0.8)",
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)',
     },
   ];
   public lineChartLegend = true;
-  public lineChartType = "line";
+  public lineChartType = 'line';
 
   // events
   public chartClicked(e: any): void {
@@ -197,10 +197,10 @@ export class SingleHostComponent implements OnInit {
   }
 
   getCollections(phone) {
-    this.auth.getCollections(phone).subscribe(
-      (res: any) => this.handleCollectionResponse(res),
-      (err) => console.log(err)
-    );
+    // this.auth.getCollections(phone).subscribe(
+    //   (res: any) => this.handleCollectionResponse(res),
+    //   (err) => console.log(err)
+    // );
   }
 
   handleCollectionResponse(res) {
@@ -214,7 +214,7 @@ export class SingleHostComponent implements OnInit {
     if (amount)
       return parseFloat(amount)
         .toFixed(2)
-        .replace(/\d(?=(\d{3})+\.)/g, "$&,");
+        .replace(/\d(?=(\d{3})+\.)/g, '$&,');
   }
 
   selectTransaction(trans) {

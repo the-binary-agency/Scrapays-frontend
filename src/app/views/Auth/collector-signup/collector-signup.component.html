@@ -12,18 +12,18 @@
           <input
             class="form-control"
             placeholder="First Name"
-            formControlName="firstName"
+            formControlName="first_name"
           />
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.firstName"
+              *ngFor="let validation of validation_messages.first_name"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  CollectorForm.get('firstName').hasError(validation.type) &&
-                  (CollectorForm.get('firstName').dirty ||
-                    CollectorForm.get('firstName').touched)
+                  CollectorForm.get('first_name').hasError(validation.type) &&
+                  (CollectorForm.get('first_name').dirty ||
+                    CollectorForm.get('first_name').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -36,18 +36,18 @@
           <input
             class="form-control"
             placeholder="Last Name"
-            formControlName="lastName"
+            formControlName="last_name"
           />
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.lastName"
+              *ngFor="let validation of validation_messages.last_name"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  CollectorForm.get('lastName').hasError(validation.type) &&
-                  (CollectorForm.get('lastName').dirty ||
-                    CollectorForm.get('lastName').touched)
+                  CollectorForm.get('last_name').hasError(validation.type) &&
+                  (CollectorForm.get('last_name').dirty ||
+                    CollectorForm.get('last_name').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -109,22 +109,22 @@
           type="text"
           class="form-control"
           placeholder="Collection Coverage Zone"
-          formControlName="collectionCoverageZone"
+          formControlName="collection_coverage_zone"
         />
         <div class="validation-errors w-100">
           <ng-container
             *ngFor="
-              let validation of validation_messages.collectionCoverageZone
+              let validation of validation_messages.collection_coverage_zone
             "
           >
             <div
               class="error-message alert alert-danger"
               *ngIf="
-                CollectorForm.get('collectionCoverageZone').hasError(
+                CollectorForm.get('collection_coverage_zone').hasError(
                   validation.type
                 ) &&
-                (CollectorForm.get('collectionCoverageZone').dirty ||
-                  CollectorForm.get('collectionCoverageZone').touched)
+                (CollectorForm.get('collection_coverage_zone').dirty ||
+                  CollectorForm.get('collection_coverage_zone').touched)
               "
             >
               <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -138,7 +138,7 @@
           type="text"
           class="form-control"
           placeholder="Invite Code (optional)"
-          formControlName="inviteCode"
+          formControlName="invite_code"
         />
       </div>
       <div class="input-group mb-0 mt-3">
@@ -233,17 +233,13 @@
           <div class="col-auto">
             <i class="fa fa-arrow-right" aria-hidden="true"></i>
           </div>
-          <div class="col">
-            Work from your Area
-          </div>
+          <div class="col">Work from your Area</div>
         </li>
         <li class="signup-rows row">
           <div class="col-auto">
             <i class="fa fa-arrow-right" aria-hidden="true"></i>
           </div>
-          <div class="col">
-            Earn as you collect
-          </div>
+          <div class="col">Earn as you collect</div>
         </li>
         <li class="signup-rows row">
           <div class="col-auto">
@@ -257,9 +253,7 @@
           <div class="col-auto">
             <i class="fa fa-arrow-right" aria-hidden="true"></i>
           </div>
-          <div class="col">
-            Get trained
-          </div>
+          <div class="col">Get trained</div>
         </li>
       </ul>
       <div class="w-100">

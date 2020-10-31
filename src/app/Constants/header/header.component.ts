@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   public Admin: boolean;
   public Household: boolean;
   public Enterprise: boolean;
-  public Vendor: boolean;
+  public Host: boolean;
   public Collector: boolean;
   public _error = new Subject<string>();
   public authError = '';
@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit {
     this.Auth.householdStatus.subscribe( value => this.Household = value );
     this.Auth.enterpriseStatus.subscribe( value => this.Enterprise = value );
     this.Auth.collectorStatus.subscribe( value => this.Collector = value );
-    this.Auth.vendorStatus.subscribe( value => this.Vendor = value );
+    this.Auth.HostStatus.subscribe( value => this.Host = value );
   }
 
   logOut(event: MouseEvent){
@@ -70,14 +70,14 @@ export class HeaderComponent implements OnInit {
     var Admin = this.Admin;
     var Household = this.Household;
     var Enterprise = this.Enterprise;
-    var Vendor = this.Vendor;
+    var Host = this.Host;
     var Collector = this.Collector;
     this.Token.remove();
     this.Auth.changeAuthStatus(false);
     this.Auth.changeAdminStatus(false);
     this.Auth.changeHouseholdStatus(false);
     this.Auth.changeEnterpriseStatus(false);
-    this.Auth.changeVendorStatus(false);
+    this.Auth.changeHostStatus(false);
     this.Auth.changeCollectorStatus(false);
     if ( Admin ) {
       this.router.navigateByUrl( '/login/partners' );

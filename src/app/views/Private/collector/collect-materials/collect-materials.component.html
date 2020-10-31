@@ -8,7 +8,7 @@
       </div>
       <div class="col-6 col-md-2">
         <div class="bolder w-100">Producer ID</div>
-        {{ "0" + req.userID.split("+234")[1] }}
+        {{ '0' + req.producer_id }}
       </div>
       <div class="col-6 col-md-2">
         <div class="bolder w-100">Address</div>
@@ -47,26 +47,26 @@
                   type="tel"
                   class="form-control w-md-auto"
                   name="producerID"
-                  [(ngModel)]="producerPhone"
+                  [(ngModel)]="producer_phone"
                   placeholder="Customer ID"
                   (focusout)="PhoneOnFocusOut($event)"
-                  *ngIf="!producerName"
+                  *ngIf="!producer_name"
                 />
                 <div
                   class="form-control w-md-auto text-capitalize"
-                  *ngIf="producerName"
+                  *ngIf="producer_name"
                 >
                   <img
                     src="assets/images/icons/user-1.png"
                     alt="user icon"
                     class="h-100"
                   />&nbsp;
-                  {{ producerName }}
+                  {{ producer_name }}
                 </div>
                 <i
                   class="fa fa-times-circle text-danger fake-btn name-cancel fa-lg"
                   aria-hidden="true"
-                  *ngIf="producerName"
+                  *ngIf="producer_name"
                   (click)="clearProducer()"
                 ></i>
               </div>
@@ -87,8 +87,8 @@
                 <div class="form-group">
                   <input
                     type="text"
-                    name="producerName"
-                    [(ngModel)]="newProducer.firstName"
+                    name="producer_name"
+                    [(ngModel)]="newProducer.first_name"
                     class="form-control"
                     placeholder="Customer First Name"
                   />
@@ -98,8 +98,8 @@
                 <div class="form-group ml-md-3">
                   <input
                     type="text"
-                    name="producerName"
-                    [(ngModel)]="newProducer.lastName"
+                    name="producer_name"
+                    [(ngModel)]="newProducer.last_name"
                     class="form-control"
                     placeholder="Customer Last Name"
                   />
@@ -110,7 +110,7 @@
                   [(ngModel)]="registerNew"
                   name="check-new"
                   class="h4 bolder"
-                  [disabled]="producerName != null"
+                  [disabled]="producer_name != null"
                 >
                   New User
                 </mat-checkbox>
@@ -140,25 +140,41 @@
               </select>
             </div>
           </div>
-          <div class="col-12 col-md pl-0">
+          <ng-container *ngIf="material.name == 'Composite'">
+            <div class="col-6 col-md pl-0">
+              <div class="form-group">
+                <input
+                  type="number"
+                  class="form-control"
+                  name="material-weight_{{ i }}"
+                  placeholder="Tonnage"
+                  [(ngModel)]="material.weight"
+                  (keyup)="weightChange($event.target.value, i)"
+                  [disabled]="material.name == null"
+                />
+              </div>
+            </div>
+            <div class="col-6 col-md pl-0">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="material-comment{{ i }}"
+                  placeholder="Comment"
+                  [(ngModel)]="material.comment"
+                  [disabled]="material.name == null"
+                />
+              </div>
+            </div>
+          </ng-container>
+          <div class="col-12 col-md pl-0" *ngIf="material.name != 'Composite'">
             <div class="form-group">
               <input
-                *ngIf="material.name != 'Composite'"
                 type="number"
                 class="form-control"
                 name="material-weight_{{ i }}"
                 placeholder="Tonnage"
                 [(ngModel)]="material.weight"
-                (keyup)="weightChange($event.target.value, i)"
-                [disabled]="material.name == null"
-              />
-              <input
-                *ngIf="material.name == 'Composite'"
-                type="number"
-                class="form-control"
-                name="material-weight_{{ i }}"
-                placeholder="Cost"
-                [(ngModel)]="material.cost"
                 (keyup)="weightChange($event.target.value, i)"
                 [disabled]="material.name == null"
               />
@@ -205,14 +221,14 @@
                 </div>
                 <div class="col">
                   Total Price Estimate: <br />
-                  <span class="h3"> ₦{{ formatToCurrency(totalCost) }} </span>
+                  <span class="h3"> ₦{{ formatToCurrency(total_cost) }} </span>
                 </div>
               </div>
               <div class="row">
                 This price estimate is based on the price of &nbsp;
                 <span *ngFor="let material of materials; let i = index">
                   <span *ngIf="material.name == 'Composite'">
-                    {{ "a " + material.name + " material" }} at ₦{{
+                    {{ 'a ' + material.name + ' material' }} at ₦{{
                       material.cost
                     }}
                   </span>

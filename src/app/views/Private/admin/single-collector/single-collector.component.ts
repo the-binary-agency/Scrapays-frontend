@@ -1,60 +1,56 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { NavService } from "src/app/services/general/nav.service";
-import { AuthService } from "src/app/services/auth/auth.service";
-import { Router } from "@angular/router";
-import { EnvironmentService } from "src/app/services/env/environment.service";
-import { TokenService } from "src/app/services/auth/token.service";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
-import { SelectionModel } from "@angular/cdk/collections";
-import { materialize } from "rxjs/operators";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NavService } from 'src/app/services/general/nav.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { Router } from '@angular/router';
+import { TokenService } from 'src/app/services/auth/token.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import {
   NgbCalendar,
   NgbDate,
   NgbDateStruct,
   NgbModal,
-} from "@ng-bootstrap/ng-bootstrap";
+} from '@ng-bootstrap/ng-bootstrap';
 
 export interface Collection {
   id: string;
-  producerPhone: string;
-  collectorID: string;
+  producer_id: string;
+  collector_id: string;
   materials: string;
   date: string;
   time: string;
   cost: string;
-  paymentMethod: string;
+  payment_method: string;
 }
 
 @Component({
-  selector: "app-single-collector",
-  templateUrl: "./single-collector.component.html",
-  styleUrls: ["./single-collector.component.css"],
+  selector: 'app-single-collector',
+  templateUrl: './single-collector.component.html',
+  styleUrls: ['./single-collector.component.css'],
 })
 export class SingleCollectorComponent implements OnInit {
   displayedColumns: string[] = [
-    "id",
-    "producerPhone",
-    "collectorID",
-    "materials",
-    "cost",
-    "paymentMethod",
-    "time",
-    "date",
+    'id',
+    'producer_id',
+    'collector_id',
+    'materials',
+    'cost',
+    'payment_method',
+    'time',
+    'date',
   ];
   dataSource: MatTableDataSource<Collection>;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild("collHist") private collHist;
+  @ViewChild('collHist') private collHist;
 
   constructor(
     private nav: NavService,
     private auth: AuthService,
     private router: Router,
     private modal: NgbModal,
-    private env: EnvironmentService,
     private token: TokenService,
     private calender: NgbCalendar
   ) {}
@@ -66,7 +62,8 @@ export class SingleCollectorComponent implements OnInit {
     this.populateUser();
   }
 
-  User: any = { phone: "", userable: {} };
+  User: any = { phone: '', userable: {} };
+  Balance: any = '0.00';
   loading = false;
   Scrap: any = {};
   SelectedTransaction: any = {};
@@ -78,59 +75,66 @@ export class SingleCollectorComponent implements OnInit {
   model: NgbDateStruct;
 
   hoveredDate: NgbDate | null = null;
-
   fromDate: NgbDate;
   toDate: NgbDate | null = null;
   maxDate: NgbDateStruct;
 
+  currentPage = 1;
+  collectionSize = 0;
+  pageSize = 1;
+
   configureDate() {
-    this.fromDate = this.calender.getPrev(this.calender.getToday(), "d", 6);
+    this.fromDate = this.calender.getPrev(this.calender.getToday(), 'd', 6);
     this.maxDate = this.calender.getToday();
     this.toDate = this.calender.getToday();
   }
 
   populateUser() {
     if (this.nav.get() == null) {
-      var id = this.router.url.split("_")[1];
-      var payload = {
-        adminPhone: this.token.phone,
-        userID: "+234" + id,
-        userType: "Collector",
-      };
-      this.getSingleUser(payload);
+      var id = this.router.url.split('_')[1];
+      this.getSingleUser(id);
     } else {
+      var id = this.router.url.split('_')[1];
       this.User = this.nav.get();
-      this.getCollectorWithTonnage(this.User.phone);
-      this.getCollections(this.User.phone);
+      this.getCollectedTonnage(id);
+      this.getCollectedScrap(id);
       this.dataSource = new MatTableDataSource(this.Collections);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }
   }
 
-  getSingleUser(payload) {
-    this.auth.getUserWithID(payload).subscribe(
-      (data: any) => {
-        this.User = data;
-        this.getCollectorWithTonnage(data.phone);
-        this.getCollections(data.phone);
+  getSingleUser(id) {
+    this.auth.getUserWithID(id).subscribe(
+      (res: any) => {
+        this.User = res.data;
+        this.getCollectedTonnage(res.data.id);
+        this.getCollectedScrap(id);
       },
       (error) => console.log(error)
     );
   }
 
-  getCollectorWithTonnage(phone) {
-    this.getCollectionshistory(phone);
+  getCollectedTonnage(id) {
+    this.getCollectionshistory(id);
+    this.getWalletBalance(id);
     this.loading = true;
-    this.auth.getCollectorWithTonnage(phone).subscribe(
-      (data: any) => {
-        this.CollectedScrap = data.tonnage;
+    this.auth.getCollectedTonnage(id).subscribe(
+      (res: any) => {
+        this.CollectedScrap = res.data;
         this.processTonnage();
       },
       (error) => {
         this.loading = false;
         console.log(error);
       }
+    );
+  }
+
+  getWalletBalance(phone) {
+    this.auth.getwalletbalance(phone).subscribe(
+      (res: any) => (this.Balance = res.balance),
+      (err) => console.log(err)
     );
   }
 
@@ -141,7 +145,7 @@ export class SingleCollectorComponent implements OnInit {
     this.lineChartData = [
       {
         data: this.getSingleScrapForGraph(),
-        label: "Scrap",
+        label: 'Scrap',
       },
     ];
   }
@@ -165,7 +169,7 @@ export class SingleCollectorComponent implements OnInit {
   public lineChartData: Array<any> = [
     {
       data: [],
-      label: "Scrap",
+      label: 'Scrap',
     },
   ];
 
@@ -177,34 +181,34 @@ export class SingleCollectorComponent implements OnInit {
   public lineChartColours: Array<any> = [
     {
       // grey
-      backgroundColor: "rgba(148,159,177,0.2)",
-      borderColor: "rgba(148,159,177,1)",
-      pointBackgroundColor: "rgba(148,159,177,1)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(148,159,177,0.8)",
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)',
     },
     {
       // dark grey
-      backgroundColor: "rgba(77,83,96,0.2)",
-      borderColor: "rgba(77,83,96,1)",
-      pointBackgroundColor: "rgba(77,83,96,1)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(77,83,96,1)",
+      backgroundColor: 'rgba(77,83,96,0.2)',
+      borderColor: 'rgba(77,83,96,1)',
+      pointBackgroundColor: 'rgba(77,83,96,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(77,83,96,1)',
     },
     {
       // grey
-      backgroundColor: "rgba(148,159,177,0.2)",
-      borderColor: "rgba(148,159,177,1)",
-      pointBackgroundColor: "rgba(148,159,177,1)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(148,159,177,0.8)",
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)',
     },
   ];
   public lineChartLegend = true;
-  public lineChartType = "line";
+  public lineChartType = 'line';
 
   // events
   public chartClicked(e: any): void {
@@ -224,17 +228,19 @@ export class SingleCollectorComponent implements OnInit {
     return matToShow;
   }
 
-  getCollections(phone) {
-    this.auth.getCollectorCollections(phone).subscribe(
-      (res: any) => this.handleCollectionResponse(res),
+  getCollectedScrap(id, query?) {
+    this.auth.getCollectedScrap(id, query).subscribe(
+      (res) => this.handleCollectionResponse(res),
       (err) => console.log(err)
     );
   }
 
   handleCollectionResponse(res) {
-    this.Collections = res.collections;
+    this.Collections = res.data;
+    this.currentPage = res.current_page;
+    this.collectionSize = res.total;
+    this.pageSize = res.per_page;
     this.dataSource = new MatTableDataSource(this.Collections);
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -242,7 +248,7 @@ export class SingleCollectorComponent implements OnInit {
     if (amount)
       return parseFloat(amount)
         .toFixed(2)
-        .replace(/\d(?=(\d{3})+\.)/g, "$&,");
+        .replace(/\d(?=(\d{3})+\.)/g, '$&,');
   }
 
   selectTransaction(trans) {
@@ -254,14 +260,14 @@ export class SingleCollectorComponent implements OnInit {
   }
 
   openCollHistModal() {
-    this.modal.open(this.collHist, { centered: true, size: "lg" });
+    this.modal.open(this.collHist, { centered: true, size: 'lg' });
   }
 
-  getCollectionshistory(phone) {
+  getCollectionshistory(id) {
     this.historyLoading = true;
-    this.auth.getCollectorCollectionsHistory(phone).subscribe(
+    this.auth.getSingleUserCollectionHistory(id).subscribe(
       (res: any) => {
-        this.matHist = res.history;
+        this.matHist = res.data;
         this.historyLoading = false;
       },
       (err) => {
@@ -305,25 +311,76 @@ export class SingleCollectorComponent implements OnInit {
     );
   }
 
+  getHistory(from, to) {
+    this.historyLoading = true;
+    let query = `from=${JSON.stringify(from)}&to=${JSON.stringify(to)}`;
+    this.auth.getSingleUserCollectionHistory(this.User.id, query).subscribe(
+      (res: any) => {
+        this.matHist = res.data;
+        this.historyLoading = false;
+      },
+      (err: any) => {
+        this.historyLoading = false;
+        console.log(err);
+      }
+    );
+  }
+
   filterByDate() {
     this.historyLoading = true;
     if (this.toDate == null) {
-      this.toDate = this.calender.getNext(this.fromDate, "d", 1);
+      this.toDate = this.calender.getNext(this.fromDate, 'd', 1);
+    } else {
+      this.toDate = this.calender.getNext(this.toDate, 'd', 1);
     }
-    let query = `?from=${JSON.stringify(this.fromDate)}&to=${JSON.stringify(
-      this.toDate
-    )}`;
-    this.auth
-      .getCollectorCollectionsHistoryWithQuery(this.User.phone, query)
-      .subscribe(
-        (res: any) => {
-          this.matHist = res.history;
-          this.historyLoading = false;
-        },
-        (err: any) => {
-          this.historyLoading = false;
-          console.log(err);
-        }
-      );
+    this.getHistory(this.fromDate, this.toDate);
+  }
+
+  changePage() {
+    let query = `&page=${this.currentPage}`;
+    this.getCollectedScrap(this.User.id, query);
+  }
+
+  selectSort(e) {
+    switch (e.target.value) {
+      case 'week':
+        this.getWeeklyHistory();
+        break;
+      case 'month':
+        this.getMonthlyHistory();
+        break;
+      case 'year':
+        this.getYearlyHistory();
+        break;
+      default:
+        break;
+    }
+  }
+
+  getWeeklyHistory() {
+    let today = this.calender.getToday();
+    let currentWeekDay = this.calender.getWeekday(today);
+    let Mon = this.calender.getPrev(today, 'd', currentWeekDay - 1);
+    let Sat = this.calender.getNext(today, 'd', 6 - currentWeekDay + 1);
+    this.getHistory(Mon, Sat);
+  }
+
+  getMonthlyHistory() {
+    let today = this.calender.getToday();
+    let endOfLastMonth = this.calender.getPrev(today, 'm', 1);
+    let endOfNextMonth = this.calender.getNext(today, 'm', 1);
+    let startOfNextMonth = this.calender.getPrev(
+      endOfNextMonth,
+      'd',
+      endOfNextMonth.day - 1
+    );
+    this.getHistory(endOfLastMonth, startOfNextMonth);
+  }
+
+  getYearlyHistory() {
+    let today = this.calender.getToday();
+    let endOfLastYear = { year: today.year - 1, month: 11, day: 31 };
+    let startOfNextYear = { year: today.year + 1, month: 0, day: 1 };
+    this.getHistory(endOfLastYear, startOfNextYear);
   }
 }

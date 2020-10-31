@@ -2,7 +2,14 @@
   <div class="row px-md-5 pt-md-4">
     <div class="col-12 col-md-6">
       <div class="row">
-        <div class="col-6 font-weight-bold h3">Material</div>
+        <div class="col-6 font-weight-bold h3">
+          Material
+          <i
+            class="fa fa-spinner fa-spin"
+            aria-hidden="true"
+            *ngIf="materialLoading"
+          ></i>
+        </div>
         <div class="col-6 font-weight-bold h3">Price Per KG</div>
         <ng-container *ngFor="let mat of materialPrices; let i = index">
           <div class="col-6 mt-5">
@@ -37,6 +44,23 @@
           No Material has been Added
         </div>
       </div>
+
+      <div class="row mt-5 justify-content-end">
+        <ngb-pagination
+          [collectionSize]="collectionSize"
+          [(page)]="currentPage"
+          [pageSize]="pageSize"
+          [rotate]="true"
+          [ellipses]="false"
+          (pageChange)="changePage()"
+        >
+          <ng-template ngbPaginationPrevious
+            ><i class="fa fa-caret-left" aria-hidden="true"></i
+          ></ng-template>
+          <ng-template ngbPaginationNext
+            ><i class="fa fa-caret-right" aria-hidden="true"></i></ng-template
+        ></ngb-pagination>
+      </div>
     </div>
     <div class="col-12 col-md-6 mt-4 mt-md-0">
       <div *ngIf="edit == false">
@@ -54,12 +78,31 @@
           <div class="form-group">
             <label for="">Material Price</label>
             <input
-              type="text"
+              type="number"
               name="materialPrice"
               [(ngModel)]="matForm.price"
               class="form-control"
               placeholder=""
-              aria-describedby="helpId"
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Material Collector's Commision</label>
+            <input
+              type="number"
+              name="materialColcom"
+              [(ngModel)]="matForm.collector_commission"
+              class="form-control"
+              placeholder=""
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Material Vendor's Commision</label>
+            <input
+              type="number"
+              name="materialHostCom"
+              [(ngModel)]="matForm.host_commission"
+              class="form-control"
+              placeholder=""
             />
           </div>
           <div class="form-group">
@@ -105,12 +148,31 @@
           <div class="form-group">
             <label for="">Material Price</label>
             <input
-              type="text"
+              type="number"
               name="materialPrice"
               [(ngModel)]="matForm.price"
               class="form-control"
               placeholder=""
-              aria-describedby="helpId"
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Material Collector's Commision</label>
+            <input
+              type="number"
+              name="materialCollector_commission"
+              [(ngModel)]="matForm.collector_commission"
+              class="form-control"
+              placeholder=""
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Material Vendor's Commision</label>
+            <input
+              type="number"
+              name="materialHostCom"
+              [(ngModel)]="matForm.host_commission"
+              class="form-control"
+              placeholder=""
             />
           </div>
           <div class="form-group">

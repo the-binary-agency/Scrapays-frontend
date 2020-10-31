@@ -65,7 +65,7 @@
           Date
         </th>
         <td mat-cell *matCellDef="let row">
-          {{ row.created_at | date: "medium" }}
+          {{ row.created_at | date: 'medium' }}
         </td>
       </ng-container>
 
@@ -129,149 +129,169 @@
       </tr>
     </table>
 
-    <mat-paginator pageSize="25"></mat-paginator>
-
-    <ngx-loading [show]="loading"></ngx-loading>
-  </div>
-</div>
-
-<ng-template #viewMessage let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">
-      <p>{{ selectedMessage.subject }}</p>
-    </h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <p>{{ selectedMessage.message }}</p>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-light"
-      (click)="modal.close('Close click')"
-    >
-      Close
-    </button>
-  </div>
-</ng-template>
-
-<ng-template #replyMessage let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">
-      <p>Reply {{ selectedMessage.name }}</p>
-    </h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <form [formGroup]="ReplyForm" (ngSubmit)="sendReplyMessage(ReplyForm.value)">
-    <div class="modal-body">
-      <div class="reply-sec py-1 px-2 mb-2">
-        Reply as:
-        <input type="text" class="reply-input w-100" formControlName="as" />
-      </div>
-      <ng-container *ngFor="let validation of validation_messages.as">
-        <div
-          class="error-message"
-          *ngIf="
-            ReplyForm.get('as').hasError(validation.type) &&
-            (ReplyForm.get('as').dirty || ReplyForm.get('as').touched)
-          "
-        >
-          <i class="fa fa-info-circle text-danger"></i> &nbsp;
-          <span class="text-danger">{{ validation.message }}</span>
-        </div>
-      </ng-container>
-      <div class="reply-sec py-1 px-2 mb-2">
-        CC:
-        <input type="text" class="reply-input w-100" formControlName="cc" />
-      </div>
-      <ng-container *ngFor="let validation of validation_messages.cc">
-        <div
-          class="error-message"
-          *ngIf="
-            ReplyForm.get('cc').hasError(validation.type) &&
-            (ReplyForm.get('cc').dirty || ReplyForm.get('cc').touched)
-          "
-        >
-          <i class="fa fa-info-circle text-danger"></i> &nbsp;
-          <span class="text-danger">{{ validation.message }}</span>
-        </div>
-      </ng-container>
-      <textarea
-        formControlName="message"
-        class="reply-input reply-textarea non-res-textarea w-100 p-2"
-      ></textarea>
-      <ng-container *ngFor="let validation of validation_messages.message">
-        <div
-          class="error-message"
-          *ngIf="
-            ReplyForm.get('message').hasError(validation.type) &&
-            (ReplyForm.get('message').dirty || ReplyForm.get('message').touched)
-          "
-        >
-          <i class="fa fa-info-circle text-danger"></i> &nbsp;
-          <span class="text-danger">{{ validation.message }}</span>
-        </div>
-      </ng-container>
-    </div>
-    <div class="modal-footer justify-content-between">
-      <div>
-        <i
-          class="fa fa-circle-o-notch fa-spin fa-lg"
-          aria-hidden="true"
-          *ngIf="replyLoading"
-        ></i
-        >{{ replyRes }}
-      </div>
-      <button
-        type="submit"
-        class="btn btn-light"
-        [disabled]="!ReplyForm.valid || replyLoading"
+    <div class="mt-5 d-flex justify-content-end">
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="currentPage"
+        [pageSize]="pageSize"
+        [rotate]="true"
+        [maxSize]="5"
+        [ellipses]="true"
+        (pageChange)="changePage()"
       >
-        <img src="assets/images/icons/big-paper-plane.png" alt="send" />
+        <ng-template ngbPaginationPrevious
+          ><i class="fa fa-caret-left" aria-hidden="true"></i
+        ></ng-template>
+        <ng-template ngbPaginationNext
+          ><i class="fa fa-caret-right" aria-hidden="true"></i></ng-template
+      ></ngb-pagination>
+
+      <ngx-loading [show]="loading"></ngx-loading>
+    </div>
+  </div>
+
+  <ng-template #viewMessage let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">
+        <p>{{ selectedMessage.subject }}</p>
+      </h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
       </button>
     </div>
-  </form>
-</ng-template>
+    <div class="modal-body">
+      <p>{{ selectedMessage.message }}</p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="modal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
 
-<ng-template #deleteModal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">
-      <p>{{ deleteNotification.title }}</p>
-    </h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
+  <ng-template #replyMessage let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">
+        <p>Reply {{ selectedMessage.name }}</p>
+      </h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form
+      [formGroup]="ReplyForm"
+      (ngSubmit)="sendReplyMessage(ReplyForm.value)"
     >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <p>{{ deleteNotification.body }}</p>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-light"
-      (click)="modal.close('Close click')"
-    >
-      Close
-    </button>
-  </div>
-</ng-template>
+      <div class="modal-body">
+        <div class="reply-sec py-1 px-2 mb-2">
+          Reply as:
+          <input type="text" class="reply-input w-100" formControlName="as" />
+        </div>
+        <ng-container *ngFor="let validation of validation_messages.as">
+          <div
+            class="error-message"
+            *ngIf="
+              ReplyForm.get('as').hasError(validation.type) &&
+              (ReplyForm.get('as').dirty || ReplyForm.get('as').touched)
+            "
+          >
+            <i class="fa fa-info-circle text-danger"></i> &nbsp;
+            <span class="text-danger">{{ validation.message }}</span>
+          </div>
+        </ng-container>
+        <div class="reply-sec py-1 px-2 mb-2">
+          CC:
+          <input type="text" class="reply-input w-100" formControlName="cc" />
+        </div>
+        <ng-container *ngFor="let validation of validation_messages.cc">
+          <div
+            class="error-message"
+            *ngIf="
+              ReplyForm.get('cc').hasError(validation.type) &&
+              (ReplyForm.get('cc').dirty || ReplyForm.get('cc').touched)
+            "
+          >
+            <i class="fa fa-info-circle text-danger"></i> &nbsp;
+            <span class="text-danger">{{ validation.message }}</span>
+          </div>
+        </ng-container>
+        <textarea
+          formControlName="message"
+          class="reply-input reply-textarea non-res-textarea w-100 p-2"
+        ></textarea>
+        <ng-container *ngFor="let validation of validation_messages.message">
+          <div
+            class="error-message"
+            *ngIf="
+              ReplyForm.get('message').hasError(validation.type) &&
+              (ReplyForm.get('message').dirty ||
+                ReplyForm.get('message').touched)
+            "
+          >
+            <i class="fa fa-info-circle text-danger"></i> &nbsp;
+            <span class="text-danger">{{ validation.message }}</span>
+          </div>
+        </ng-container>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <div>
+          <i
+            class="fa fa-circle-o-notch fa-spin fa-lg"
+            aria-hidden="true"
+            *ngIf="replyLoading"
+          ></i
+          >{{ replyRes }}
+        </div>
+        <button
+          type="submit"
+          class="btn btn-light"
+          [disabled]="!ReplyForm.valid || replyLoading"
+        >
+          <img src="assets/images/icons/big-paper-plane.png" alt="send" />
+        </button>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #deleteModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">
+        <p>{{ deleteNotification.title }}</p>
+      </h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{ deleteNotification.body }}</p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="modal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
+</div>

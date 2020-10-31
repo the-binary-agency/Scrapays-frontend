@@ -12,18 +12,18 @@
           <input
             class="form-control"
             placeholder="First Name"
-            formControlName="firstName"
+            formControlName="first_name"
           />
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.firstName"
+              *ngFor="let validation of validation_messages.first_name"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  BusinessForm.get('firstName').hasError(validation.type) &&
-                  (BusinessForm.get('firstName').dirty ||
-                    BusinessForm.get('firstName').touched)
+                  BusinessForm.get('first_name').hasError(validation.type) &&
+                  (BusinessForm.get('first_name').dirty ||
+                    BusinessForm.get('first_name').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -36,18 +36,18 @@
           <input
             class="form-control"
             placeholder="Last Name"
-            formControlName="lastName"
+            formControlName="last_name"
           />
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.lastName"
+              *ngFor="let validation of validation_messages.last_name"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  BusinessForm.get('lastName').hasError(validation.type) &&
-                  (BusinessForm.get('lastName').dirty ||
-                    BusinessForm.get('lastName').touched)
+                  BusinessForm.get('last_name').hasError(validation.type) &&
+                  (BusinessForm.get('last_name').dirty ||
+                    BusinessForm.get('last_name').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -85,18 +85,18 @@
           type="text"
           class="form-control"
           placeholder="Host Address"
-          formControlName="hostAddress"
+          formControlName="hosting_address"
         />
         <div class="validation-errors w-100">
           <ng-container
-            *ngFor="let validation of validation_messages.hostAddress"
+            *ngFor="let validation of validation_messages.hosting_address"
           >
             <div
               class="error-message alert alert-danger"
               *ngIf="
-                BusinessForm.get('hostAddress').hasError(validation.type) &&
-                (BusinessForm.get('hostAddress').dirty ||
-                  BusinessForm.get('hostAddress').touched)
+                BusinessForm.get('hosting_address').hasError(validation.type) &&
+                (BusinessForm.get('hosting_address').dirty ||
+                  BusinessForm.get('hosting_address').touched)
               "
             >
               <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -110,18 +110,18 @@
           type="tel"
           class="form-control"
           placeholder="Space Size (Length x breath )m"
-          formControlName="spaceSize"
+          formControlName="space_size"
         />
         <div class="validation-errors w-100">
           <ng-container
-            *ngFor="let validation of validation_messages.spaceSize"
+            *ngFor="let validation of validation_messages.space_size"
           >
             <div
               class="error-message alert alert-danger"
               *ngIf="
-                BusinessForm.get('spaceSize').hasError(validation.type) &&
-                (BusinessForm.get('spaceSize').dirty ||
-                  BusinessForm.get('spaceSize').touched)
+                BusinessForm.get('space_size').hasError(validation.type) &&
+                (BusinessForm.get('space_size').dirty ||
+                  BusinessForm.get('space_size').touched)
               "
             >
               <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -135,18 +135,20 @@
           type="tel"
           class="form-control"
           placeholder="Hosting Duration"
-          formControlName="hostingDuration"
+          formControlName="hosting_duration"
         />
         <div class="validation-errors w-100">
           <ng-container
-            *ngFor="let validation of validation_messages.hostingDuration"
+            *ngFor="let validation of validation_messages.hosting_duration"
           >
             <div
               class="error-message alert alert-danger"
               *ngIf="
-                BusinessForm.get('hostingDuration').hasError(validation.type) &&
-                (BusinessForm.get('hostingDuration').dirty ||
-                  BusinessForm.get('hostingDuration').touched)
+                BusinessForm.get('hosting_duration').hasError(
+                  validation.type
+                ) &&
+                (BusinessForm.get('hosting_duration').dirty ||
+                  BusinessForm.get('hosting_duration').touched)
               "
             >
               <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -268,9 +270,7 @@
           <div class="col-auto">
             <i class="fa fa-arrow-right" aria-hidden="true"></i>
           </div>
-          <div class="col">
-            Run business without operations worry
-          </div>
+          <div class="col">Run business without operations worry</div>
         </li>
         <li class="signup-rows w-md-90 row">
           <div class="col-auto">

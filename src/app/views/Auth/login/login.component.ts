@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit {
   loginWithPhone(Form) {
     this.loading = true;
     this.Auth.loginWithPhone(Form).subscribe(
-      (data) => this.handleResponse(data),
+      (res:any) => this.handleResponse(res.data),
       (error) => {
         this.handleError(error);
       }
@@ -93,14 +93,14 @@ export class LoginComponent implements OnInit {
   loginWithEmail(Form) {
     this.loading = true;
     this.Auth.loginWithEmail(Form).subscribe(
-      (data) => this.handleResponse(data),
+      (res:any) => this.handleResponse(res.data),
       (error) => {
         this.handleError(error);
       }
     );
   }
 
-  handleResponse(data) {
+  handleResponse( data ) {
     this.Token.handle(data.access_token);
     this.Auth.changeAuthStatus(true);
     this.loading = false;
@@ -122,8 +122,8 @@ export class LoginComponent implements OnInit {
     } else if (this.Token.isEnterprise()) {
       this.Auth.changeEnterpriseStatus(true);
       this.router.navigateByUrl("/dashboard/enterprise");
-    } else if (this.Token.isVendor()) {
-      this.Auth.changeVendorStatus(true);
+    } else if (this.Token.isHost()) {
+      this.Auth.changeHostStatus(true);
       this.router.navigateByUrl("/dashboard/host");
     } else if (this.Token.isCollector()) {
       this.Auth.changeCollectorStatus(true);

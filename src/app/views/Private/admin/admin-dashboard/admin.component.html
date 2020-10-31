@@ -19,7 +19,7 @@
               <div class="text-muted small">
                 Last updated
                 <span class="font-weight-bold">{{
-                  lastUpdated | date: "short"
+                  lastUpdated | date: 'short'
                 }}</span>
               </div>
               <br />
@@ -47,16 +47,16 @@
               <img src="assets/images/icons/user-1.png" alt="user icon" />
             </div>
             <div class="card-text">
-              <p class="font-weight-bold">Vendors</p>
+              <p class="font-weight-bold">Hosts</p>
               <div class="text-muted small">
                 Last updated
                 <span class="font-weight-bold">{{
-                  lastUpdated | date: "short"
+                  lastUpdated | date: 'short'
                 }}</span>
               </div>
               <br />
               <span class="badge bg-orange text-light"
-                >{{ UserCount.vendors }} Users</span
+                >{{ UserCount.hosts }} Users</span
               >
             </div>
           </div>
@@ -76,7 +76,7 @@
               <div class="text-muted small">
                 Last updated
                 <span class="font-weight-bold">{{
-                  lastUpdated | date: "short"
+                  lastUpdated | date: 'short'
                 }}</span>
               </div>
               <br />
@@ -241,13 +241,15 @@
           <span class="badge bg-orange text-light h5"
             >₦
             {{
-              matHist.totalcost ? formatToCurrency(matHist.totalcost) : 0
+              matHist.total_cost ? formatToCurrency(matHist.total_cost) : 0
             }}</span
           ><br /><br />
           Total Tonnage recovered <br /><br />
           <span class="badge bg-orange text-light h5">
             {{
-              matHist.totaltonnage ? formatToCurrency(matHist.totaltonnage) : 0
+              matHist.total_tonnage
+                ? formatToCurrency(matHist.total_tonnage)
+                : 0
             }}
             KG</span
           >
@@ -325,7 +327,7 @@
           role="tab"
           aria-controls="pills-contact"
           aria-selected="false"
-          (click)="getCollectionshistory()"
+          (click)="getAllCollectionshistory()"
           >Collectors</a
         >
       </li>
@@ -342,14 +344,14 @@
           &nbsp;
           <span class="sc-green"
             >{{
-              matHist.totaltonnage ? matHist.totaltonnage : 0
+              matHist.total_tonnage ? matHist.total_tonnage.toFixed(2) : 0
             }}
             &nbsp;kg</span
           >
         </div>
         <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
           <div *ngFor="let mat of matHist.materials">
-            {{ mat.name + ": " + mat.weight }} kg <&nbsp;
+            {{ mat.name + ': ' + mat.weight }} kg <&nbsp;
           </div>
           <br />
         </div>
@@ -359,8 +361,8 @@
           <span class="sc-green"
             >₦
             {{
-              formatToCurrency(matHist.totalcost)
-                ? formatToCurrency(matHist.totalcost)
+              formatToCurrency(matHist.total_cost)
+                ? formatToCurrency(matHist.total_cost)
                 : 0
             }}
             &nbsp;</span
@@ -368,7 +370,7 @@
         </div>
         <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
           <div *ngFor="let mat of matHist.materials">
-            {{ mat.name + ": ₦ " + formatToCurrency(mat.cost) }}&nbsp;<
+            {{ mat.name + ': ₦ ' + formatToCurrency(mat.cost) }}&nbsp;<
           </div>
           <br />
         </div>
@@ -384,14 +386,14 @@
           &nbsp;
           <span class="sc-green"
             >{{
-              matHist.totaltonnage ? matHist.totaltonnage : 0
+              matHist.total_tonnage ? matHist.total_tonnage.toFixed(2) : 0
             }}
             &nbsp;kg</span
           >
         </div>
         <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
           <div *ngFor="let mat of matHist.materials">
-            {{ mat.name + ": " + mat.weight }} kg <&nbsp;
+            {{ mat.name + ': ' + mat.weight }} kg <&nbsp;
           </div>
           <br />
         </div>
@@ -401,8 +403,8 @@
           <span class="sc-green"
             >₦
             {{
-              formatToCurrency(matHist.totalcost)
-                ? formatToCurrency(matHist.totalcost)
+              formatToCurrency(matHist.total_cost)
+                ? formatToCurrency(matHist.total_cost)
                 : 0
             }}
             &nbsp;</span
@@ -410,7 +412,7 @@
         </div>
         <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
           <div *ngFor="let mat of matHist.materials">
-            {{ mat.name + ": ₦ " + formatToCurrency(mat.cost) }}&nbsp;<
+            {{ mat.name + ': ₦ ' + formatToCurrency(mat.cost) }}&nbsp;<
           </div>
           <br />
         </div>
@@ -426,14 +428,14 @@
           &nbsp;
           <span class="sc-green"
             >{{
-              matHist.totaltonnage ? matHist.totaltonnage : 0
+              matHist.total_tonnage ? matHist.total_tonnage.toFixed(2) : 0
             }}
             &nbsp;kg</span
           >
         </div>
         <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
           <div *ngFor="let mat of matHist.materials">
-            {{ mat.name + ": " + mat.weight }} kg <&nbsp;
+            {{ mat.name + ': ' + mat.weight }} kg <&nbsp;
           </div>
           <br />
         </div>
@@ -443,8 +445,8 @@
           <span class="sc-green"
             >₦
             {{
-              formatToCurrency(matHist.totalcost)
-                ? formatToCurrency(matHist.totalcost)
+              formatToCurrency(matHist.total_cost)
+                ? formatToCurrency(matHist.total_cost)
                 : 0
             }}
             &nbsp;</span
@@ -452,7 +454,7 @@
         </div>
         <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
           <div *ngFor="let mat of matHist.materials">
-            {{ mat.name + ": ₦ " + formatToCurrency(mat.cost) }}&nbsp;<
+            {{ mat.name + ': ₦ ' + formatToCurrency(mat.cost) }}&nbsp;<
           </div>
           <br />
         </div>

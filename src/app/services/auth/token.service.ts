@@ -7,7 +7,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class TokenService {
 
-  public phone: number;
+  public _id: String;
   private iss = {
     login1: this.env.backendUrl + '/loginwithemail',
     login2: this.env.backendUrl + '/loginwithphone',
@@ -25,8 +25,8 @@ export class TokenService {
   constructor(private env: EnvironmentService) { }
 
 
-handle(data){
-  this.set( data );
+handle(token){
+  this.set( token );
 }
 
 set(token){
@@ -42,27 +42,17 @@ remove(){
   localStorage.removeItem('token');
 }
 
-  isValid() {
-    const helper = new JwtHelperService();
-    let token = this.get();
-    if(token){
-      const payload = this.payload( token )
-      if ( payload ) { 
-        this.phone = payload.phone;
-        return !helper.isTokenExpired( token );
-      }
-      return false;
+isValid() {
+  const helper = new JwtHelperService();
+  let token = this.get();
+  if(token){
+    const payload = this.payload( token )
+    if ( payload ) { 
+      this._id = payload.id;
+      return !helper.isTokenExpired( token );
     }
-    
-  // const token = this.get();
-  // if(token){
-  //   const payload = this.payload( token )
-  //   if ( payload ) { 
-  //     this.phone = payload.phone;
-  //    return  Object.values(this.iss).indexOf(payload.iss) > -1 ? true : false; 
-  //   }
-  //   return false;
-  // }
+    return false;
+  }
 }
   
   isAdmin(){
@@ -70,7 +60,7 @@ remove(){
   if(token){
     const payload = this.payload( token )
     if ( payload ) {
-      return  (payload.userable_type == 'App\\Admin') ? true : false; 
+      return  (payload.userable_type == 'Admin') ? true : false; 
     }
       return false;
     }
@@ -81,19 +71,19 @@ remove(){
     if(token){
       const payload = this.payload( token )
       if ( payload ) {
-        return  (payload.userable_type == 'App\\Collector') ? true : false; 
+        return  (payload.userable_type == 'Collector') ? true : false; 
       }
         return false;
      }
   }
   
   
-  isVendor(){
+  isHost(){
     const token = this.get();
     if(token){
       const payload = this.payload( token )
       if ( payload ) {
-        return  (payload.userable_type == 'App\\Vendor') ? true : false; 
+        return  (payload.userable_type == 'Host') ? true : false; 
       }
         return false;
     }
@@ -104,7 +94,7 @@ remove(){
     if(token){
       const payload = this.payload( token )
       if ( payload ) {
-        return  (payload.userable_type == 'App\\Enterprise') ? true : false; 
+        return  (payload.userable_type == 'Enterprise') ? true : false; 
       }
         return false;
     }
@@ -115,7 +105,7 @@ remove(){
     if(token){
       const payload = this.payload( token )
       if ( payload ) {
-        return  (payload.userable_type == 'App\\Household') ? true : false; 
+        return  (payload.userable_type == 'Household') ? true : false; 
       }
         return false;
     }
@@ -126,7 +116,7 @@ payload(token){
   return this.decode(payload);
 }
 
-decode(payload){
+  decode( payload ) {
   return JSON.parse(atob(payload));
 }
 
@@ -134,25 +124,25 @@ loggedIn(){
   return this.isValid();
 }
   
-  Admin() {
-    return this.isAdmin();
-  }
+Admin() {
+  return this.isAdmin();
+}
 
-  
-  Vendor() {
-    return this.isVendor();
-  }
 
-  Enterprise() {
-    return this.isEnterprise();
-  }
-  
-  Household() {
-    return this.isHousehold();
-  }
+Host() {
+  return this.isHost();
+}
 
-  Collector() {
-    return this.isCollector();
-  }
+Enterprise() {
+  return this.isEnterprise();
+}
+
+Household() {
+  return this.isHousehold();
+}
+
+Collector() {
+  return this.isCollector();
+}
 
 }

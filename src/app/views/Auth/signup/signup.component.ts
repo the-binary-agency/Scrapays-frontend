@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormControl,
   Validators,
@@ -7,20 +7,20 @@ import {
   FormControlName,
   FormGroupDirective,
   NgForm,
-} from "@angular/forms";
-import { AuthService } from "src/app/services/auth/auth.service";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { TokenService } from "src/app/services/auth/token.service";
-import { Router } from "@angular/router";
-import { LoginComponent } from "../login/login.component";
+} from '@angular/forms';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TokenService } from 'src/app/services/auth/token.service';
+import { Router } from '@angular/router';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
-  selector: "app-signup",
-  templateUrl: "./signup.component.html",
-  styleUrls: ["./signup.component.css"],
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent implements OnInit {
-  @ViewChild("content") private content;
+  @ViewChild('content') private content;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -32,34 +32,34 @@ export class SignupComponent implements OnInit {
   ) {}
 
   loading: boolean;
-  public error = { password: "" };
-  public BusinessForm: FormGroup;
+  public error = { password: '' };
+  public HouseholdForm: FormGroup;
   modalTitle: any;
   modalBody: any;
 
   validation_messages = {
-    firstName: [{ type: "required", message: "A First Name is required." }],
-    lastName: [{ type: "required", message: "A Last Name is required." }],
+    first_name: [{ type: 'required', message: 'A First Name is required.' }],
+    last_name: [{ type: 'required', message: 'A Last Name is required.' }],
     email: [
-      { type: "required", message: "An email is required." },
-      { type: "pattern", message: "Please enter a valid email" },
+      { type: 'required', message: 'An email is required.' },
+      { type: 'pattern', message: 'Please enter a valid email' },
     ],
     phone: [
-      { type: "required", message: "A Phone Number is required." },
-      { type: "pattern", message: "Please enter a valid Phone Number." },
+      { type: 'required', message: 'A Phone Number is required.' },
+      { type: 'pattern', message: 'Please enter a valid Phone Number.' },
     ],
-    requestAddress: [
-      { type: "required", message: "A request address is required." },
+    request_address: [
+      { type: 'required', message: 'A request address is required.' },
     ],
     pin: [
-      { type: "required", message: "A wallet pin is required." },
-      { type: "minlength", message: "Minimum of 4 numbers" },
-      { type: "maxlength", message: "Maximum of 6 numbers" },
-      { type: "pattern", message: "Only numbers are allowed" },
+      { type: 'required', message: 'A wallet pin is required.' },
+      { type: 'minlength', message: 'Minimum of 4 numbers' },
+      { type: 'maxlength', message: 'Maximum of 6 numbers' },
+      { type: 'pattern', message: 'Only numbers are allowed' },
     ],
     password: [
-      { type: "required", message: "A Password is required." },
-      { type: "minlength", message: "Minimum of 6 characters" },
+      { type: 'required', message: 'A Password is required.' },
+      { type: 'minlength', message: 'Minimum of 6 characters' },
     ],
   };
 
@@ -68,75 +68,75 @@ export class SignupComponent implements OnInit {
   }
 
   initForm() {
-    this.BusinessForm = this.formBuilder.group({
-      firstName: new FormControl(
-        "",
+    this.HouseholdForm = this.formBuilder.group({
+      first_name: new FormControl(
+        '',
         Validators.compose([
           Validators.maxLength(30),
-          Validators.pattern("[a-zA-Z ]*"),
+          Validators.pattern('[a-zA-Z ]*'),
           Validators.required,
         ])
       ),
-      lastName: new FormControl(
-        "",
+      last_name: new FormControl(
+        '',
         Validators.compose([
           Validators.maxLength(30),
-          Validators.pattern("[a-zA-Z ]*"),
+          Validators.pattern('[a-zA-Z ]*'),
           Validators.required,
         ])
       ),
       email: new FormControl(
-        "",
+        '',
         Validators.compose([
           Validators.required,
-          Validators.pattern("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"),
+          Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
         ])
       ),
       phone: new FormControl(
-        "",
-        Validators.compose([Validators.pattern("[0-9 ]*"), Validators.required])
+        '',
+        Validators.compose([Validators.pattern('[0-9 ]*'), Validators.required])
       ),
-      requestAddress: new FormControl(
-        "",
+      request_address: new FormControl(
+        '',
         Validators.compose([Validators.required])
       ),
-      inviteCode: new FormControl(""),
+      invite_code: new FormControl(''),
       pin: new FormControl(
-        "",
+        '',
         Validators.compose([
           Validators.required,
           Validators.minLength(4),
           Validators.maxLength(6),
-          Validators.pattern("[0-9]*"),
+          Validators.pattern('[0-9]*'),
         ])
       ),
       password: new FormControl(
-        "",
+        '',
         Validators.compose([Validators.required, Validators.minLength(6)])
       ),
       password_confirmation: new FormControl(
-        "",
+        '',
         Validators.compose([Validators.required])
       ),
     });
   }
 
-  registerBusiness(Form) {
+  registerHousehold(Form) {
     this.loading = true;
-    this.Auth.registerHousehold(Form).subscribe(
-      (data) => {
-        this.handleResponse(data);
+    this.Auth.registerUser('households', Form).subscribe(
+      (res: any) => {
+        this.handleResponse(res.data);
       },
-      (error) => {
-        this.handleError(error);
+      (err) => {
+        this.handleError(err);
       }
     );
   }
 
   handleResponse(data) {
     this.loading = false;
-    this.modalTitle = "Success";
-    this.modalBody = data.data;
+    this.modalTitle = 'Success';
+    this.modalBody = data;
     this.openModal(this.content);
     this.goToDashboard();
   }
@@ -144,31 +144,15 @@ export class SignupComponent implements OnInit {
   handleError(error) {
     console.log(error);
     this.loading = false;
-    if (error.error.errors) {
-      if (error.error.errors.password) {
-        this.error = error.error.errors.password[0];
-      } else if (error.error.errors.email) {
-        this.modalTitle = "Error";
-        this.modalBody = error.error.errors.email[0];
-        this.openModal(this.content);
-        return;
-      } else if (error.error.errors.phone) {
-        this.modalTitle = "Error";
-        this.modalBody = error.error.errors.phone[0];
-        this.openModal(this.content);
-        return;
-      }
-    } else {
-      this.modalTitle = "Error";
-      this.modalBody = "An Error has occured, please try again.";
-      this.openModal(this.content);
-    }
+    this.modalTitle = 'Error';
+    this.modalBody = error.error.error;
+    this.openModal(this.content);
   }
 
   goToDashboard() {
     var form = {
-      phone: this.BusinessForm.value.phone,
-      password: this.BusinessForm.value.password,
+      phone: this.HouseholdForm.value.phone,
+      password: this.HouseholdForm.value.password,
     };
     this.loginPage.loginWithPhone(form);
   }

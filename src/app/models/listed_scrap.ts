@@ -1,11 +1,11 @@
 export class Listed_Scrap {
-    id: string;
-    firstName: string;
-    lastName:  string;
-    phone:  number;
-    email: string;
-    materialImages:  string;
-    materialLocation:  string;
-    materialDescription: string;
-    created_at: string;
+  id: string;
+  first_name: string;
+  last_name: string;
+  phone: number;
+  email: string;
+  material_images: string;
+  material_location: string;
+  materialDescription: string;
+  created_at: string;
 }

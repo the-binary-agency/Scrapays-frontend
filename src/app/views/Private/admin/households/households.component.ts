@@ -1,47 +1,45 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { ApiService } from "src/app/services/auth/api.service";
-import { AuthService } from "src/app/services/auth/auth.service";
-import { NavService } from "src/app/services/general/nav.service";
-import { TokenService } from "src/app/services/auth/token.service";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
-import { SelectionModel } from "@angular/cdk/collections";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ApiService } from 'src/app/services/auth/api.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { NavService } from 'src/app/services/general/nav.service';
+import { TokenService } from 'src/app/services/auth/token.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
 
 export interface User {
-  avatarImage: string;
+  avatar_image: string;
   id: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   phone: string;
   email: string;
   userable_type: string;
-  totalTonnage: string;
-  totalEarnings: string;
-  totalWithdrawals: string;
+  total_tonnage: string;
+  total_earnings: string;
+  total_withdrawals: string;
   userable: {};
 }
 
 @Component({
-  selector: "app-households",
-  templateUrl: "./households.component.html",
-  styleUrls: ["./households.component.css"],
+  selector: 'app-households',
+  templateUrl: './households.component.html',
+  styleUrls: ['./households.component.css'],
 })
 export class HouseholdsComponent implements OnInit {
   displayedColumns: string[] = [
-    "select",
-    "companyName",
-    "id",
-    "lastLogin",
-    "totalTonnage",
-    "totalEarnings",
-    "totalWithdrawals",
-    "created_at",
-    "menu",
+    'select',
+    'name',
+    'id',
+    'last_login',
+    'total_tonnage',
+    'total_earnings',
+    'total_withdrawals',
+    'created_at',
+    'menu',
   ];
   dataSource: MatTableDataSource<User>;
-
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   selection = new SelectionModel<User>(true, []);
 
@@ -58,15 +56,17 @@ export class HouseholdsComponent implements OnInit {
   subtask: any;
   allComplete: boolean = false;
   deleteLoading: boolean;
+  currentPage = 1;
+  collectionSize = 0;
+  pageSize = 1;
 
   ngOnInit(): void {
     this.getUsers();
   }
 
-  getUsers() {
-    var form = this.processForm();
-    this.Auth.getAllUsers(form).subscribe(
-      (data) => this.handleResponse(data),
+  getUsers(query?) {
+    this.Auth.getAllUsers('households', query).subscribe(
+      (res) => this.handleResponse(res),
       (error) => this.handleError(error)
     );
   }
@@ -80,22 +80,12 @@ export class HouseholdsComponent implements OnInit {
     }
   }
 
-  processForm() {
-    var formData = {
-      id: this.token.phone,
-      userType: "Household",
-      orderBy: "",
-    };
-    return formData;
-  }
-
-  handleResponse(data) {
-    this.Users = data;
-    // this.Users.map((user) => {
-    //   user["checked"] = false;
-    // });
+  handleResponse(res) {
+    this.currentPage = res.current_page;
+    this.collectionSize = res.total;
+    this.pageSize = res.per_page;
+    this.Users = res.data;
     this.dataSource = new MatTableDataSource(this.Users);
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -104,14 +94,11 @@ export class HouseholdsComponent implements OnInit {
   }
 
   gotoSingleUser(user) {
-    this.nav.navigate(
-      "/dashboard/household/hd_" + user.phone.split("+234")[1],
-      user
-    );
+    this.nav.navigate('/dashboard/household/hd_' + user.id, user);
   }
 
   gotoSingleAdmin(admin) {
-    this.nav.navigate("/dashboard/users/Admin_" + admin.id, admin);
+    this.nav.navigate('/dashboard/users/Admin_' + admin.id, admin);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -133,22 +120,17 @@ export class HouseholdsComponent implements OnInit {
   /** The label for the checkbox on the passed row */
   checkboxLabel(row?: User): string {
     if (!row) {
-      return `${this.isAllSelected() ? "select" : "deselect"} all`;
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? "deselect" : "select"} row ${
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
       row.id + 1
     }`;
   }
 
-  deleteUser(phone) {
+  deleteUser(id) {
     this.deleteLoading = true;
-    console.log("User " + phone);
-    let form = {
-      adminPhone: this.token.phone,
-      deletePhone: phone,
-    };
-    this.Auth.deleteUser(form).subscribe(
-      (data) => this.handleDeleteResponse(data),
+    this.Auth.deleteUser('households', id).subscribe(
+      (res) => this.handleDeleteResponse(res),
       (error) => this.handleDeleteError(error)
     );
   }
@@ -156,7 +138,7 @@ export class HouseholdsComponent implements OnInit {
   handleDeleteResponse(data) {
     this.deleteLoading = false;
     this.getUsers();
-    console.log(data.success);
+    console.log(data);
   }
 
   handleDeleteError(error) {
@@ -177,5 +159,10 @@ export class HouseholdsComponent implements OnInit {
       return;
     }
     this.Users.forEach((t) => (t.checked = checked));
+  }
+
+  changePage() {
+    let query = `&page=${this.currentPage}`;
+    this.getUsers(query);
   }
 }

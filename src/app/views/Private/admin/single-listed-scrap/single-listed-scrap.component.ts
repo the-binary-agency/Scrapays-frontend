@@ -1,17 +1,17 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { Router } from "@angular/router";
-import { NavService } from "src/app/services/general/nav.service";
-import { EnvironmentService } from "src/app/services/env/environment.service";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { AuthService } from "src/app/services/auth/auth.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { NavService } from 'src/app/services/general/nav.service';
+import { EnvironmentService } from 'src/app/services/env/environment.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
-  selector: "app-single-listed-scrap",
-  templateUrl: "./single-listed-scrap.component.html",
-  styleUrls: ["./single-listed-scrap.component.css"],
+  selector: 'app-single-listed-scrap',
+  templateUrl: './single-listed-scrap.component.html',
+  styleUrls: ['./single-listed-scrap.component.css'],
 })
 export class SingleListedScrapComponent implements OnInit {
-  @ViewChild("content") private content;
+  @ViewChild('content') private content;
   URL = this.env.backendUrl;
   imageToBeExpanded: any;
   Items: any[] = [];
@@ -26,12 +26,12 @@ export class SingleListedScrapComponent implements OnInit {
   ) {}
 
   public Scrap: {
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     phone: number;
     email: string;
-    materialImages: [];
-    materialLocation: string;
+    material_images: [];
+    material_location: string;
     materialDescription: [];
     created_at: string;
   };
@@ -53,16 +53,16 @@ export class SingleListedScrapComponent implements OnInit {
   getSingleScrap(id) {
     this.auth.getSingleScrap(id).subscribe(
       (data: any) => {
-        var images = JSON.parse(data.scrap.materialImages);
+        var images = JSON.parse(data.scrap.material_images);
         var descriptions = JSON.parse(data.scrap.materialDescription);
         let lscrap = {
           id: data.scrap.id,
-          firstName: data.scrap.firstName,
-          lastName: data.scrap.lastName,
+          first_name: data.scrap.first_name,
+          last_name: data.scrap.last_name,
           phone: data.scrap.phone,
           email: data.scrap.email,
-          materialImages: images,
-          materialLocation: data.scrap.materialLocation,
+          material_images: images,
+          material_location: data.scrap.material_location,
           materialDescription: descriptions,
           created_at: data.scrap.created_at,
         };
@@ -79,27 +79,27 @@ export class SingleListedScrapComponent implements OnInit {
     var items = this.Items;
     for (let i = 0; i < description.length; i++) {
       let newitem = {
-        item: "",
-        materialImages: [],
-        materialDescription: "",
+        item: '',
+        material_images: [],
+        materialDescription: '',
       };
       items.push(newitem);
       items[i].description = description[i];
-      items[i].item = "Item " + (i + 1);
+      items[i].item = 'Item ' + (i + 1);
     }
     this.itemCount = items.length;
     this.processScrapImage();
   }
 
   processScrapImage() {
-    var images = this.Scrap.materialImages;
+    var images = this.Scrap.material_images;
     var description = this.Scrap.materialDescription;
     var items = this.Items;
     for (let i = 0; i < images.length; i++) {
       let itemnumber = this.splitName(images[i]);
       for (let ind = 0; ind < description.length; ind++) {
-        if (itemnumber == "item " + (ind + 1)) {
-          items[ind].materialImages.push(images[i]);
+        if (itemnumber == 'item ' + (ind + 1)) {
+          items[ind].material_images.push(images[i]);
         }
       }
     }
@@ -107,14 +107,14 @@ export class SingleListedScrapComponent implements OnInit {
 
   openModal(image) {
     this.imageToBeExpanded = image;
-    this.modal.open(this.content, { centered: true, size: "xl" });
+    this.modal.open(this.content, { centered: true, size: 'xl' });
   }
 
   splitName(name) {
-    return name.split("-")[0];
+    return name.split('-')[0];
   }
 
   getRouteId(route) {
-    return route.split("_")[1];
+    return route.split('_')[1];
   }
 }

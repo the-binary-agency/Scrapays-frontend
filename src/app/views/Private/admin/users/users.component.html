@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="col-12 col-md-6 text-center text-md-right font-weight-bold h4">
-      {{ Users.length + " " }} Users
+      {{ collectionSize + ' ' }} Users
     </div>
   </div>
 
@@ -55,7 +55,7 @@
       </ng-container>
 
       <!-- ID Column -->
-      <ng-container matColumnDef="companyName">
+      <ng-container matColumnDef="company_name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Company's Name
         </th>
@@ -73,7 +73,7 @@
           />
           <div class="line-h-s">
             <div class="bolder">
-              {{ row.firstName + " " }} {{ row.lastName }}
+              {{ row.first_name + ' ' }} {{ row.last_name }}
             </div>
             <span class="small text-muted">
               {{ row.email }}
@@ -96,7 +96,7 @@
       </ng-container>
 
       <!-- Name Column -->
-      <ng-container matColumnDef="lastLogin">
+      <ng-container matColumnDef="last_login">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Login</th>
         <td
           mat-cell
@@ -104,12 +104,12 @@
           (click)="gotoSingleUser(row)"
           class="fake-btn"
         >
-          {{ row.lastLogin | dateAgo }}
+          {{ row.last_login | dateAgo }}
         </td>
       </ng-container>
 
       <!-- Color Column -->
-      <ng-container matColumnDef="totalTonnage">
+      <ng-container matColumnDef="total_tonnage">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Total Volume Disposed
         </th>
@@ -119,12 +119,12 @@
           (click)="gotoSingleUser(row)"
           class="fake-btn"
         >
-          {{ row.totalTonnage ? row.totalTonnage : 0 }}kg
+          {{ row.total_tonnage ? row.total_tonnage : 0 }}kg
         </td>
       </ng-container>
 
       <!-- Color Column -->
-      <ng-container matColumnDef="totalEarnings">
+      <ng-container matColumnDef="total_earnings">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Total Earnings
         </th>
@@ -134,12 +134,12 @@
           (click)="gotoSingleUser(row)"
           class="fake-btn"
         >
-          {{ row.totalEarnings }}
+          {{ row.total_earnings }}
         </td>
       </ng-container>
 
       <!-- Color Column -->
-      <ng-container matColumnDef="totalWithdrawals">
+      <ng-container matColumnDef="total_withdrawals">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Total Withdrawals
         </th>
@@ -149,7 +149,7 @@
           (click)="gotoSingleUser(row)"
           class="fake-btn"
         >
-          {{ row.totalWithdrawals }}
+          {{ row.total_withdrawals }}
         </td>
       </ng-container>
 
@@ -159,7 +159,7 @@
           Registration Date
         </th>
         <td mat-cell *matCellDef="let row" (click)="gotoSingleUser(row)">
-          {{ row.created_at | date: "medium" }}
+          {{ row.created_at | date: 'medium' }}
         </td>
       </ng-container>
 
@@ -180,7 +180,7 @@
             <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
           </button>
           <ng-template #popTitle
-            >{{ row.userable.companyName }}
+            >{{ row.userable.company_name }}
             <i
               class="fa fa-times float-right mt-2 fake-btn"
               aria-hidden="true"
@@ -201,24 +201,24 @@
             </div>
             <div class="row text-left mb-4">
               <div class="bolder pop-tit w-100">Last Name</div>
-              <span class="pop-bod">{{ row.lastName }}</span>
+              <span class="pop-bod">{{ row.last_name }}</span>
             </div>
             <div class="row text-left mb-4">
               <div class="bolder pop-tit w-100">Company Size</div>
-              <span class="pop-bod">{{ row.userable.companySize }}</span>
+              <span class="pop-bod">{{ row.userable.company_size }}</span>
             </div>
             <div class="row text-left mb-4">
               <div class="bolder pop-tit w-100">Total Tonnage Disposed</div>
               <span class="pop-bod"
-                >{{ row.totalTonnage ? row.totalTonnage : 0 }}kg</span
+                >{{ row.total_tonnage ? row.total_tonnage : 0 }}kg</span
               >
             </div>
             <div class="row text-left mb-4">
               <div class="bolder pop-tit w-100">Last Withdrawal Date</div>
               <div class="w-100">
-                <span class="pop-bod">{{ row.totalWithdrawals }}</span>
+                <span class="pop-bod">{{ row.total_withdrawals }}</span>
                 <button
-                  (click)="deleteUser(row.phone)"
+                  (click)="deleteUser(row.id)"
                   type="button"
                   class="btn btn-clear float-right text-danger"
                 >
@@ -241,7 +241,23 @@
       </tr>
     </table>
 
-    <mat-paginator pageSize="25"></mat-paginator>
+    <div class="mt-5 d-flex justify-content-end">
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="currentPage"
+        [pageSize]="pageSize"
+        [rotate]="true"
+        [maxSize]="5"
+        [ellipses]="true"
+        (pageChange)="changePage()"
+      >
+        <ng-template ngbPaginationPrevious
+          ><i class="fa fa-caret-left" aria-hidden="true"></i
+        ></ng-template>
+        <ng-template ngbPaginationNext
+          ><i class="fa fa-caret-right" aria-hidden="true"></i></ng-template
+      ></ngb-pagination>
+    </div>
   </div>
 </div>
 <ngx-loading [show]="deleteLoading"></ngx-loading>

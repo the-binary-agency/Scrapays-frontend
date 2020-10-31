@@ -10,7 +10,7 @@
           class="form-control"
           name="collectorID"
           placeholder="Collectors ID"
-          [(ngModel)]="collID"
+          [(ngModel)]="coll_id"
         />
       </div>
     </div>
@@ -50,10 +50,10 @@
     ></i>
   </div>
 
-  <div class="row px-md-4" *ngIf="displayedCollector.firstName">
+  <div class="row px-md-4" *ngIf="displayedCollector.first_name">
     <div class="col-12 bg-orange text-white py-2">
-      {{ displayedCollector.firstName + " "
-      }}{{ displayedCollector.lastName + " " }}(Collector
+      {{ displayedCollector.first_name + ' '
+      }}{{ displayedCollector.last_name + ' ' }}(Collector
       {{ displayedCollector.id }}'s Log)
     </div>
     <table class="table text-center table-borderless">
@@ -80,7 +80,7 @@
               *ngIf="req.status != 'Resolved'"
             ></i>
           </td>
-          <td>{{ "0" + req.userID.split("+234")[1] }}</td>
+          <td>{{ req.producer_id }}</td>
           <td>{{ formatMaterials(req.materials) }}</td>
           <td>{{ req.address }}</td>
           <td>1hr 30mins</td>

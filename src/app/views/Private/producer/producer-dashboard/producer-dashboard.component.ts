@@ -1,31 +1,31 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { TokenService } from "src/app/services/auth/token.service";
-import { AuthService } from "src/app/services/auth/auth.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { TokenService } from 'src/app/services/auth/token.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import {
   FormBuilder,
   FormGroup,
   FormControl,
   Validators,
-} from "@angular/forms";
+} from '@angular/forms';
 import {
   NgbModal,
   NgbPopoverConfig,
   NgbCalendar,
   NgbDatepickerConfig,
   NgbDateStruct,
-} from "@ng-bootstrap/ng-bootstrap";
-import { SidenavComponent } from "src/app/Constants/sidenav/sidenav.component";
-import { EnvironmentService } from "src/app/services/env/environment.service";
+} from '@ng-bootstrap/ng-bootstrap';
+import { SidenavComponent } from 'src/app/Constants/sidenav/sidenav.component';
+import { EnvironmentService } from 'src/app/services/env/environment.service';
 
 @Component({
-  selector: "app-producer-dashboard",
-  templateUrl: "./producer-dashboard.component.html",
-  styleUrls: ["./producer-dashboard.component.css"],
+  selector: 'app-producer-dashboard',
+  templateUrl: './producer-dashboard.component.html',
+  styleUrls: ['./producer-dashboard.component.css'],
 })
 export class ProducerDashboardComponent implements OnInit {
-  @ViewChild("content") private content;
-  @ViewChild("scheduleModal") scheduleModal;
-  @ViewChild("sellBulk") sellBulkModal;
+  @ViewChild('content') private content;
+  @ViewChild('scheduleModal') scheduleModal;
+  @ViewChild('sellBulk') sellBulkModal;
 
   constructor(
     private token: TokenService,
@@ -39,7 +39,7 @@ export class ProducerDashboardComponent implements OnInit {
     private env: EnvironmentService
   ) {
     var now = new Date();
-    config.placement = "bottom";
+    config.placement = 'bottom';
     dateConfig.minDate = {
       year: now.getFullYear(),
       month: now.getMonth() + 1,
@@ -52,51 +52,51 @@ export class ProducerDashboardComponent implements OnInit {
   month: any;
   year: any;
   User: any = {
-    id: "",
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    role: "",
-    created_at: "",
+    id: '',
+    first_name: '',
+    last_name: '',
+    phone: '',
+    email: '',
+    role: '',
+    created_at: '',
   };
   Scrap: any = {};
   CollectedScrap: any = [];
-  totalTonnage: number = 0;
+  total_tonnage: number = 0;
   public Form: FormGroup;
   validation_messages = {
-    firstName: [
-      { type: "required", message: "A First Name is required." },
-      { type: "pattern", message: "Please enter a valid First Name." },
-      { type: "maxlength", message: "Please enter a shorter First Name." },
+    first_name: [
+      { type: 'required', message: 'A First Name is required.' },
+      { type: 'pattern', message: 'Please enter a valid First Name.' },
+      { type: 'maxlength', message: 'Please enter a shorter First Name.' },
     ],
-    lastName: [
-      { type: "required", message: "A Last Name is required." },
-      { type: "pattern", message: "Please enter a valid Last Name." },
-      { type: "maxlength", message: "Please enter a shorter Last Name." },
+    last_name: [
+      { type: 'required', message: 'A Last Name is required.' },
+      { type: 'pattern', message: 'Please enter a valid Last Name.' },
+      { type: 'maxlength', message: 'Please enter a shorter Last Name.' },
     ],
     phone: [
-      { type: "required", message: "A Phone Number is required." },
-      { type: "pattern", message: "Please enter a valid Phone Number." },
-      { type: "minlength", message: "Please enter a valid Phone Number." },
-      { type: "maxlength", message: "Please enter a valid Phone Number." },
+      { type: 'required', message: 'A Phone Number is required.' },
+      { type: 'pattern', message: 'Please enter a valid Phone Number.' },
+      { type: 'minlength', message: 'Please enter a valid Phone Number.' },
+      { type: 'maxlength', message: 'Please enter a valid Phone Number.' },
     ],
     email: [
-      { type: "required", message: "An Email is required." },
-      { type: "pattern", message: "Please enter a valid email." },
+      { type: 'required', message: 'An Email is required.' },
+      { type: 'pattern', message: 'Please enter a valid email.' },
     ],
-    materialLocation: [
-      { type: "required", message: "Material Location is required." },
+    material_location: [
+      { type: 'required', message: 'Material Location is required.' },
     ],
     description: [
-      { type: "required", message: "Material Description is required." },
+      { type: 'required', message: 'Material Description is required.' },
     ],
-    materialImages: [
-      { type: "required", message: "Material Images are required." },
-      { type: "minLength", message: "minimum length is {{0}}." },
+    material_images: [
+      { type: 'required', message: 'Material Images are required.' },
+      { type: 'minLength', message: 'minimum length is {{0}}.' },
     ],
   };
-  materialType = "aluminium";
+  materialType = 'aluminium';
   modalTitle: any;
   modalBody: any;
   loading: boolean;
@@ -108,18 +108,18 @@ export class ProducerDashboardComponent implements OnInit {
   model: NgbDateStruct;
   date: { year: number; month: number };
   times = [
-    { name: "9:00" },
-    { name: "10:00" },
-    { name: "11:00" },
-    { name: "12:00" },
-    { name: "13:00" },
-    { name: "14:00" },
-    { name: "15:00" },
-    { name: "16:00" },
-    { name: "17:00" },
-    { name: "18:00" },
-    { name: "19:00" },
-    { name: "20:00" },
+    { name: '9:00' },
+    { name: '10:00' },
+    { name: '11:00' },
+    { name: '12:00' },
+    { name: '13:00' },
+    { name: '14:00' },
+    { name: '15:00' },
+    { name: '16:00' },
+    { name: '17:00' },
+    { name: '18:00' },
+    { name: '19:00' },
+    { name: '20:00' },
   ];
   selectedTime: string;
   materialSelect: string = null;
@@ -140,73 +140,83 @@ export class ProducerDashboardComponent implements OnInit {
     this.year = now.getFullYear();
     switch (now.getMonth()) {
       case 0:
-        this.month = "January";
+        this.month = 'January';
         break;
       case 1:
-        this.month = "February";
+        this.month = 'February';
         break;
       case 2:
-        this.month = "March";
+        this.month = 'March';
         break;
       case 3:
-        this.month = "April";
+        this.month = 'April';
         break;
       case 4:
-        this.month = "May";
+        this.month = 'May';
         break;
       case 5:
-        this.month = "June";
+        this.month = 'June';
         break;
       case 6:
-        this.month = "July";
+        this.month = 'July';
         break;
       case 7:
-        this.month = "August";
+        this.month = 'August';
         break;
       case 8:
-        this.month = "September";
+        this.month = 'September';
         break;
       case 9:
-        this.month = "October";
+        this.month = 'October';
         break;
       case 10:
-        this.month = "November";
+        this.month = 'November';
         break;
       case 11:
-        this.month = "December";
+        this.month = 'December';
         break;
     }
   }
   getUser() {
     this.loading = true;
-    this.auth.getUserWithTonnage(this.token.phone).subscribe(
-      (data: any) => {
-        this.User = data.user;
-        this.CollectedScrap = data.tonnage;
+    this.auth.getLoggedInUser().subscribe(
+      (res: any) => {
+        this.User = res.data;
+        this.automated = res.data.userable.recovery_automated;
+        this.getTonnage();
+      },
+      (err) => {
+        this.loading = false;
+        console.log(err);
+      }
+    );
+  }
+
+  getTonnage() {
+    this.auth.getProducedTonnage(this.token._id).subscribe(
+      (res: any) => {
+        this.CollectedScrap = res.data;
         this.processTonnage();
       },
-      (error) => {
-        this.loading = false;
-        console.log(error);
-      }
+      (error) => console.log(error)
     );
   }
 
   processTonnage() {
     for (let scrap of this.CollectedScrap) {
-      this.totalTonnage += scrap.weight;
+      this.total_tonnage += scrap.weight;
     }
     this.lineChartData = [
       {
         data: this.getSingleScrapForGraph(),
-        label: "Scrap",
+        label: 'Scrap',
       },
     ];
   }
 
   getSingleScrapForGraph() {
     var data = [];
-    var tonnage = this.totalTonnage;
+    var tonnage = this.total_tonnage;
     var label = this.lineChartLabels;
     var scrap = this.Scrap;
     this.CollectedScrap.forEach(function (d) {
@@ -220,7 +230,7 @@ export class ProducerDashboardComponent implements OnInit {
   }
 
   getMaterials() {
-    this.auth.getMaterialPrices(this.token.phone).subscribe(
+    this.auth.getMaterialPrices(this.token._id).subscribe(
       (data: any) => {
         if (data.length > 0) {
           this.materials = data;
@@ -232,7 +242,7 @@ export class ProducerDashboardComponent implements OnInit {
 
   getDisabledDates() {
     this.markDisabled = (date) => this.calendar.getWeekday(date) > 6;
-    console.log("test disabled", this.markDisabled);
+    console.log('test disabled', this.markDisabled);
   }
 
   round(value) {
@@ -247,13 +257,13 @@ export class ProducerDashboardComponent implements OnInit {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  radioModel: string = "Month";
+  radioModel: string = 'Month';
 
   // lineChart
   public lineChartData: Array<any> = [
     {
       data: [],
-      label: "Scrap",
+      label: 'Scrap',
     },
   ];
 
@@ -265,34 +275,34 @@ export class ProducerDashboardComponent implements OnInit {
   public lineChartColours: Array<any> = [
     {
       // grey
-      backgroundColor: "rgba(148,159,177,0.2)",
-      borderColor: "rgba(148,159,177,1)",
-      pointBackgroundColor: "rgba(148,159,177,1)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(148,159,177,0.8)",
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)',
     },
     {
       // dark grey
-      backgroundColor: "rgba(77,83,96,0.2)",
-      borderColor: "rgba(77,83,96,1)",
-      pointBackgroundColor: "rgba(77,83,96,1)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(77,83,96,1)",
+      backgroundColor: 'rgba(77,83,96,0.2)',
+      borderColor: 'rgba(77,83,96,1)',
+      pointBackgroundColor: 'rgba(77,83,96,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(77,83,96,1)',
     },
     {
       // grey
-      backgroundColor: "rgba(148,159,177,0.2)",
-      borderColor: "rgba(148,159,177,1)",
-      pointBackgroundColor: "rgba(148,159,177,1)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(148,159,177,0.8)",
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)',
     },
   ];
   public lineChartLegend = true;
-  public lineChartType = "line";
+  public lineChartType = 'line';
 
   // events
   public chartClicked(e: any): void {
@@ -306,18 +316,18 @@ export class ProducerDashboardComponent implements OnInit {
   initForm() {
     this.Form = this.formBuilder.group({
       materialType: new FormControl(
-        "",
+        '',
         Validators.compose([Validators.required])
       ),
       materialVolume: new FormControl(
-        "",
+        '',
         Validators.compose([Validators.required])
       ),
       generatedRevenue: new FormControl(
-        "",
+        '',
         Validators.compose([Validators.required])
       ),
-      receipt: new FormControl(""),
+      receipt: new FormControl(''),
     });
   }
 
@@ -335,7 +345,7 @@ export class ProducerDashboardComponent implements OnInit {
 
   automatePickup() {
     this.loading = true;
-    this.auth.automatePickup({ phone: this.token.phone }).subscribe(
+    this.auth.automatePickup(this.token._id).subscribe(
       (data) => this.handleResponse(data),
       (error) => this.handleError(error)
     );
@@ -352,16 +362,16 @@ export class ProducerDashboardComponent implements OnInit {
 
   handleResponse(data) {
     this.loading = false;
-    this.modalTitle = "Success";
-    this.modalBody = data.data;
+    this.modalTitle = 'Success';
+    this.modalBody = data;
     this.getUser();
     this.openModal(this.content);
   }
 
   handleError(error) {
     this.loading = false;
-    this.modalTitle = "Error";
-    this.modalBody = error.error;
+    this.modalTitle = 'Error';
+    this.modalBody = error.error.error;
     this.openModal(this.content);
   }
 
@@ -392,19 +402,19 @@ export class ProducerDashboardComponent implements OnInit {
   }
 
   openScheduleModal() {
-    this.scheduleModal.nativeElement.style.display = "block";
+    this.scheduleModal.nativeElement.style.display = 'block';
   }
 
   closeScheduleModal() {
-    this.scheduleModal.nativeElement.style.display = "none";
+    this.scheduleModal.nativeElement.style.display = 'none';
   }
 
   openSellBulkModal() {
-    this.sellBulkModal.nativeElement.style.display = "block";
+    this.sellBulkModal.nativeElement.style.display = 'block';
   }
 
   closeSellBulkModal() {
-    this.sellBulkModal.nativeElement.style.display = "none";
+    this.sellBulkModal.nativeElement.style.display = 'none';
   }
 
   selectToday() {
@@ -431,32 +441,32 @@ export class ProducerDashboardComponent implements OnInit {
 
   requestPickup() {
     var form = {
-      id: this.token.phone,
+      id: this.token._id,
       materials: this.requestMaterials,
       description: this.requestDescription,
       comment: this.requestComment,
-      scheduleDate: this.model,
-      scheduleTime: this.selectedTime,
+      schedule_date: this.model,
+      schedule_time: this.selectedTime,
     };
     this.auth.requestPickup(form).subscribe(
-      (data) => {
-        this.handleResponse(data);
+      (res: any) => {
+        this.handleResponse(res.data);
         this.requestMaterials = [];
       },
-      (error) => console.log("ertyrertyt", error)
+      (error) => console.log('ertyrertyt', error)
     );
   }
 
   getPrices() {
-    this.auth.getMaterialPrices(this.token.phone).subscribe(
-      (data: any) => {
-        for (let price of data.prices) {
+    this.auth.getMaterialPrices(this.token._id).subscribe(
+      (res: any) => {
+        for (let price of res.data) {
           this.materials.push(price);
         }
         this.materials.push({
           id: 500,
-          name: "Composite",
-          image: "composite-icon.png",
+          name: 'Composite',
+          image: 'composite-icon.png',
         });
         this.displayMaterials();
       },
@@ -467,10 +477,10 @@ export class ProducerDashboardComponent implements OnInit {
   addBorder(i) {
     var classes = {};
     if (i == 0 || i == 2) {
-      classes["border-right"] = true;
+      classes['border-right'] = true;
     }
     if (i == 0 || i == 1) {
-      classes["border-bottom"] = true;
+      classes['border-bottom'] = true;
     }
     return classes;
   }

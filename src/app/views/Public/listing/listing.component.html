@@ -9,17 +9,17 @@
         <div class="form-group">
           <input
             class="form-control"
-            name="companyname"
-            id="companyname"
+            name="company_name"
+            id="company_name"
             type="text"
-            formControlName="companyName"
+            formControlName="company_name"
             placeholder="Business/Company Name"
           />
           <!-- <div class="validation-errors w-100">
-            <ng-container *ngFor="let validation of validation_messages.firstName">
+            <ng-container *ngFor="let validation of validation_messages.first_name">
               <div class="error-message alert alert-danger" *ngIf="
-                  Form.get('firstName').hasError(validation.type) &&
-                  (Form.get('firstName').dirty || Form.get('firstName').touched)
+                  Form.get('first_name').hasError(validation.type) &&
+                  (Form.get('first_name').dirty || Form.get('first_name').touched)
                 ">
                 <i class="fa fa-info-circle text-danger"></i> &nbsp; <span
                   class="text-danger">{{ validation.message }}</span>
@@ -32,21 +32,22 @@
         <div class="form-group">
           <input
             class="form-control"
-            name="firstname"
-            id="firstname"
+            name="first_name"
+            id="first_name"
             type="text"
-            formControlName="firstName"
+            formControlName="first_name"
             placeholder="First Name"
           />
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.firstName"
+              *ngFor="let validation of validation_messages.first_name"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  Form.get('firstName').hasError(validation.type) &&
-                  (Form.get('firstName').dirty || Form.get('firstName').touched)
+                  Form.get('first_name').hasError(validation.type) &&
+                  (Form.get('first_name').dirty ||
+                    Form.get('first_name').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -60,20 +61,20 @@
         <div class="form-group">
           <input
             class="form-control"
-            name="lastname"
-            id="lastname"
-            formControlName="lastName"
+            name="last_name"
+            id="last_name"
+            formControlName="last_name"
             placeholder="Last Name"
           />
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.lastName"
+              *ngFor="let validation of validation_messages.last_name"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  Form.get('lastName').hasError(validation.type) &&
-                  (Form.get('lastName').dirty || Form.get('lastName').touched)
+                  Form.get('last_name').hasError(validation.type) &&
+                  (Form.get('last_name').dirty || Form.get('last_name').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -222,7 +223,7 @@
               <div class="validation-errors mx-3">
                 <ng-container
                   *ngFor="
-                    let validation of validation_messages.materialLocation
+                    let validation of validation_messages.material_location
                   "
                 >
                   <div
@@ -288,22 +289,22 @@
         <div class="form-group">
           <textarea
             class="form-control"
-            name="materialLocation"
-            id="materialLocation"
+            name="material_location"
+            id="material_location"
             rows="2"
-            formControlName="materialLocation"
+            formControlName="material_location"
             placeholder="Location"
           ></textarea>
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.materialLocation"
+              *ngFor="let validation of validation_messages.material_location"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  Form.get('materialLocation').hasError(validation.type) &&
-                  (Form.get('materialLocation').dirty ||
-                    Form.get('materialLocation').touched)
+                  Form.get('material_location').hasError(validation.type) &&
+                  (Form.get('material_location').dirty ||
+                    Form.get('material_location').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;

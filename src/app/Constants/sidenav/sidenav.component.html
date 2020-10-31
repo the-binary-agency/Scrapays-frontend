@@ -29,28 +29,28 @@
             </div>
           </div>
           <div class="col-6 px-0">
-            <span class="font-weight-bold companyName" *ngIf="Enterprise">{{
-              User.userable.companyName
+            <span class="font-weight-bold company_name" *ngIf="Enterprise">{{
+              User.userable.company_name || 'Enterprise'
             }}</span>
             <br *ngIf="Enterprise" />
             <span class="font-weight-bold" *ngIf="!Enterprise">{{
-              User.firstName + " " + User.lastName
+              User.first_name + ' ' + User.last_name
             }}</span>
             <br *ngIf="!Enterprise" />
             <span class="text-muted small">{{ User.email }}</span>
           </div>
           <div class="col-3 px-0 text-right pl-2">
             <img
-              src="{{ URL }}/storage/profile_pictures/{{ User.avatarImage }}"
+              src="{{ URL }}/storage/profile_pictures/{{ User.avatar_image }}"
               class="profile-icon"
               alt="User Icon"
-              *ngIf="User.avatarImage"
+              *ngIf="User.avatar_image"
             />
             <img
               [src]="avatar"
               class="profile-icon"
               alt="User Icon"
-              *ngIf="!User.avatarImage"
+              *ngIf="!User.avatar_image"
             />
           </div>
         </div>
@@ -99,6 +99,14 @@
         ><i class="fa fa-envelope-o mr-3 ml-1 fa-lg" aria-hidden="true"></i>
         Messages
       </a>
+      <a
+        mat-list-item
+        routerLink="/dashboard/create-admin"
+        routerLinkActive="list-item-active"
+        *ngIf="loggedIn && Admin"
+        ><i class="fa fa-user-circle mr-3 ml-1 fa-lg" aria-hidden="true"></i>
+        Register New Admin
+      </a>
 
       <!-- Producer -->
       <a
@@ -140,7 +148,7 @@
         mat-list-item
         routerLink="/dashboard/vendor"
         routerLinkActive="list-item-active"
-        *ngIf="loggedIn && Vendor"
+        *ngIf="loggedIn && Host"
         ><i class="fa fa-line-chart mr-3 ml-1 fa-lg" aria-hidden="true"></i>
         Dashboard
       </a>
@@ -148,7 +156,7 @@
         mat-list-item
         routerLink="/vendor/profile"
         routerLinkActive="list-item-active"
-        *ngIf="loggedIn && Vendor"
+        *ngIf="loggedIn && Host"
         ><i class="fa fa-user-circle-o mr-3 ml-1 fa-lg" aria-hidden="true"></i
         >Vendor's Profile
       </a>

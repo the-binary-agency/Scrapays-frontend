@@ -1,17 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 @font-face {
-  font-family: "Material Icons";
+  font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
   src: url(assets/icons/iconfont/MaterialIcons-Regular.eot); /* For IE6-8 */
-  src: local("Material Icons"), local("MaterialIcons-Regular"),
-    url(assets/icons/iconfont/MaterialIcons-Regular.woff2) format("woff2"),
-    url(assets/icons/iconfont/MaterialIcons-Regular.woff) format("woff"),
-    url(assets/icons/iconfont/MaterialIcons-Regular.ttf) format("truetype");
+  src: local('Material Icons'), local('MaterialIcons-Regular'),
+    url(assets/icons/iconfont/MaterialIcons-Regular.woff2) format('woff2'),
+    url(assets/icons/iconfont/MaterialIcons-Regular.woff) format('woff'),
+    url(assets/icons/iconfont/MaterialIcons-Regular.ttf) format('truetype');
 }
 
 .material-icons {
-  font-family: "Material Icons";
+  font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
   font-size: 24px; /* Preferred icon size */
@@ -32,7 +32,7 @@
   -moz-osx-font-smoothing: grayscale;
 
   /* Support for IE. */
-  font-feature-settings: "liga";
+  font-feature-settings: 'liga';
 }
 
 @media (min-width: 768px) {
@@ -202,7 +202,7 @@ ngb-datepicker {
   padding: 10px !important;
 }
 .user-type-popover .mat-list-item-content {
-  font-family: "Poppins", sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
 }
 .n-popover {
   box-shadow: -8px -2px 8px rgba(0, 0, 0, 0.25);
@@ -249,6 +249,15 @@ ngb-datepicker {
 ::-webkit-scrollbar-thumb:hover {
   background: #9f4c00;
 }
+
+.mat-hist {
+  height: 100px;
+}
+
+.hist-list {
+  height: 362px;
+}
+
 .btn-smol {
   font-size: 11px !important;
 }
@@ -262,7 +271,7 @@ ngb-datepicker {
   width: auto;
 }
 .mat-sort-header-button {
-  font-family: "Poppins" !important;
+  font-family: 'Poppins' !important;
   font-weight: 600 !important;
 }
 .custom-day {
@@ -285,4 +294,7 @@ ngb-datepicker {
 }
 .ngb-dp-day.disabled {
   color: #6c757d !important;
+}
+.mat-checkbox-label {
+  font-weight: bolder !important;
 }

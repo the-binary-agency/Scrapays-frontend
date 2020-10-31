@@ -7,20 +7,20 @@
     <div class="row align-items-center justify-content-center">
       <div class="position-relative">
         <img
-          src="{{ URL }}/storage/profile_pictures/{{ User.avatarImage }}"
+          src="{{ URL }}/storage/profile_pictures/{{ User.avatar_image }}"
           class="user-avatar"
           alt="User Icon"
-          *ngIf="User.avatarImage"
+          *ngIf="User.avatar_image"
         />
         <img
           [src]="avatar"
           class="user-avatar"
           alt="User Icon"
-          *ngIf="!User.avatarImage"
+          *ngIf="!User.avatar_image"
         />
         <input
           type="file"
-          formControlName="avatarImage"
+          formControlName="avatar_image"
           class="d-none"
           #fileInput
           accept="image/*"
@@ -107,11 +107,11 @@
               <div class="row">
                 <div class="col-6 details mb-3 px-0">First Name:</div>
                 <div class="col-6 details mb-3 text-capitalize">
-                  <span *ngIf="!edit"> {{ User.firstName }}</span>
+                  <span *ngIf="!edit"> {{ User.first_name }}</span>
                   <input
                     class="form-control"
-                    formControlName="firstName"
-                    [(ngModel)]="User.firstName"
+                    formControlName="first_name"
+                    [(ngModel)]="User.first_name"
                     *ngIf="edit"
                   />
                 </div>
@@ -121,11 +121,11 @@
               <div class="row">
                 <div class="col-6 details mb-3 px-0">Last Name:</div>
                 <div class="col-6 details mb-3 text-capitalize">
-                  <span *ngIf="!edit"> {{ User.lastName }}</span>
+                  <span *ngIf="!edit"> {{ User.last_name }}</span>
                   <input
                     class="form-control"
-                    formControlName="lastName"
-                    [(ngModel)]="User.lastName"
+                    formControlName="last_name"
+                    [(ngModel)]="User.last_name"
                     *ngIf="edit"
                   />
                 </div>
@@ -133,23 +133,17 @@
             </div>
           </div>
         </div>
-        <!-- <div class="col-12 col-md-6">
+        <div class="col-12 col-md-6">
           <div class="row">
-            <div class="col-6 details mb-3">Role(s)</div>
-            <div class="col-6 details">
-              <span *ngIf="!edit">
-                {{ User.userable.collectionCoverageZone }}</span
+            <div class="col-12 details mb-3">Permission(s)</div>
+            <div class="col-12 details">
+              <span
+                *ngFor="let permission of displayPermissions(); let i = index"
+                >{{ permission + ' ' }}</span
               >
-
-              <input
-                class="form-control"
-                formControlName="collectionCoverageZone"
-                [(ngModel)]="User.userable.collectionCoverageZone"
-                *ngIf="edit"
-              />
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
 

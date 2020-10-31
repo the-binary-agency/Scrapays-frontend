@@ -1,194 +1,274 @@
 <div class="dashboard-body pt-5 p-1 py-md-4 px-md-5">
-    <div class="row">
-        <span class="h3 text-primary ml-2 bb-blue">Profile</span>
+  <div class="row">
+    <span class="h3 text-primary ml-2 bb-blue">Profile</span>
+  </div>
+
+  <form [formGroup]="Form" (ngSubmit)="updateProfile(Form.value)" class="w-100">
+    <div class="row align-items-center justify-content-center">
+      <div class="position-relative">
+        <img
+          src="{{ URL }}/storage/profile_pictures/{{ User.avatar_image }}"
+          class="user-avatar"
+          alt="User Icon"
+          *ngIf="User.avatar_image"
+        />
+        <img
+          [src]="avatar"
+          class="user-avatar"
+          alt="User Icon"
+          *ngIf="!User.avatar_image"
+        />
+        <input
+          type="file"
+          formControlName="avatar_image"
+          class="d-none"
+          #fileInput
+          accept="image/*"
+          (change)="onFileInput($event)"
+        />
+        <button
+          type="button"
+          class="btn btn-primary btn-circle btn-sm solid"
+          (click)="fileInput.click()"
+          *ngIf="edit"
+        >
+          <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="ml-3">
+        <h2 class="font-weight-bold mb-0">{{ User.company_name }}</h2>
+        {{ User.email }}
+      </div>
+    </div>
+    <div class="w-100 text-right">
+      <button
+        type="button"
+        class="btn btn-primary px-4"
+        (click)="edit = false"
+        *ngIf="edit"
+      >
+        Cancel Edit
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary solid"
+        (click)="edit = !edit"
+        *ngIf="!edit"
+      >
+        Edit Profile
+      </button>
     </div>
 
-    <form [formGroup]="Form" (ngSubmit)="updateProfile(Form.value)" class="w-100">
-        <div class="row align-items-center justify-content-center">
-        <div class="position-relative">
-            <img src="{{ URL }}/storage/profile_pictures/{{ User.avatarImage }}" class="user-avatar" alt="User Icon" *ngIf="User.avatarImage">
-            <img [src]="avatar" class="user-avatar" alt="User Icon" *ngIf="!User.avatarImage">
-            <input type="file" formControlName="avatarImage"  class="d-none" #fileInput accept="image/*" (change)="onFileInput($event)">
-            <button type="button" class="btn btn-primary btn-circle btn-sm solid" (click)="fileInput.click()"  *ngIf="edit">
-                <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
-            </button>
-        </div>
-            <div class="ml-3">
-                <h2 class="font-weight-bold mb-0">{{ User.companyName }}</h2>
-                {{ User.email }}
+    <div class="row mb-5">
+      <div class="row font-weight-bold">
+        <div class="col-md-6">
+          <h3 class="font-weight-bold ml-3">Contact Infrormation</h3>
+          <br />
+          <div class="row">
+            <div class="col-6 details mb-3">Email:</div>
+            <div class="col-6 details mb-3">
+              <span *ngIf="!edit"> {{ User.email }}</span>
+              <input
+                class="form-control"
+                formControlName="email"
+                [(ngModel)]="User.email"
+                *ngIf="edit"
+              />
             </div>
-        </div>
-        <div class="w-100 text-right">
-            <button type="button" class="btn btn-primary px-4" (click)="edit = false" *ngIf="edit">Cancel Edit</button>
-            <button type="button" class="btn btn-primary solid" (click)="edit = !edit"  *ngIf="!edit">Edit Profile</button>
-        </div>
-
-        <div class="row mb-5">
-            <div class="row font-weight-bold">
-                    <div class="col-md-6">
-                        <h3 class="font-weight-bold ml-3">Contact Infrormation</h3><br>
-                        <div class="row">
-                            <div class="col-6 details mb-3">
-                                Email:
-                            </div>
-                            <div class="col-6 details mb-3">
-                            <span *ngIf="!edit"> {{ User.email }}</span>
-                                <input class="form-control" formControlName="email" [(ngModel)]="User.email" *ngIf="edit"/>
-                            </div>
-                            <div class="col-6 details pr-0 pr-md-3">
-                                Phone number:
-                            </div>
-                            <div class="col-6 details">
-                                {{ User.phone }}
-                            </div>
-                        </div>
-                    </div>
+            <div class="col-6 details pr-0 pr-md-3">Phone number:</div>
+            <div class="col-6 details">
+              {{ User.phone }}
             </div>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <div class="row mb-5">
-            <div class="row font-weight-bold">
-                    <div class="col-12">
-                        <h3 class="font-weight-bold ml-3">Company's Information</h3><br>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <div class="row">
-                            <div class="col-6 details mb-3">
-                                Company’s Name:
-                            </div>
-                            <div class="col-6 details mb-3">
-                            <span *ngIf="!edit"> {{ User.userable.companyName }}</span>
-                                <input class="form-control" formControlName="companyName" [(ngModel)]="User.userable.companyName" *ngIf="edit"/>
-                            </div>
-                            <div class="col-6 details mb-3 mb-md-0">
-                                Industry:
-                            </div>
-                            <div class="col-6 details mb-3 mb-md-0">
-                            <span *ngIf="!edit"> {{ User.userable.industry }}</span>
-                                <input class="form-control" formControlName="industry" [(ngModel)]="User.userable.industry" *ngIf="edit"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <div class="row">
-                            <div class="col-6 details mb-3">
-                                Company’s Size:
-                            </div>
-                            <div class="col-6 details">
-                            <span *ngIf="!edit"> {{ User.userable.companySize }}</span>
-                                <select class="form-control w-100" formControlName="companySize"  [(ngModel)]="User.userable.companySize" *ngIf="edit">
-                                    <option value="1 - 10">1 - 10</option>
-                                    <option value="10 - 50">10 - 50</option>
-                                    <option value="50 - 100">50 - 100</option>
-                                    <option value="100 - 500">100 - 500</option>
-                                    <option value="> 500"> > 500</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6 details mb-3">
-                                Address:
-                            </div>
-                            <div class="col-6 details">
-                            <span *ngIf="!edit"> {{ User.userable.address }}</span>
-                                <input class="form-control" formControlName="address" [(ngModel)]="User.userable.address" *ngIf="edit"/>
-                            </div>
-                        </div>
-                    </div>
+    <div class="row mb-5">
+      <div class="row font-weight-bold">
+        <div class="col-12">
+          <h3 class="font-weight-bold ml-3">Company's Information</h3>
+          <br />
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="row">
+            <div class="col-6 details mb-3">Company’s Name:</div>
+            <div class="col-6 details mb-3">
+              <span *ngIf="!edit"> {{ User.userable.company_name }}</span>
+              <input
+                class="form-control"
+                formControlName="company_name"
+                [(ngModel)]="User.userable.company_name"
+                *ngIf="edit"
+              />
             </div>
-        </div>
-
-        <div class="row mb-5">
-            <div class="row font-weight-bold">
-                    <div class="col-12">
-                        <h3 class="font-weight-bold ml-3">Personal Infrormation</h3><br>
-                    </div>
-                    <div class="col-12">
-                    <div class="row">
-                            <div class="col-12 col-md-6 details mb-3">
-                                    <div class="row">
-                                        <div class="col-6 details mb-3 px-0">
-                                            User ID:
-                                        </div>
-                                        <div class="col-6 details mb-3">
-                                            {{ User.id }}
-                                        </div>
-                                    </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-12 col-md-6 details mb-3">
-                                <div class="row">
-                                    <div class="col-6 details mb-3 px-0">
-                                    First Name:
-                                    </div>
-                                    <div class="col-6 details mb-3 text-capitalize">
-                                    <span *ngIf="!edit"> {{ User.firstName }}</span>
-                                        <input class="form-control" formControlName="firstName" [(ngModel)]="User.firstName" *ngIf="edit"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 details mb-3 mb-md-0">
-                                <div class="row">
-                                    <div class="col-6 details mb-3 px-0">
-                                    Last Name:
-                                    </div>
-                                    <div class="col-6 details mb-3 text-capitalize">
-                                    <span *ngIf="!edit"> {{ User.lastName }}</span>
-                                        <input class="form-control" formControlName="lastName" [(ngModel)]="User.lastName" *ngIf="edit"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <div class="row">
-                            <div class="col-6 details mb-3">
-                            Sex:
-                            </div>
-                            <div class="col-6 details text-capitalize">
-                            <span *ngIf="!edit" class="ml-2"> {{ User.userable.sex }}</span>
-
-                                <div class="form-check" *ngIf="edit">
-                                    <label class="form-check-label">
-                                    <input type="radio" name="gender" class="form-check-input" (change)="sex = 'male'" [checked]="User.userable.sex == 'male'">
-                                    Male
-                                  </label>
-                                </div>
-                                <div class="form-check" *ngIf="edit">
-                                    <label class="form-check-label">
-                                    <input type="radio" name="gender" class="form-check-input" (change)="sex = 'female'" [checked]="User.userable.sex == 'female'">
-                                    Female
-                                  </label>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
+            <div class="col-6 details mb-3 mb-md-0">Industry:</div>
+            <div class="col-6 details mb-3 mb-md-0">
+              <span *ngIf="!edit"> {{ User.userable.industry }}</span>
+              <input
+                class="form-control"
+                formControlName="industry"
+                [(ngModel)]="User.userable.industry"
+                *ngIf="edit"
+              />
             </div>
+          </div>
         </div>
+        <div class="col-12 col-md-6">
+          <div class="row">
+            <div class="col-6 details mb-3">Company’s Size:</div>
+            <div class="col-6 details mb-3">
+              <span *ngIf="!edit"> {{ User.userable.company_size }}</span>
+              <select
+                class="form-control w-100"
+                formControlName="company_size"
+                [(ngModel)]="User.userable.company_size"
+                *ngIf="edit"
+              >
+                <option value="1 - 10">1 - 10</option>
+                <option value="10 - 50">10 - 50</option>
+                <option value="50 - 100">50 - 100</option>
+                <option value="100 - 500">100 - 500</option>
+                <option value="> 500">> 500</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6 details mb-3">Address:</div>
+            <div class="col-6 details mb-3">
+              <span *ngIf="!edit"> {{ User.userable.address }}</span>
+              <input
+                class="form-control"
+                formControlName="address"
+                [(ngModel)]="User.userable.address"
+                *ngIf="edit"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <div class="text-right">
-            <button type="submit" class="btn btn-success px-4" *ngIf="edit">Save</button>
+    <div class="row mb-5">
+      <div class="row font-weight-bold">
+        <div class="col-12">
+          <h3 class="font-weight-bold ml-3">Personal Infrormation</h3>
+          <br />
         </div>
-    </form>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-12 col-md-6 details mb-3">
+              <div class="row">
+                <div class="col-6 details mb-3 px-0">User ID:</div>
+                <div class="col-6 details mb-3">
+                  {{ User.id }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-12 col-md-6 details mb-3">
+              <div class="row">
+                <div class="col-6 details mb-3 px-0">First Name:</div>
+                <div class="col-6 details mb-3 text-capitalize">
+                  <span *ngIf="!edit"> {{ User.first_name }}</span>
+                  <input
+                    class="form-control"
+                    formControlName="first_name"
+                    [(ngModel)]="User.first_name"
+                    *ngIf="edit"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 details mb-3 mb-md-0">
+              <div class="row">
+                <div class="col-6 details mb-3 px-0">Last Name:</div>
+                <div class="col-6 details mb-3 text-capitalize">
+                  <span *ngIf="!edit"> {{ User.last_name }}</span>
+                  <input
+                    class="form-control"
+                    formControlName="last_name"
+                    [(ngModel)]="User.last_name"
+                    *ngIf="edit"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="row">
+            <div class="col-6 details mb-3">Gender:</div>
+            <div class="col-6 details text-capitalize">
+              <span *ngIf="!edit" class="ml-2">
+                {{ User.userable.gender }}</span
+              >
+
+              <div class="form-check" *ngIf="edit">
+                <label class="form-check-label">
+                  <input
+                    type="radio"
+                    name="gender"
+                    class="form-check-input"
+                    (change)="gender = 'male'"
+                    [checked]="User.userable.gender == 'male'"
+                  />
+                  Male
+                </label>
+              </div>
+              <div class="form-check" *ngIf="edit">
+                <label class="form-check-label">
+                  <input
+                    type="radio"
+                    name="gender"
+                    class="form-check-input"
+                    (change)="gender = 'female'"
+                    [checked]="User.userable.gender == 'female'"
+                  />
+                  Female
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-right">
+      <button type="submit" class="btn btn-success px-4" *ngIf="edit">
+        Save
+      </button>
+    </div>
+  </form>
 </div>
 
 <ng-template #content let-modal>
-      <div class="modal-header">
-        <h4 class="modal-title">{{ modalTitle }}</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>{{ modalBody }}</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
-      </div>
-    </ng-template>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ modalTitle }}</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{ modalBody }}</p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
 
-    <ngx-loading [show]="loading"></ngx-loading>
+<ngx-loading [show]="loading"></ngx-loading>

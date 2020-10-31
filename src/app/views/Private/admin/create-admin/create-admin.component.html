@@ -8,17 +8,18 @@
           <input
             class="form-control"
             placeholder="First Name"
-            formControlName="firstName"
+            formControlName="first_name"
           />
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.firstName"
+              *ngFor="let validation of validation_messages.first_name"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  Form.get('firstName').hasError(validation.type) &&
-                  (Form.get('firstName').dirty || Form.get('firstName').touched)
+                  Form.get('first_name').hasError(validation.type) &&
+                  (Form.get('first_name').dirty ||
+                    Form.get('first_name').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -31,17 +32,17 @@
           <input
             class="form-control"
             placeholder="Last Name"
-            formControlName="lastName"
+            formControlName="last_name"
           />
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.lastName"
+              *ngFor="let validation of validation_messages.last_name"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  Form.get('lastName').hasError(validation.type) &&
-                  (Form.get('lastName').dirty || Form.get('lastName').touched)
+                  Form.get('last_name').hasError(validation.type) &&
+                  (Form.get('last_name').dirty || Form.get('last_name').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -119,6 +120,22 @@
             <span class="text-danger">{{ validation.message }}</span>
           </div>
         </ng-container>
+      </div>
+      <div class="row mt-3">
+        <p class="bolder w-100">Permissions</p>
+        <div
+          class="col-6"
+          *ngFor="let check of permissionsCheckboxes; let i = index"
+        >
+          <mat-checkbox
+            class="bolder font-weight-bold"
+            (click)="$event.stopPropagation()"
+            (change)="permissionChecked($event, check)"
+            aria-label="permission checkbox"
+          >
+            <span class="bolder h4">{{ splitString(check) }}</span>
+          </mat-checkbox>
+        </div>
       </div>
       <div class="row mt-3">
         <div class="input-group mb-0">

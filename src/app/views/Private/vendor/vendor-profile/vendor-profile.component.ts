@@ -1,22 +1,22 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { AuthService } from "src/app/services/auth/auth.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import {
   FormBuilder,
   FormGroup,
   FormControl,
   Validators,
-} from "@angular/forms";
-import { EnvironmentService } from "src/app/services/env/environment.service";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { TokenService } from "src/app/services/auth/token.service";
+} from '@angular/forms';
+import { EnvironmentService } from 'src/app/services/env/environment.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TokenService } from 'src/app/services/auth/token.service';
 
 @Component({
-  selector: "app-vendor-profile",
-  templateUrl: "./vendor-profile.component.html",
-  styleUrls: ["./vendor-profile.component.css"],
+  selector: 'app-vendor-profile',
+  templateUrl: './vendor-profile.component.html',
+  styleUrls: ['./vendor-profile.component.css'],
 })
 export class VendorProfileComponent implements OnInit {
-  @ViewChild("content") private content;
+  @ViewChild('content') private content;
 
   constructor(
     private auth: AuthService,
@@ -40,56 +40,56 @@ export class VendorProfileComponent implements OnInit {
   User: any = {};
   public Form: FormGroup;
   validation_messages = {
-    firstName: [{ type: "required", message: "A First Name is required." }],
-    lastName: [{ type: "required", message: "A Last Name is required." }],
+    first_name: [{ type: 'required', message: 'A First Name is required.' }],
+    last_name: [{ type: 'required', message: 'A Last Name is required.' }],
     email: [
-      { type: "required", message: "An email is required." },
-      { type: "pattern", message: "Please enter a valid email" },
+      { type: 'required', message: 'An email is required.' },
+      { type: 'pattern', message: 'Please enter a valid email' },
     ],
     phone: [
-      { type: "required", message: "A Phone Number is required." },
-      { type: "pattern", message: "Please enter a valid Phone Number." },
+      { type: 'required', message: 'A Phone Number is required.' },
+      { type: 'pattern', message: 'Please enter a valid Phone Number.' },
     ],
     password: [
-      { type: "required", message: "A Password is required." },
-      { type: "minlength", message: "Minimum of 6 characters" },
+      { type: 'required', message: 'A Password is required.' },
+      { type: 'minlength', message: 'Minimum of 6 characters' },
     ],
   };
 
   initForm() {
     this.Form = this.formBuilder.group({
-      firstName: new FormControl(
-        "",
+      first_name: new FormControl(
+        '',
         Validators.compose([
           Validators.maxLength(30),
-          Validators.pattern("[a-zA-Z ]*"),
+          Validators.pattern('[a-zA-Z ]*'),
           Validators.required,
         ])
       ),
-      lastName: new FormControl(
-        "",
+      last_name: new FormControl(
+        '',
         Validators.compose([
           Validators.maxLength(30),
-          Validators.pattern("[a-zA-Z ]*"),
+          Validators.pattern('[a-zA-Z ]*'),
           Validators.required,
         ])
       ),
       email: new FormControl(
-        "",
+        '',
         Validators.compose([
           Validators.required,
-          Validators.pattern("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"),
+          Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
         ])
       ),
       phone: new FormControl(
-        "",
-        Validators.compose([Validators.pattern("[0-9 ]*"), Validators.required])
+        '',
+        Validators.compose([Validators.pattern('[0-9 ]*'), Validators.required])
       ),
     });
   }
 
   getSingleUser() {
-    this.auth.getUserDetails(this.token.phone).subscribe(
+    this.auth.getUserDetails(this.token._id).subscribe(
       (data) => {
         this.User = data;
         // this.getApprovedCollectors();
@@ -99,8 +99,7 @@ export class VendorProfileComponent implements OnInit {
   }
 
   getApprovedCollectors() {
-    var payload = { apikey: this.env.API_KEY, id: this.User.id };
-    this.auth.getApprovedCollectors(payload).subscribe(
+    this.auth.getApprovedCollectors(this.User.id).subscribe(
       (data) => (this.approvedCollectors = data),
       (error) => console.log(error)
     );
@@ -118,23 +117,23 @@ export class VendorProfileComponent implements OnInit {
   updateProfile(form) {
     this.loading = true;
     var user = this.processForm(form);
-    this.auth.updateUser(user.id, user).subscribe(
-      (data) => this.handleResponse(data),
+    this.auth.updateUser('hosts', user.id, user).subscribe(
+      (res: any) => this.handleResponse(res.data),
       (error) => this.handleError(error)
     );
   }
 
   processForm(Form) {
     var formdata = {
-      id: "",
-      firstName: "",
-      lastName: "",
-      phone: "",
-      email: "",
+      id: '',
+      first_name: '',
+      last_name: '',
+      phone: '',
+      email: '',
     };
     formdata.id = this.User.id;
-    formdata.firstName = Form.firstName;
-    formdata.lastName = Form.lastName;
+    formdata.first_name = Form.first_name;
+    formdata.last_name = Form.last_name;
     formdata.email = Form.email;
     formdata.phone = Form.phone;
 
@@ -143,14 +142,14 @@ export class VendorProfileComponent implements OnInit {
 
   handleResponse(data) {
     this.loading = false;
-    this.modalTitle = "Success";
-    this.modalBody = data.data;
+    this.modalTitle = 'Success';
+    this.modalBody = data;
     this.openModal(this.content);
   }
 
   handleError(error) {
     this.loading = false;
-    this.modalTitle = "Error";
+    this.modalTitle = 'Error';
     this.modalBody = error.error.error;
     this.openModal(this.content);
   }

@@ -9,17 +9,17 @@
       <div class="row">
         <div class="form-group mb-0 w-100">
           <label class="signup-sec-header">Company Name</label>
-          <input class="form-control" formControlName="companyName" />
+          <input class="form-control" formControlName="company_name" />
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.companyName"
+              *ngFor="let validation of validation_messages.company_name"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  BusinessForm.get('companyName').hasError(validation.type) &&
-                  (BusinessForm.get('companyName').dirty ||
-                    BusinessForm.get('companyName').touched)
+                  BusinessForm.get('company_name').hasError(validation.type) &&
+                  (BusinessForm.get('company_name').dirty ||
+                    BusinessForm.get('company_name').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -35,18 +35,18 @@
           <input
             class="form-control"
             placeholder="First Name"
-            formControlName="firstName"
+            formControlName="first_name"
           />
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.firstName"
+              *ngFor="let validation of validation_messages.first_name"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  BusinessForm.get('firstName').hasError(validation.type) &&
-                  (BusinessForm.get('firstName').dirty ||
-                    BusinessForm.get('firstName').touched)
+                  BusinessForm.get('first_name').hasError(validation.type) &&
+                  (BusinessForm.get('first_name').dirty ||
+                    BusinessForm.get('first_name').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -59,18 +59,18 @@
           <input
             class="form-control"
             placeholder="Last Name"
-            formControlName="lastName"
+            formControlName="last_name"
           />
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.lastName"
+              *ngFor="let validation of validation_messages.last_name"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  BusinessForm.get('lastName').hasError(validation.type) &&
-                  (BusinessForm.get('lastName').dirty ||
-                    BusinessForm.get('lastName').touched)
+                  BusinessForm.get('last_name').hasError(validation.type) &&
+                  (BusinessForm.get('last_name').dirty ||
+                    BusinessForm.get('last_name').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -130,25 +130,25 @@
       <div class="row mt-3">
         <div class="form-group w-100 mb-0">
           <label class="signup-sec-header">Company Size</label>
-          <select class="form-control w-100" formControlName="companySize">
+          <select class="form-control w-100" formControlName="company_size">
             <option [ngValue]="null">Select company size</option>
             <option value="1 - 10">1 - 10</option>
             <option value="10 - 50">10 - 50</option>
             <option value="50 - 100">50 - 100</option>
             <option value="100 - 500">100 - 500</option>
-            <option value="> 500"> > 500</option>
+            <option value="> 500">> 500</option>
           </select>
         </div>
         <div class="validation-errors w-100">
           <ng-container
-            *ngFor="let validation of validation_messages.companySize"
+            *ngFor="let validation of validation_messages.company_size"
           >
             <div
               class="error-message alert alert-danger w-100"
               *ngIf="
-                BusinessForm.get('companySize').hasError(validation.type) &&
-                (BusinessForm.get('companySize').dirty ||
-                  BusinessForm.get('companySize').touched)
+                BusinessForm.get('company_size').hasError(validation.type) &&
+                (BusinessForm.get('company_size').dirty ||
+                  BusinessForm.get('company_size').touched)
               "
             >
               <i class="fa fa-info-circle text-danger"></i> &nbsp;

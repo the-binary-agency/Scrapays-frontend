@@ -1,10 +1,10 @@
 <div class="row mt-5 pt-md-5">
-  <div class="row mb-4 pl-4" *ngIf="collectorToAssign.firstName">
+  <div class="row mb-4 pl-4" *ngIf="collectorToAssign.first_name">
     Choose request to assign to
     <span class="bolder ml-2">
-      {{ collectorToAssign.firstName + " "
-      }}{{ collectorToAssign.lastName + " " }} ({{
-        "Collector " + collectorToAssign.id
+      {{ collectorToAssign.first_name + ' '
+      }}{{ collectorToAssign.last_name + ' ' }} ({{
+        'Collector ' + collectorToAssign.id
       }})
     </span>
   </div>
@@ -24,7 +24,7 @@
       </ng-container>
 
       <!-- Progress Column -->
-      <ng-container matColumnDef="userID">
+      <ng-container matColumnDef="producer_id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>User ID</th>
         <td
           mat-cell
@@ -32,12 +32,12 @@
           (click)="assignToCollector(row)"
           class="fake-btn"
         >
-          {{ "0" + row.userID.split("+234")[1] }}
+          {{ row.producer_id }}
         </td>
       </ng-container>
 
       <!-- Name Column -->
-      <ng-container matColumnDef="assignedCollector">
+      <ng-container matColumnDef="assigned_collector">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Assigned Collector
         </th>
@@ -47,16 +47,12 @@
           (click)="assignToCollector(row)"
           class="fake-btn"
         >
-          {{
-            row.assignedCollector
-              ? "0" + row.assignedCollector.split("+234")[1]
-              : "None"
-          }}
+          {{ row.assigned_collector ? '0' + row.assigned_collector : 'None' }}
         </td>
       </ng-container>
 
       <!-- Name Column -->
-      <ng-container matColumnDef="producerName">
+      <ng-container matColumnDef="producer_name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Producer Name</th>
         <td
           mat-cell
@@ -64,7 +60,7 @@
           (click)="assignToCollector(row)"
           class="fake-btn"
         >
-          {{ row.producerName }}
+          {{ row.producer_name }}
         </td>
       </ng-container>
 
@@ -131,7 +127,7 @@
           (click)="assignToCollector(row)"
           class="fake-btn"
         >
-          {{ row.created_at | date: "short" }}
+          {{ row.created_at | date: 'short' }}
         </td>
       </ng-container>
 
@@ -146,36 +142,52 @@
       </tr>
     </table>
 
-    <mat-paginator pageSize="25"></mat-paginator>
+    <div class="mt-5 d-flex justify-content-end">
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="currentPage"
+        [pageSize]="pageSize"
+        [rotate]="true"
+        [maxSize]="5"
+        [ellipses]="true"
+        (pageChange)="changePage()"
+      >
+        <ng-template ngbPaginationPrevious
+          ><i class="fa fa-caret-left" aria-hidden="true"></i
+        ></ng-template>
+        <ng-template ngbPaginationNext
+          ><i class="fa fa-caret-right" aria-hidden="true"></i></ng-template
+      ></ngb-pagination>
 
-    <ngx-loading [show]="loading"></ngx-loading>
+      <ngx-loading [show]="loading"></ngx-loading>
+    </div>
   </div>
+
+  <ng-template #assignModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">
+        <p>{{ assignNotification.title }}</p>
+      </h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{ assignNotification.body }}</p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="modal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
 </div>
-
-<ng-template #assignModal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">
-      <p>{{ assignNotification.title }}</p>
-    </h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <p>{{ assignNotification.body }}</p>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-light"
-      (click)="modal.close('Close click')"
-    >
-      Close
-    </button>
-  </div>
-</ng-template>

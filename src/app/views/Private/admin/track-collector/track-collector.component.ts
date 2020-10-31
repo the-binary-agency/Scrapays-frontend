@@ -1,10 +1,10 @@
-import { Component, OnInit } from "@angular/core";
-import Echo from "laravel-echo";
-import { EnvironmentService } from "src/app/services/env/environment.service";
-import { environment } from "src/environments/environment";
-import { AuthService } from "src/app/services/auth/auth.service";
-import { TokenService } from "src/app/services/auth/token.service";
-import { NavService } from "src/app/services/general/nav.service";
+import { Component, OnInit } from '@angular/core';
+import Echo from 'laravel-echo';
+import { EnvironmentService } from 'src/app/services/env/environment.service';
+import { environment } from 'src/environments/environment';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { TokenService } from 'src/app/services/auth/token.service';
+import { NavService } from 'src/app/services/general/nav.service';
 
 declare let google: any;
 
@@ -12,9 +12,9 @@ const PUSHER_API_KEY = environment.PUSHER_API_KEY;
 const PUSHER_CLUSTER = environment.PUSHER_CLUSTER;
 
 @Component({
-  selector: "app-track-collector",
-  templateUrl: "./track-collector.component.html",
-  styleUrls: ["./track-collector.component.css"],
+  selector: 'app-track-collector',
+  templateUrl: './track-collector.component.html',
+  styleUrls: ['./track-collector.component.css'],
 })
 export class TrackCollectorComponent implements OnInit {
   constructor(
@@ -31,7 +31,7 @@ export class TrackCollectorComponent implements OnInit {
   id: string;
   marker: any;
   markers = [];
-  collID;
+  coll_id;
   collLocation;
   lineCoordinates = [];
   loading: boolean;
@@ -45,11 +45,11 @@ export class TrackCollectorComponent implements OnInit {
 
   subscribeToEcho() {
     let echo = new Echo({
-      broadcaster: "pusher",
+      broadcaster: 'pusher',
       key: PUSHER_API_KEY,
       cluster: PUSHER_CLUSTER,
     });
-    echo.channel("location").listen("SendLocation", (e) => {
+    echo.channel('location').listen('SendLocation', (e) => {
       this.data = e.location;
       this.updateMap(this.data);
     });
@@ -57,17 +57,17 @@ export class TrackCollectorComponent implements OnInit {
 
   launchMap(lat, lng) {
     let nigeria = { lat: lat, lng: lng };
-    this.map = new google.maps.Map(document.getElementById("map"), {
+    this.map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
       center: nigeria,
     });
     // Create the search box and link it to the UI element.
-    const input = document.getElementById("loc-input") as HTMLInputElement;
+    const input = document.getElementById('loc-input') as HTMLInputElement;
     const searchBox = new google.maps.places.SearchBox(input);
     // this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
     // Bias the SearchBox results towards current map's viewport.
-    this.map.addListener("bounds_changed", () => {
+    this.map.addListener('bounds_changed', () => {
       // @ts-ignore
       searchBox.setBounds(this.map.getBounds() as google.maps.LatLngBounds);
     });
@@ -76,7 +76,7 @@ export class TrackCollectorComponent implements OnInit {
     let markers: google.maps.Marker[] = [];
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
-    searchBox.addListener("places_changed", () => {
+    searchBox.addListener('places_changed', () => {
       const places = searchBox.getPlaces();
 
       if (places.length == 0) {
@@ -93,7 +93,7 @@ export class TrackCollectorComponent implements OnInit {
       const bounds = new google.maps.LatLngBounds();
       places.forEach((place) => {
         if (!place.geometry) {
-          console.log("Returned place contains no geometry");
+          console.log('Returned place contains no geometry');
           return;
         }
         const icon = {
@@ -145,14 +145,14 @@ export class TrackCollectorComponent implements OnInit {
     if (!exists) {
       var marker = new google.maps.Marker({
         map: this.map,
-        animation: "bounce",
-        icon: "assets/images/icons/loc-marker.png",
+        animation: 'bounce',
+        icon: 'assets/images/icons/loc-marker.png',
       });
 
       const infowindow = new google.maps.InfoWindow({
-        content: "<div>Collector " + data.id + "</div>",
+        content: '<div>Collector ' + data.id + '</div>',
       });
-      marker.addListener("click", () => {
+      marker.addListener('click', () => {
         infowindow.open(this.map, marker);
       });
       var m = {
@@ -179,7 +179,7 @@ export class TrackCollectorComponent implements OnInit {
   }
 
   findCollectorByID() {
-    var id = this.collID;
+    var id = this.coll_id;
     this.getCollectorWithLog(id);
     for (let coll of this.markers) {
       if (id == coll.id) {
@@ -194,27 +194,30 @@ export class TrackCollectorComponent implements OnInit {
 
   getCollectorWithLog(id) {
     this.loading = true;
-    let form = this.processForm(id);
-    this.Auth.getCollectorWithLog(form).subscribe(
-      (data) => this.handleCollectorGetResponse(data),
+    this.Auth.getCollectorDetails(id).subscribe(
+      (res: any) => this.handleCollectorGetResponse(res.data),
       (error) => this.handleCollectorGetError(error)
     );
   }
 
   handleCollectorGetResponse(data) {
-    this.displayedCollector = data.collector;
-    this.displayedCollectorRequests = data.pickups;
+    this.displayedCollector = data;
+    let query = 'status=Pending';
+    this.Auth.getAssignedRequests(data.id, query).subscribe(
+      (res: any) => (this.displayedCollectorRequests = res.data),
+      (error) => this.handleCollectorGetError(error)
+    );
     this.loading = false;
   }
 
   handleCollectorGetError(error) {
-    console.log(error);
+    console.log(error.error.error);
     this.loading = false;
   }
 
   processForm(id) {
     var formData = {
-      adminPhone: this.token.phone,
+      adminPhone: this.token._id,
       collectorID: id,
     };
     return formData;
@@ -226,8 +229,8 @@ export class TrackCollectorComponent implements OnInit {
 
   assignToRequest() {
     this.nav.navigate(
-      "/dashboard/pickup-requests/assign_to_" + this.collID,
-      this.collID
+      '/dashboard/pickup-requests/assign_to_' + this.coll_id,
+      this.coll_id
     );
   }
 }

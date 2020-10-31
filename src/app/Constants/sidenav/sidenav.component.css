@@ -1,6 +1,6 @@
-mat-sidenav{
-    /* padding-top: 72px; */
-    width: 250px;
+mat-sidenav {
+  /* padding-top: 72px; */
+  width: 250px;
 }
 mat-sidenav-container /deep/ .mat-sidenav-content {
   overflow: hidden;
@@ -9,14 +9,14 @@ mat-sidenav-container /deep/ .mat-sidenav-content {
   height: calc(100% - 64px);
   overflow: auto;
 } */
-.list-item-active{
-    border-left: 5px solid #FF7900;
-    /* color: #FF7900; */
-    font-weight: bold;
+.list-item-active {
+  border-left: 5px solid #ff7900;
+  /* color: #FF7900; */
+  font-weight: bold;
 }
-.menu-toggler{
-    position: absolute !important;
-    bottom: 0;
+.menu-toggler {
+  position: absolute !important;
+  bottom: 0;
 }
 .schedule-modal {
   display: none; /* Hidden by default */
@@ -27,24 +27,24 @@ mat-sidenav-container /deep/ .mat-sidenav-content {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
 .modal-content {
-    border: 0;
-    background-color: transparent;
-    margin: 20% auto;
-    animation-name: animatetop;
-    animation-duration: 0.4s
+  border: 0;
+  background-color: transparent;
+  margin: 20% auto;
+  animation-name: animatetop;
+  animation-duration: 0.4s;
 }
 
-.modal-cal{
-    border: 1px solid #888;
-    border-radius: 15px;
-    background-color: #fefefe;
-    padding: 10px;
+.modal-cal {
+  border: 1px solid #888;
+  border-radius: 15px;
+  background-color: #fefefe;
+  padding: 10px;
 }
 
 /* The Close Button */
@@ -66,41 +66,41 @@ mat-sidenav-container /deep/ .mat-sidenav-content {
   text-decoration: none;
   cursor: pointer;
 }
-.modal-container{
-    border-radius: 15px;
-    padding: 10px;
+.modal-container {
+  border-radius: 15px;
+  padding: 10px;
 }
-.profile-icon{
-    height: 40px;
-    width: auto;
+.profile-icon {
+  height: 40px;
+  width: auto;
 }
-.profile-drop-down{
-    padding-top: 0.85rem !important;
+.profile-drop-down {
+  padding-top: 0.85rem !important;
 }
-.fa.badge{
-    display: flow-root;
-    width: fit-content;
-    text-align: center;
-    vertical-align: middle;
-    position: relative;
+.fa.badge {
+  display: flow-root;
+  width: fit-content;
+  text-align: center;
+  vertical-align: middle;
+  position: relative;
 }
-.fa.badge:after{
-    content: attr(data-count);
-    position: absolute;
-    background: red;
-    top: 0;
-    left: 13px;
-    padding: 3px;
-    text-align: center;
-    line-height: 1rem;
-    font-size: 1rem;
-    border-radius: 100%;
-    color: white;
-    border: 1px solid red;
+.fa.badge:after {
+  content: attr(data-count);
+  position: absolute;
+  background: red;
+  top: 0;
+  left: 13px;
+  padding: 3px;
+  text-align: center;
+  line-height: 1rem;
+  font-size: 1rem;
+  border-radius: 100%;
+  color: white;
+  border: 1px solid red;
 }
-.mat-list-item-content:first-of-type{
-  padding-left: 2px !important; 
-  padding-right: 2px !important; 
+.mat-list-item-content:first-of-type {
+  padding-left: 2px !important;
+  padding-right: 2px !important;
 }
 /* Modal Header */
 .modal-header {
@@ -110,20 +110,26 @@ mat-sidenav-container /deep/ .mat-sidenav-content {
 }
 /* Add Animation */
 @keyframes animatetop {
-  from {top: -300px; opacity: 0}
-  to {top: 0; opacity: 1}
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
 }
-.head-model-closer{
-    position: relative;
-    top: -22px;
-    right: -18px;
-    background-color: black;
-    border-radius: 27px;
-    padding-right: 5px;
-    padding-left: 5px;
-    padding-top: 2px;
-    padding-bottom: 3px;
-    border: 1px solid white;
+.head-model-closer {
+  position: relative;
+  top: -22px;
+  right: -18px;
+  background-color: black;
+  border-radius: 27px;
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-top: 2px;
+  padding-bottom: 3px;
+  border: 1px solid white;
 }
 .trunc-text {
   display: block;
@@ -133,44 +139,44 @@ mat-sidenav-container /deep/ .mat-sidenav-content {
   text-overflow: ellipsis;
 }
 .list-group-item:hover {
-    z-index: 2;
-    color: #fff;
-    background-color: #FF7900;
-    border-color: #FF7900;
+  z-index: 2;
+  color: #fff;
+  background-color: #ff7900;
+  border-color: #ff7900;
 }
 .list-group-item:first-child {
-    margin-top: 4px;
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
+  margin-top: 4px;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
 }
 .list-group-item {
-    position: relative;
-    display: block;
-    padding: 0.05rem 1.35rem;
-    margin-bottom: -1px;
-    background-color: #fff;
-    border: 0;
-    border-radius: 5px;
+  position: relative;
+  display: block;
+  padding: 0.05rem 1.35rem;
+  margin-bottom: -1px;
+  background-color: #fff;
+  border: 0;
+  border-radius: 5px;
 }
 .list-group-item-action {
-    width: 100%;
-    color: #495057;
-    text-align: inherit;
+  width: 100%;
+  color: #495057;
+  text-align: inherit;
 }
 .not-check-input {
-    position: absolute;
-    margin-top: .3rem;
-    margin-left: -1.25rem;
-    left: 42.4px;
-    margin-right: 5px;
-    z-index: 3;
+  position: absolute;
+  margin-top: 0.3rem;
+  margin-left: -1.25rem;
+  left: 42.4px;
+  margin-right: 5px;
+  z-index: 3;
 }
 .not-modal-content {
-    margin: 15% auto !important;
+  margin: 15% auto !important;
 }
-.companyName{
-    line-height: 1rem;
+.company_name {
+  line-height: 1rem;
 }
-.notificationsModalToggler{
+.notificationsModalToggler {
   margin-left: -10px;
 }

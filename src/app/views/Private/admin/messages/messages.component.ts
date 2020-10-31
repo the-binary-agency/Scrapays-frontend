@@ -1,20 +1,20 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { ApiService } from "src/app/services/auth/api.service";
-import { AuthService } from "src/app/services/auth/auth.service";
-import { NavService } from "src/app/services/general/nav.service";
-import { TokenService } from "src/app/services/auth/token.service";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
-import { SelectionModel } from "@angular/cdk/collections";
-import { Router } from "@angular/router";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ApiService } from 'src/app/services/auth/api.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { NavService } from 'src/app/services/general/nav.service';
+import { TokenService } from 'src/app/services/auth/token.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
-} from "@angular/forms";
+} from '@angular/forms';
 
 export interface Message {
   id: string;
@@ -26,26 +26,25 @@ export interface Message {
 }
 
 @Component({
-  selector: "app-messages",
-  templateUrl: "./messages.component.html",
-  styleUrls: ["./messages.component.css"],
+  selector: 'app-messages',
+  templateUrl: './messages.component.html',
+  styleUrls: ['./messages.component.css'],
 })
 export class MessagesComponent implements OnInit {
-  @ViewChild("viewMessage") private viewMessage;
-  @ViewChild("replyMessage") private replyMessage;
-  @ViewChild("deleteModal") private deleteModal;
+  @ViewChild('viewMessage') private viewMessage;
+  @ViewChild('replyMessage') private replyMessage;
+  @ViewChild('deleteModal') private deleteModal;
 
   displayedColumns: string[] = [
-    "select",
-    "name",
-    "messageTitle",
-    "messageBody",
-    "date",
-    "more",
+    'select',
+    'name',
+    'messageTitle',
+    'messageBody',
+    'date',
+    'more',
   ];
   dataSource: MatTableDataSource<Message>;
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   selection = new SelectionModel<Message>(true, []);
 
@@ -68,11 +67,11 @@ export class MessagesComponent implements OnInit {
   Messages: any[] = [];
   selectedMessage: any = {};
   replyToSend = {
-    msgID: "",
-    msgEmail: "",
-    as: "",
-    cc: "",
-    message: "",
+    msg_id: '',
+    msg_email: '',
+    as: '',
+    cc: '',
+    message: '',
   };
   replyLoading: boolean = false;
   replyRes: null;
@@ -80,30 +79,33 @@ export class MessagesComponent implements OnInit {
   deleteLoading: boolean;
   loading: boolean;
   validation_messages = {
-    as: [{ type: "required", message: "A 'reply as' is required." }],
-    cc: [{ type: "pattern", message: "Please enter a valid email" }],
-    message: [{ type: "required", message: "A message is required." }],
+    as: [{ type: 'required', message: "A 'reply as' is required." }],
+    cc: [{ type: 'pattern', message: 'Please enter a valid email' }],
+    message: [{ type: 'required', message: 'A message is required.' }],
   };
   deleteNotification = {
-    title: "",
-    body: "",
+    title: '',
+    body: '',
   };
+  currentPage = 1;
+  collectionSize = 0;
+  pageSize = 1;
 
   initForm() {
     this.ReplyForm = this.formBuilder.group({
-      as: new FormControl("Admin", [Validators.required]),
+      as: new FormControl('Admin', [Validators.required]),
       cc: new FormControl(
-        "",
+        '',
         Validators.compose([
-          Validators.pattern("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"),
+          Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
         ])
       ),
-      message: new FormControl("", [Validators.required]),
+      message: new FormControl('', [Validators.required]),
     });
   }
 
-  getAllContactMessages() {
-    this.Auth.getAllContactMessages(this.token.phone).subscribe(
+  getAllContactMessages(query?) {
+    this.Auth.getAllContactMessages(query).subscribe(
       (res) => {
         this.handleResponse(res);
       },
@@ -113,21 +115,20 @@ export class MessagesComponent implements OnInit {
 
   gotoSingle(listedscrap) {
     this.nav.navigate(
-      "/dashboard/listedScrap/scrap_" + listedscrap.id,
+      '/dashboard/listedScrap/scrap_' + listedscrap.id,
       listedscrap
     );
   }
 
   handleResponse(data) {
-    this.Messages = data.messages;
+    this.Messages = data.data;
     this.dataSource = new MatTableDataSource(this.Messages);
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.loading = false;
   }
 
   handleError(error) {
-    console.log(error);
+    console.log(error.error.error);
   }
 
   formatMaterials(mat) {
@@ -148,19 +149,6 @@ export class MessagesComponent implements OnInit {
     this.isAllSelected()
       ? this.selection.clear()
       : this.dataSource.data.forEach((row) => this.selection.select(row));
-  }
-
-  deleteUser(phone) {
-    this.deleteLoading = true;
-    console.log("User " + phone);
-    let form = {
-      adminPhone: this.token.phone,
-      deletePhone: phone,
-    };
-    this.Auth.deleteUser(form).subscribe(
-      (data) => this.handleDeleteResponse(data),
-      (error) => this.handleDeleteError(error)
-    );
   }
 
   handleDeleteResponse(data) {
@@ -200,15 +188,18 @@ export class MessagesComponent implements OnInit {
   sendReplyMessage(Form) {
     this.replyLoading = true;
     let _message = this.replyToSend;
-    _message.msgID = this.selectedMessage.id;
-    _message.msgEmail = this.selectedMessage.email;
+    _message.msg_id = this.selectedMessage.id;
+    _message.msg_email = this.selectedMessage.email;
     _message.as = Form.as;
     _message.cc = Form.cc;
     _message.message = Form.message;
     let body = { body: _message };
-    this.Auth.replyContactMessage(body).subscribe(
+    this.Auth.replyContactMessage(body, this.selectedMessage.id).subscribe(
       (data) => this.handleReplyResponse(data),
-      (err) => console.log(err)
+      (err) => {
+        console.log(err);
+        this.replyLoading = false;
+      }
     );
   }
 
@@ -223,14 +214,19 @@ export class MessagesComponent implements OnInit {
   deleteMessage(message) {
     this.deleteLoading = true;
     this.Auth.deleteContactMessage(message.id).subscribe(
-      (res) => this.handleDeleteResponse(res),
+      (res: any) => this.handleDeleteResponse(res.data),
       (err) => this.handleDeleteError(err)
     );
   }
 
-  showDeleteAlert(res) {
-    this.deleteNotification.title = "Success";
-    this.deleteNotification.body = res.data;
-    this.modal.open(this.deleteModal, { centered: true, size: "md" });
+  showDeleteAlert(data) {
+    this.deleteNotification.title = 'Success';
+    this.deleteNotification.body = data;
+    this.modal.open(this.deleteModal, { centered: true, size: 'md' });
+  }
+
+  changePage() {
+    let query = `&page=${this.currentPage}`;
+    this.getAllContactMessages(query);
   }
 }

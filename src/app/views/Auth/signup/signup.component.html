@@ -2,8 +2,8 @@
   <div class="col-12 col-md-6 pl-md-5 bg-white">
     <div class="w-100 h1 sc-orange my-3 ml-md-5">Household Signup</div>
     <form
-      [formGroup]="BusinessForm"
-      (ngSubmit)="registerBusiness(BusinessForm.value)"
+      [formGroup]="HouseholdForm"
+      (ngSubmit)="registerHousehold(HouseholdForm.value)"
       class="mx-md-5"
     >
       <div class="row">
@@ -12,18 +12,18 @@
           <input
             class="form-control"
             placeholder="First Name"
-            formControlName="firstName"
+            formControlName="first_name"
           />
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.firstName"
+              *ngFor="let validation of validation_messages.first_name"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  BusinessForm.get('firstName').hasError(validation.type) &&
-                  (BusinessForm.get('firstName').dirty ||
-                    BusinessForm.get('firstName').touched)
+                  HouseholdForm.get('first_name').hasError(validation.type) &&
+                  (HouseholdForm.get('first_name').dirty ||
+                    HouseholdForm.get('first_name').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -36,18 +36,18 @@
           <input
             class="form-control"
             placeholder="Last Name"
-            formControlName="lastName"
+            formControlName="last_name"
           />
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.lastName"
+              *ngFor="let validation of validation_messages.last_name"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  BusinessForm.get('lastName').hasError(validation.type) &&
-                  (BusinessForm.get('lastName').dirty ||
-                    BusinessForm.get('lastName').touched)
+                  HouseholdForm.get('last_name').hasError(validation.type) &&
+                  (HouseholdForm.get('last_name').dirty ||
+                    HouseholdForm.get('last_name').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -69,9 +69,9 @@
             <div
               class="error-message alert alert-danger"
               *ngIf="
-                BusinessForm.get('email').hasError(validation.type) &&
-                (BusinessForm.get('email').dirty ||
-                  BusinessForm.get('email').touched)
+                HouseholdForm.get('email').hasError(validation.type) &&
+                (HouseholdForm.get('email').dirty ||
+                  HouseholdForm.get('email').touched)
               "
             >
               <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -93,9 +93,9 @@
             <div
               class="error-message alert alert-danger"
               *ngIf="
-                BusinessForm.get('phone').hasError(validation.type) &&
-                (BusinessForm.get('phone').dirty ||
-                  BusinessForm.get('phone').touched)
+                HouseholdForm.get('phone').hasError(validation.type) &&
+                (HouseholdForm.get('phone').dirty ||
+                  HouseholdForm.get('phone').touched)
               "
             >
               <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -110,22 +110,22 @@
             >Location where requests will be made from</label
           >
           <textarea
-            formControlName="requestAddress"
+            formControlName="request_address"
             class="form-control"
             rows="3"
           ></textarea>
           <div class="validation-errors w-100">
             <ng-container
-              *ngFor="let validation of validation_messages.requestAddress"
+              *ngFor="let validation of validation_messages.request_address"
             >
               <div
                 class="error-message alert alert-danger"
                 *ngIf="
-                  BusinessForm.get('requestAddress').hasError(
+                  HouseholdForm.get('request_address').hasError(
                     validation.type
                   ) &&
-                  (BusinessForm.get('requestAddress').dirty ||
-                    BusinessForm.get('requestAddress').touched)
+                  (HouseholdForm.get('request_address').dirty ||
+                    HouseholdForm.get('request_address').touched)
                 "
               >
                 <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -139,7 +139,7 @@
             type="text"
             class="form-control"
             placeholder="Invite Code (optional)"
-            formControlName="inviteCode"
+            formControlName="invite_code"
           />
         </div>
         <div class="input-group mb-0 mt-3">
@@ -157,9 +157,9 @@
             <div
               class="error-message alert alert-danger"
               *ngIf="
-                BusinessForm.get('pin').hasError(validation.type) &&
-                (BusinessForm.get('pin').dirty ||
-                  BusinessForm.get('pin').touched)
+                HouseholdForm.get('pin').hasError(validation.type) &&
+                (HouseholdForm.get('pin').dirty ||
+                  HouseholdForm.get('pin').touched)
               "
             >
               <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -181,9 +181,9 @@
             <div
               class="error-message alert alert-danger"
               *ngIf="
-                BusinessForm.get('password').hasError(validation.type) &&
-                (BusinessForm.get('password').dirty ||
-                  BusinessForm.get('password').touched)
+                HouseholdForm.get('password').hasError(validation.type) &&
+                (HouseholdForm.get('password').dirty ||
+                  HouseholdForm.get('password').touched)
               "
             >
               <i class="fa fa-info-circle text-danger"></i> &nbsp;
@@ -216,7 +216,7 @@
         <button
           type="submit"
           class="btn btn-primary bg-orange float-right"
-          [disabled]="!BusinessForm.valid"
+          [disabled]="!HouseholdForm.valid"
         >
           Sign Up
         </button>

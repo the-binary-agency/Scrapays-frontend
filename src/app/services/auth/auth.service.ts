@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, Subject, Observable } from "rxjs";
-import { TokenService } from "./token.service";
-import { EnvironmentService } from "../env/environment.service";
-import { Router } from "@angular/router";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Subject, Observable } from 'rxjs';
+import { TokenService } from './token.service';
+import { EnvironmentService } from '../env/environment.service';
+import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthService {
   private loggedIn: Subject<boolean> = new BehaviorSubject<boolean>(
@@ -21,8 +21,8 @@ export class AuthService {
   private Enterprise: Subject<boolean> = new BehaviorSubject<boolean>(
     this.token.Enterprise()
   );
-  private Vendor: Subject<boolean> = new BehaviorSubject<boolean>(
-    this.token.Vendor()
+  private Host: Subject<boolean> = new BehaviorSubject<boolean>(
+    this.token.Host()
   );
   private Collector: Subject<boolean> = new BehaviorSubject<boolean>(
     this.token.Collector()
@@ -31,7 +31,7 @@ export class AuthService {
   adminStatus = this.Admin.asObservable();
   householdStatus = this.Household.asObservable();
   enterpriseStatus = this.Enterprise.asObservable();
-  vendorStatus = this.Vendor.asObservable();
+  HostStatus = this.Host.asObservable();
   collectorStatus = this.Collector.asObservable();
 
   URL = this.env.backendUrl;
@@ -59,171 +59,171 @@ export class AuthService {
     this.Enterprise.next(value);
   }
 
-  changeVendorStatus(value: boolean) {
-    this.Vendor.next(value);
+  changeHostStatus(value: boolean) {
+    this.Host.next(value);
   }
 
   changeCollectorStatus(value: boolean) {
     this.Collector.next(value);
   }
 
-  loginWithEmail(Form) {
-    return this.http.post(`${this.URL}/loginwithemail`, Form);
+  loginWithEmail(Form: any) {
+    return this.http.post(`${this.URL}/auth/email/login`, Form);
   }
 
-  loginWithPhone(Form) {
-    return this.http.post(`${this.URL}/loginwithphone`, Form);
+  loginWithPhone(Form: any) {
+    return this.http.post(`${this.URL}/auth/phone/login`, Form);
   }
 
-  registerEnterprise(Form) {
-    return this.http.post(`${this.URL}/registerEnterprise`, Form);
+  registerUser(usertype: String, Form: any) {
+    return this.http.post(`${this.URL}/auth/${usertype}/register`, Form);
   }
 
-  registerHousehold(Form) {
-    return this.http.post(`${this.URL}/registerHousehold`, Form);
+  getLoggedInUser() {
+    if (this.token.Admin()) {
+      return this.http.get(`${this.URL}/auth/admins/me`);
+    } else if (this.token.Enterprise()) {
+      return this.http.get(`${this.URL}/auth/enterprises/me`);
+    } else if (this.token.Household()) {
+      return this.http.get(`${this.URL}/auth/households/me`);
+    } else if (this.token.Collector()) {
+      return this.http.get(`${this.URL}/auth/collectors/me`);
+    } else if (this.token.Host()) {
+      return this.http.get(`${this.URL}/auth/hosts/me`);
+    }
   }
 
-  registerHost(Form) {
-    return this.http.post(`${this.URL}/registerHost`, Form);
+  getAssignedRequests(id: String, query?: String) {
+    return query
+      ? this.http.get(`${this.URL}/collectors/${id}/pickuprequests?${query}`)
+      : this.http.get(`${this.URL}/collectors/${id}/pickuprequests`);
   }
 
-  registerCollector(Form) {
-    return this.http.post(`${this.URL}/registerCollector`, Form);
-  }
-  registerAgent(Form) {
-    return this.http.post(`${this.URL}/registerAgent`, Form);
-  }
-
-  makeAdmin(Form) {
-    return this.http.post(`${this.URL}/registerAdmin`, Form);
+  getAllUsers(usertype: String, query?: String) {
+    return query
+      ? this.http.get(`${this.URL}/${usertype}?${query}`)
+      : this.http.get(`${this.URL}/${usertype}`);
   }
 
-  getAssignedRequests(id) {
-    return this.http.get(`${this.URL}/getAssignedRequests/${id}`);
-  }
-
-  getAllUsers(form) {
-    return this.http.post(`${this.URL}/getAllUsers`, form);
-  }
-
-  getAllAdmins(id) {
+  getAllAdmins(id: String) {
     return this.http.get(`${this.URL}/getAllAdmins/${id}`);
   }
 
-  getUserWithID(form) {
-    return this.http.post(`${this.URL}/getUserWithID`, form);
+  getUserWithID(id: String) {
+    return this.http.get(`${this.URL}/users/${id}`);
   }
 
-  getUserDetails(id) {
+  getUserDetails(id: String) {
     return this.http.get(`${this.URL}/getUserDetails/${id}`);
   }
 
-  toggleCollectorStatus(form) {
-    return this.http.post(`${this.URL}/toggleCollectorStatus`, form);
+  toggleCollectorStatus(id: String) {
+    return this.http.get(`${this.URL}/collectors/${id}/togglestatus`);
   }
 
-  deleteUser(form) {
-    return this.http.post(`${this.URL}/deleteUser`, form);
+  deleteUser(userType: String, id: String) {
+    return this.http.delete(`${this.URL}/${userType}/${id}`);
   }
 
-  getUserWithNotifications(id) {
-    return this.http.get(`${this.URL}/getUserWithNotifications/${id}`);
+  getUserWithNotifications(id: String) {
+    return this.http.get(`${this.URL}/auth/users/${id}/notifications`);
   }
 
-  getProducedTonnage(id) {
-    return this.http.get(`${this.URL}/getUserWithID/${id}`);
+  getProducedTonnage(id: String) {
+    return this.http.get(`${this.URL}/collectedscraps/${id}/producedtonnage`);
   }
 
-  getUserWithTonnage(id) {
-    return this.http.get(`${this.URL}/getUserWithTonnage/${id}`);
+  getCollectedTonnage(id: String) {
+    return this.http.get(`${this.URL}/collectedscraps/${id}/collectedtonnage`);
   }
 
-  getCollectorWithTonnage(id) {
-    return this.http.get(`${this.URL}/getCollectorWithTonnage/${id}`);
-  }
-
-  getDisposedTonnage(id): Observable<any> {
-    return this.http.get<any>(`${this.URL}/getDisposedTonnage/${id}`);
-  }
-
-  sendPasswordResetLink(Form) {
+  sendPasswordResetLink(Form: any) {
     return this.http.post(`${this.URL}/sendPasswordResetLink`, Form);
   }
 
-  changePassword(Form) {
+  changePassword(Form: any) {
     return this.http.post(`${this.URL}/resetPassword`, Form);
   }
 
-  updateUser(id, Form) {
-    return this.http.post(`${this.URL}/updateUser/${id}`, Form);
+  updateUser(userType: String, id: String, Form: any) {
+    return this.http.post(
+      `${this.URL}/auth/${userType}/${id}?_method=PUT`,
+      Form
+    );
   }
 
-  registerVendor(Form) {
-    return this.http.post(`${this.URL}/registerVendor`, Form);
+  getApprovedCollectors(id: String) {
+    return this.http.get(`${this.URL}/hosts/${id}approvedcollectors`);
   }
 
-  getApprovedCollectors(id) {
-    return this.http.get(`${this.URL}/getApprovedCollectors/${id}`);
-  }
-
-  approveCollector(Form) {
+  approveCollector(Form: any) {
     return this.http.post(`${this.URL}/approveCollector`, Form);
   }
 
-  getUserCount(id) {
-    return this.http.get(`${this.URL}/getUserCount/${id}`);
+  getUserCount() {
+    return this.http.get(`${this.URL}/users/count`);
   }
 
-  getMaterialPrices(id) {
-    return this.http.get(`${this.URL}/getMaterialPrices/${id}`);
+  getMaterialPrices(query?: String) {
+    return query
+      ? this.http.get(`${this.URL}/materials?${query}`)
+      : this.http.get(`${this.URL}/materials?per_page=5`);
   }
 
-  editMaterialPrices(id, form) {
-    return this.http.post(`${this.URL}/editMaterialPrices/${id}`, form);
+  editMaterialPrices(id: String, form: any) {
+    return this.http.post(`${this.URL}/materials/${id}?_method=PUT`, form);
   }
 
-  deleteMaterialPrices(id, form) {
-    return this.http.post(`${this.URL}/deleteMaterialPrices/${id}`, form);
+  deleteMaterialPrices(id: String) {
+    return this.http.delete(`${this.URL}/materials/${id}`);
   }
 
-  setMaterialPrices(id, form) {
-    return this.http.post(`${this.URL}/setMaterialPrices/${id}`, form);
+  setMaterialPrices(form: any) {
+    return this.http.post(`${this.URL}/materials/`, form);
   }
 
-  requestPickup(form) {
-    return this.http.post(`${this.URL}/requestPickup`, form);
+  requestPickup(form: any) {
+    return this.http.post(`${this.URL}/pickuprequests`, form);
   }
 
-  cancelPickup(form) {
-    return this.http.post(`${this.URL}/cancelPickup`, form);
+  cancelPickup(id: String) {
+    return this.http.get(`${this.URL}/pickuprequests/${id}/cancel`);
   }
 
-  automatePickup(form) {
-    return this.http.post(`${this.URL}/automatePickup`, form);
+  automatePickup(id: String) {
+    return this.http.get(`${this.URL}/auth/enterprises/pickup/${id}/automate`);
   }
 
-  unAutomatePickup(id) {
-    return this.http.post(`${this.URL}/unAutomatePickup`, id);
+  unAutomatePickup(id: String) {
+    return this.http.get(
+      `${this.URL}/auth/enterprises/pickup/${id}/unautomate`
+    );
   }
 
-  getAllPickupRequests(id) {
-    return this.http.get(`${this.URL}/getAllPickupRequests/${id}`);
+  getAllPickupRequests(query?) {
+    return query
+      ? this.http.get(`${this.URL}/pickuprequests?${query}`)
+      : this.http.get(`${this.URL}/pickuprequests`);
   }
 
-  getPickupRequestCounts(id) {
-    return this.http.get(`${this.URL}/getPickupRequestCounts/${id}`);
+  getPickupRequestCounts(query?: String) {
+    return query
+      ? this.http.get(`${this.URL}/pickuprequests/count?${query}`)
+      : this.http.get(`${this.URL}/pickuprequests/count`);
   }
 
-  getCollectorWithLog(form) {
-    return this.http.post(`${this.URL}/getCollectorWithLog`, form);
+  getCollectorDetails(id: String, query?) {
+    return query
+      ? this.http.get(`${this.URL}/collectors/${id}/details?${query}`)
+      : this.http.get(`${this.URL}/collectors/${id}/details`);
   }
 
-  assignToCollector(form) {
-    return this.http.post(`${this.URL}/assignToCollector`, form);
+  assignToCollector(form: any) {
+    return this.http.put(`${this.URL}/pickuprequests/assign`, form);
   }
 
-  submitInventory(form) {
-    return this.http.post(`${this.URL}/submitInventory`, form);
+  submitInventory(form: any) {
+    return this.http.post(`${this.URL}/inventories`, form);
   }
 
   deleteNotifications(notifications) {
@@ -234,62 +234,82 @@ export class AuthService {
     return this.http.post(`${this.URL}/toggleNotifications`, notifications);
   }
 
-  getUserName(form) {
-    return this.http.post(`${this.URL}/getUserName`, form);
+  getUserName(phone) {
+    return this.http.get(`${this.URL}/users/${phone}/name`);
   }
 
   pingServerWithLocation(location) {
-    return this.http.post(`${this.URL}/ping`, location);
+    return this.http.post(`${this.URL}/locations/ping`, location);
   }
 
   getCollectorCollections(phone) {
     return this.http.get(`${this.URL}/getCollectorCollections/${phone}`);
   }
 
-  getCollections(phone) {
-    return this.http.get(`${this.URL}/getCollections/${phone}`);
+  getProducedScrap(userType: String, id: String, query?: String) {
+    return query
+      ? this.http.get(`${this.URL}/${userType}/${id}/producedscraps`)
+      : this.http.get(`${this.URL}/${userType}/${id}/producedscraps?${query}`);
+  }
+
+  getCollectedScrap(id: String, query?: String) {
+    return query
+      ? this.http.get(`${this.URL}/collectors/${id}/collectedscraps?${query}`)
+      : this.http.get(`${this.URL}/collectors/${id}/collectedscraps`);
   }
 
   getAddressWithCoordinates(loc) {
-    return this.http.get(`${this.URL}/getAddressWithCoordinates/${loc}`);
+    return this.http.get(`${this.URL}/locations/address?${loc}`);
   }
 
-  getCollectionsHistory(users = "") {
+  getCollectionsHistory(users = '') {
     return this.http.get(`${this.URL}/getCollectionsHistory${users}`);
   }
 
-  getCollectionsHistoryWithQuery(phone, query = "") {
+  getCollectionsHistoryWithQuery(phone, query = '') {
     return this.http.get(
       `${this.URL}/getCollectionsHistoryWithQuery/${phone}${query}`
     );
   }
-  getCollectorCollectionsHistoryWithQuery(phone, query = "") {
-    return this.http.get(
-      `${this.URL}/getCollectorCollectionsHistoryWithQuery/${phone}${query}`
-    );
+  getSingleUserCollectionHistory(id: String, query?: String) {
+    return query
+      ? this.http.get(`${this.URL}/collectedscraps/${id}/history?${query}`)
+      : this.http.get(`${this.URL}/collectedscraps/${id}/history`);
   }
 
-  getCollectorCollectionsHistory(phone) {
-    return this.http.get(`${this.URL}/getCollectorCollectionsHistory/${phone}`);
+  getCollectorCollectionsHistory(query?: String) {
+    return query
+      ? this.http.get(`${this.URL}/collectedscraps/history?${query}`)
+      : this.http.get(`${this.URL}/collectedscraps/history`);
   }
 
-  getProducerCollectionsHistory(phone) {
-    return this.http.get(`${this.URL}/getProducerCollectionsHistory/${phone}`);
+  getScrapHistory(id: String) {
+    return this.http.get(`${this.URL}/collectedscraps/${id}/history`);
   }
 
-  getSingleScrap(id) {
+  getSingleScrap(id: String) {
     return this.http.get(`${this.URL}/getSingleScrap/${id}`);
   }
 
-  getAllContactMessages(id) {
-    return this.http.get(`${this.URL}/getAllContactMessages`);
+  getAllContactMessages(query?: String) {
+    return query
+      ? this.http.get(`${this.URL}/contactmessages`)
+      : this.http.get(`${this.URL}/contactmessages?${query}`);
   }
 
-  replyContactMessage(form) {
-    return this.http.post(`${this.URL}/replyContactMessage`, form);
+  replyContactMessage(form: any, id: String) {
+    return this.http.post(`${this.URL}/contactmessages/${id}/reply`, form);
   }
 
-  deleteContactMessage(id) {
-    return this.http.delete(`${this.URL}/deleteContactMessage/${id}`);
+  deleteContactMessage(id: String) {
+    return this.http.delete(`${this.URL}/contactmessages/${id}`);
+  }
+
+  getwalletbalance(id: String) {
+    return this.http.get(`${this.URL}/wallets/${id}/balance`);
+  }
+
+  getPaginationResult(url) {
+    return this.http.get(url);
   }
 }

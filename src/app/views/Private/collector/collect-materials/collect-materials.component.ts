@@ -1,14 +1,14 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormGroup } from "@angular/forms";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { ApiService } from "src/app/services/auth/api.service";
-import { TokenService } from "src/app/services/auth/token.service";
-import { AuthService } from "src/app/services/auth/auth.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ApiService } from 'src/app/services/auth/api.service';
+import { TokenService } from 'src/app/services/auth/token.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
-  selector: "app-collect-materials",
-  templateUrl: "./collect-materials.component.html",
-  styleUrls: ["./collect-materials.component.css"],
+  selector: 'app-collect-materials',
+  templateUrl: './collect-materials.component.html',
+  styleUrls: ['./collect-materials.component.css'],
 })
 export class CollectMaterialsComponent implements OnInit {
   constructor(
@@ -18,27 +18,28 @@ export class CollectMaterialsComponent implements OnInit {
     private token: TokenService
   ) {}
 
-  @ViewChild("content") private content;
+  @ViewChild('content') private content;
   Form: FormGroup;
 
-  totalCost = "0.00";
-  totalTonnage = "0.00";
-  producerName: string = null;
+  total_cost = '0.00';
+  total_tonnage = '0.00';
+  producer_name: string = null;
+  producer_id = '';
   registerNew = false;
   newProducer = {
-    firstName: "",
-    lastName: "",
+    first_name: '',
+    last_name: '',
   };
   loc = {
     lat: 0,
     lng: 0,
   };
-  pickupID: string;
+  pickup_id: string;
   nameloading = false;
   Scrap: any = {};
   CollectedScrap: any = [];
-  producerPhone: string;
-  nameError: string = "";
+  producer_phone: string;
+  nameError: string = '';
 
   public loading = false;
   modalTitle: string;
@@ -46,7 +47,7 @@ export class CollectMaterialsComponent implements OnInit {
   materials = [];
   assignedRequests = [];
   collectionMaterials = [
-    { name: null, price: "0.00", cost: "0.00", weight: "0.00" },
+    { name: null, price: '0.00', cost: '0.00', weight: '0.00' },
   ];
   materialSelect: string = null;
 
@@ -57,17 +58,19 @@ export class CollectMaterialsComponent implements OnInit {
   }
 
   getPrices() {
-    this.Auth.getMaterialPrices(this.token.phone).subscribe(
-      (data: any) => {
-        for (let price of data.prices) {
+    let query = 'per_page=50';
+    this.Auth.getMaterialPrices(query).subscribe(
+      (res: any) => {
+        for (let price of res.data) {
           this.materials.push(price);
         }
         this.materials.push({
           id: 500,
-          name: "Composite",
+          name: 'Composite',
           price: 0.0,
           cost: 0.0,
           weight: 0.0,
+          comment: '',
         });
       },
       (error) => console.log(error)
@@ -75,16 +78,16 @@ export class CollectMaterialsComponent implements OnInit {
   }
 
   getAssignedRequests() {
-    this.Auth.getAssignedRequests(this.token.phone).subscribe(
-      (data: any) => {
-        this.assignedRequests = data.pickups;
+    this.Auth.getAssignedRequests(this.token._id).subscribe(
+      (res: any) => {
+        this.assignedRequests = res.data;
       },
       (error) => console.log(error)
     );
   }
 
   initiateTracking() {
-    if ("geolocation" in navigator) {
+    if ('geolocation' in navigator) {
       navigator.geolocation.watchPosition((position) => {
         this.loc.lat = position.coords.latitude;
         this.loc.lng = position.coords.longitude;
@@ -93,21 +96,18 @@ export class CollectMaterialsComponent implements OnInit {
   }
 
   PhoneOnFocusOut(event) {
-    if (this.producerPhone != "") {
+    if (this.producer_phone != '') {
       this.nameloading = true;
-      var form = {
-        collectorID: this.token.phone,
-        producerPhone: this.producerPhone,
-      };
-      this.Auth.getUserName(form).subscribe(
-        (data: any) => {
-          this.producerName = data.Name;
-          this.pickupID = data.pickupID;
+      this.Auth.getUserName(this.producer_phone).subscribe(
+        (res: any) => {
+          this.producer_name = res.data.Name;
+          this.producer_id = res.data.producer_id;
+          this.pickup_id = res.data.pickup_id;
           this.nameloading = false;
           this.nameError = null;
         },
         (error) => {
-          this.nameError = error.error.Name;
+          this.nameError = error.error.error;
           this.nameloading = false;
         }
       );
@@ -120,37 +120,35 @@ export class CollectMaterialsComponent implements OnInit {
     let temptotal = 0;
     let tempTotalTonnage = 0;
 
-    if (selected.name == "Composite") {
+    if (selected.name == 'Composite') {
       if (weight) {
         tempCost += parseFloat(weight);
       } else {
-        tempCost = parseFloat("0.00");
-        weight = "0";
+        tempCost = parseFloat('0.00');
+        weight = '0';
       }
     } else {
       if (weight) {
         tempCost = parseFloat(selected.price) * parseFloat(weight);
       } else {
-        tempCost = parseFloat(selected.price) * parseFloat("0.00");
+        tempCost = parseFloat(selected.price) * parseFloat('0.00');
       }
     }
-    selected.cost = tempCost.toString();
+    selected.cost = tempCost.toFixed(2);
 
     for (let coll of this.collectionMaterials) {
-      console.log(coll.cost);
-
       temptotal += parseFloat(coll.cost);
       tempTotalTonnage += parseFloat(coll.weight);
     }
-    this.totalCost = temptotal.toString();
-    this.totalTonnage = tempTotalTonnage.toString();
+    this.total_cost = temptotal.toFixed(2);
+    this.total_tonnage = tempTotalTonnage.toFixed(2);
   }
 
   formatToCurrency(amount) {
     if (amount)
       return parseFloat(amount)
         .toFixed(2)
-        .replace(/\d(?=(\d{3})+\.)/g, "$&,");
+        .replace(/\d(?=(\d{3})+\.)/g, '$&,');
   }
 
   onSelectMaterial(event: any, i) {
@@ -163,7 +161,7 @@ export class CollectMaterialsComponent implements OnInit {
   }
 
   addToCollectionMaterial() {
-    var mat = { name: null, price: "", cost: "0.00", weight: "0.00" };
+    var mat = { name: null, price: '', cost: '0.00', weight: '0.00' };
     this.collectionMaterials.push(mat);
   }
 
@@ -174,25 +172,28 @@ export class CollectMaterialsComponent implements OnInit {
   cashFormValidated() {
     if (this.registerNew) {
       for (let mat of this.collectionMaterials) {
-        if (mat.name == "" || mat.weight == "" || mat.weight == "0.00") {
+        if (mat.name == '' || mat.weight == '' || mat.weight == '0.00') {
           return false;
         }
       }
-      if (this.newProducer.firstName == "" || this.newProducer.lastName == "") {
+      if (
+        this.newProducer.first_name == '' ||
+        this.newProducer.last_name == ''
+      ) {
         return false;
       }
       return true;
     } else {
-      if (this.producerName == null) {
+      if (this.producer_name == null) {
         return false;
       }
       for (let mat of this.collectionMaterials) {
-        if (mat.name == "Composite") {
-          if (mat.name == "" || mat.cost == "" || mat.cost == "0") {
+        if (mat.name == 'Composite') {
+          if (mat.name == '' || mat.cost == '' || mat.cost == '0') {
             return false;
           }
         } else {
-          if (mat.name == "" || mat.weight == "" || mat.weight == "0.00") {
+          if (mat.name == '' || mat.weight == '' || mat.weight == '0.00') {
             return false;
           }
         }
@@ -205,16 +206,16 @@ export class CollectMaterialsComponent implements OnInit {
     if (this.registerNew) {
       return false;
     } else {
-      if (this.producerName == null) {
+      if (this.producer_name == null) {
         return false;
       }
       for (let mat of this.collectionMaterials) {
-        if (mat.name == "Composite") {
-          if (mat.name == "" || mat.cost == "" || mat.cost == "0") {
+        if (mat.name == 'Composite') {
+          if (mat.name == '' || mat.cost == '' || mat.cost == '0') {
             return false;
           }
         } else {
-          if (mat.name == "" || mat.weight == "" || mat.weight == "0.00") {
+          if (mat.name == '' || mat.weight == '' || mat.weight == '0.00') {
             return false;
           }
         }
@@ -225,13 +226,14 @@ export class CollectMaterialsComponent implements OnInit {
 
   payWithCash() {
     this.loading = true;
-    var form: any = this.processForm("Cash");
-    this.Auth.getAddressWithCoordinates(JSON.stringify(this.loc)).subscribe(
+    var form: any = this.processForm('Cash');
+    let loc = `lat=${this.loc.lat}&lng=${this.loc.lng}`;
+    this.Auth.getAddressWithCoordinates(loc).subscribe(
       (res: any) => {
         if (this.registerNew) {
-          form.newUser.requestAddress = res.address;
+          form.newUser.request_address = res.data;
         } else {
-          form.requestAddress = res.address;
+          form.request_address = res.data;
         }
         this.api.listCollectedScrap(form).subscribe(
           (data) => this.handleSuccess(data),
@@ -243,17 +245,18 @@ export class CollectMaterialsComponent implements OnInit {
   }
   payWithWallet() {
     this.loading = true;
-    var form: any = this.processForm("Wallet");
-    this.Auth.getAddressWithCoordinates(JSON.stringify(this.loc)).subscribe(
+    var form: any = this.processForm('Wallet');
+    let loc = `lat=${this.loc.lat}&lng${this.loc.lng}`;
+    this.Auth.getAddressWithCoordinates(loc).subscribe(
       (res: any) => {
         if (this.registerNew) {
-          form.newUser.requestAddress = res.address;
+          form.newUser.request_address = res.data;
         } else {
-          form.requestAddress = res.address;
+          form.request_address = res.data;
         }
         this.api.listCollectedScrap(form).subscribe(
-          (data) => this.handleSuccess(data),
-          (error) => this.handleError(error)
+          (res) => this.handleSuccess(res),
+          (err) => this.handleError(err)
         );
       },
       (err) => this.handleError(err)
@@ -261,11 +264,11 @@ export class CollectMaterialsComponent implements OnInit {
   }
 
   clearProducer() {
-    this.producerName = null;
-    this.producerPhone = "";
+    this.producer_name = null;
+    this.producer_phone = '';
     this.newProducer = {
-      firstName: "",
-      lastName: "",
+      first_name: '',
+      last_name: '',
     };
     this.loc = {
       lat: 0,
@@ -277,29 +280,31 @@ export class CollectMaterialsComponent implements OnInit {
     if (this.registerNew == false) {
       const formData = {
         mode: mode,
-        producerPhone: this.producerPhone,
-        collectorID: this.token.phone,
+        producer_phone: this.producer_phone,
+        producer_id: this.producer_id,
+        collector_id: this.token._id,
         materials: this.collectionMaterials,
-        totalCost: this.totalCost,
-        totalTonnage: this.totalTonnage,
-        pickupID: this.pickupID,
-        requestAddress: "",
+        total_cost: this.total_cost,
+        total_tonnage: this.total_tonnage,
+        pickup_id: this.pickup_id,
+        request_address: '',
       };
       return formData;
     } else {
       let formData = {
         mode: mode,
-        producerPhone: this.producerPhone,
-        collectorID: this.token.phone,
+        producer_phone: this.producer_phone,
+        producer_id: this.producer_id,
+        collector_id: this.token._id,
         materials: this.collectionMaterials,
-        totalCost: this.totalCost,
-        totalTonnage: this.totalTonnage,
-        pickupID: this.pickupID,
+        total_cost: this.total_cost,
+        total_tonnage: this.total_tonnage,
+        pickup_id: this.pickup_id,
         newUser: {
-          firstName: this.newProducer.firstName,
-          lastName: this.newProducer.lastName,
-          phone: this.producerPhone,
-          requestAddress: "",
+          first_name: this.newProducer.first_name,
+          last_name: this.newProducer.last_name,
+          phone: this.producer_phone,
+          request_address: '',
         },
       };
       return formData;
@@ -307,16 +312,16 @@ export class CollectMaterialsComponent implements OnInit {
   }
 
   handleSuccess(data) {
-    this.modalTitle = "Success";
-    this.modalBody = "Scrap Listed Successfully.";
+    this.modalTitle = 'Success';
+    this.modalBody = 'Scrap Listed Successfully.';
     this.loading = false;
     this.openModal(this.content);
     this.resetCollectionMaterials();
   }
 
   handleError(error) {
-    this.modalTitle = "Error";
-    this.modalBody = error.error;
+    this.modalTitle = 'Error';
+    this.modalBody = error.error.error;
     this.loading = false;
     this.openModal(this.content);
   }
@@ -324,9 +329,9 @@ export class CollectMaterialsComponent implements OnInit {
   resetCollectionMaterials() {
     this.clearProducer();
     this.collectionMaterials = [
-      { name: null, price: "", cost: "0.00", weight: "0.00" },
+      { name: null, price: '', cost: '0.00', weight: '0.00' },
     ];
-    this.totalCost = "0.00";
+    this.total_cost = '0.00';
   }
 
   openModal(content) {
@@ -340,13 +345,13 @@ export class CollectMaterialsComponent implements OnInit {
   formatSchedule(sch) {
     let schedule = JSON.parse(sch);
     return (
-      schedule.scheduleTime +
-      " | " +
-      schedule.scheduleDate.day +
-      "-" +
-      schedule.scheduleDate.month +
-      "-" +
-      schedule.scheduleDate.year
+      schedule.schedule_time +
+      ' | ' +
+      schedule.schedule_date.day +
+      '-' +
+      schedule.schedule_date.month +
+      '-' +
+      schedule.schedule_date.year
     );
   }
 }

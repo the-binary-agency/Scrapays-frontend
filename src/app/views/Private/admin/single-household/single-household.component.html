@@ -5,19 +5,19 @@
     </div>
     <div class="col-6 col-md pt-2">
       <div class="row bolder">First Name</div>
-      {{ User.firstName }}
+      {{ User.first_name }}
     </div>
     <div class="col-6 col-md pt-2">
       <div class="row bolder">Last Name</div>
-      {{ User.lastName }}
+      {{ User.last_name }}
     </div>
     <div class="col-6 col-md pt-2">
       <div class="row bolder">Email</div>
-      {{ User.email ? User.email : "None" }}
+      {{ User.email ? User.email : 'None' }}
     </div>
     <div class="col-6 col-md pt-2">
       <div class="row bolder">Phone Number</div>
-      {{ "0" + User.phone.split("+234")[1] }}
+      {{ User.phone }}
     </div>
     <div class="col-6 col-md pt-2">
       <div class="row bolder">Producer ID</div>
@@ -25,20 +25,25 @@
     </div>
     <div class="col-6 col-md pt-2">
       <div class="row bolder">Address</div>
-      {{ User.userable.requestAddress }}
+      {{ User.userable.request_address }}
     </div>
     <div class="col-6 col-md pt-2">
       <div class="row bolder">Account Number</div>
-      6787555566566656
+      {{ User.userable.account_number || 'None' }}
     </div>
     <div class="col-6 col-md pt-2">
       <div class="row bolder">Bank</div>
-      Wema
+      {{ User.userable.bank || 'None' }}
     </div>
   </div>
   <div class="row">
-    <div class="col-12 bolder mt-5 mb-3 h4">Total Tonnage Disposed</div>
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-6 bolder mt-5 mb-3 h4 text-right order-md-2">
+      Wallet Balance: ₦{{ Balance }}
+    </div>
+    <div class="col-12 col-md-6 bolder mt-5 mb-3 h4 order-md-1">
+      Total Tonnage Disposed
+    </div>
+    <div class="col-12 col-md-6 order-md-3">
       <div class="chart-wrapper">
         <canvas
           baseChart
@@ -68,28 +73,46 @@
         View Collection summary
       </button>
     </div>
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-6 order-md-4">
       <div class="bolder">
         Transactions
         <span class="float-right text-muted">{{
           Collections.length > 0
-            ? "( " + (Collections[0].created_at | date: "shortDate") + " )"
-            : ""
+            ? '( ' + (Collections[0].created_at | date: 'shortDate') + ' )'
+            : ''
         }}</span>
       </div>
-      <div
-        *ngFor="let trans of Collections; let i = index"
-        (click)="selectTransaction(trans)"
-        class="fake-btn"
-        [ngClass]="{
-          'bg-white': trans.id == SelectedTransaction.id,
-          'p-3': trans.id == SelectedTransaction.id
-        }"
-      >
-        <span class="bolder">{{ i + 1 + ". " }}</span
-        >Transaction {{ " " + trans.id }}
-        <span class="float-right">{{ trans.created_at }}</span>
+      <div class="hist-list overflow-auto">
+        <div
+          *ngFor="let trans of Collections; let i = index"
+          (click)="selectTransaction(trans)"
+          class="fake-btn"
+          [ngClass]="{
+            'bg-white': trans.id == SelectedTransaction.id,
+            'p-3': trans.id == SelectedTransaction.id
+          }"
+        >
+          <span class="bolder">{{ i + 1 + '. ' }}</span
+          >Transaction {{ ' ' + trans.id }}
+          <span class="float-right">{{ trans.created_at }}</span>
+        </div>
       </div>
+
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="currentPage"
+        [pageSize]="pageSize"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="true"
+        (pageChange)="changePage()"
+      >
+        <ng-template ngbPaginationPrevious
+          ><i class="fa fa-caret-left" aria-hidden="true"></i
+        ></ng-template>
+        <ng-template ngbPaginationNext
+          ><i class="fa fa-caret-right" aria-hidden="true"></i></ng-template
+      ></ngb-pagination>
     </div>
   </div>
   <div class="gap-40"></div>
@@ -106,14 +129,14 @@
     <div class="col-12 col-md-6">
       <div class="row">
         <div class="col-6 pb-md-4 bolder">Transaction ID</div>
-        <div class="col-6 pb-md-4">:{{ " " + SelectedTransaction.id }}</div>
+        <div class="col-6 pb-md-4">:{{ ' ' + SelectedTransaction.id }}</div>
         <div class="col-6 pb-md-4 bolder">Producer ID</div>
         <div class="col-6 pb-md-4">
-          :{{ " " + SelectedTransaction.producerPhone }}
+          :{{ ' ' + SelectedTransaction.producer_id }}
         </div>
         <div class="col-6 pb-md-4 bolder">Material(s) Collected</div>
         <div class="col-6 pb-md-4">
-          :{{ " " + formatMaterials(SelectedTransaction.materials) }}
+          :{{ ' ' + formatMaterials(SelectedTransaction.materials) }}
         </div>
         <div class="col-6 pb-md-4 bolder">Tonnage Per Material Class</div>
         <div class="col-6 pb-md-4">
@@ -125,7 +148,7 @@
               let i = index
             "
           >
-            {{ mat.name + ": ₦" + formatToCurrency(mat.price) }} <br
+            {{ mat.name + ': ₦' + formatToCurrency(mat.price) }} <br
           /></span>
         </div>
       </div>
@@ -134,23 +157,23 @@
       <div class="row">
         <div class="col-6 pb-md-4 bolder">Total Tonnage</div>
         <div class="col-6 pb-md-4">
-          :{{ " " + SelectedTransaction.totalTonnage }}kg
+          :{{ ' ' + SelectedTransaction.total_tonnage }}kg
         </div>
         <div class="col-6 pb-md-4 bolder">Payment Approved</div>
         <div class="col-6 pb-md-4">
-          :{{ " ₦" + formatToCurrency(SelectedTransaction.cost) }}
+          :{{ ' ₦' + formatToCurrency(SelectedTransaction.cost) }}
         </div>
         <div class="col-6 pb-md-4 bolder">Payment Type</div>
         <div class="col-6 pb-md-4">
-          :{{ " " + SelectedTransaction.paymentMethod }}
+          :{{ ' ' + SelectedTransaction.payment_method }}
         </div>
         <div class="col-6 pb-md-4 bolder">Time Stamp</div>
         <div class="col-6 pb-md-4">
-          :{{ " " + SelectedTransaction.created_at }}
+          :{{ ' ' + SelectedTransaction.created_at }}
         </div>
         <div class="col-6 pb-md-4 bolder">Address</div>
         <div class="col-6 pb-md-4">
-          :{{ " " + SelectedTransaction.address }}
+          :{{ ' ' + SelectedTransaction.address }}
         </div>
         <div class="col-6 pb-md-4 bolder">Location</div>
         <div class="col-6 pb-md-4"></div>
@@ -173,18 +196,18 @@
         </ng-container>
 
         <!-- Progress Column -->
-        <ng-container matColumnDef="producerPhone">
+        <ng-container matColumnDef="producer_id">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Producer ID</th>
-          <td mat-cell *matCellDef="let row">{{ row.producerPhone }}</td>
+          <td mat-cell *matCellDef="let row">{{ row.producer_id }}</td>
         </ng-container>
 
         <!-- Name Column -->
-        <ng-container matColumnDef="collectorID">
+        <ng-container matColumnDef="collector_id">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             Collector ID
           </th>
           <td mat-cell *matCellDef="let row">
-            {{ "0" + row.collectorID.split("+234")[1] }}
+            {{ row.collector_id }}
           </td>
         </ng-container>
 
@@ -205,12 +228,12 @@
         </ng-container>
 
         <!-- Color Column -->
-        <ng-container matColumnDef="paymentMethod">
+        <ng-container matColumnDef="payment_method">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             Payment Type
           </th>
           <td mat-cell *matCellDef="let row">
-            {{ row.paymentMethod }}
+            {{ row.payment_method }}
           </td>
         </ng-container>
 
@@ -218,7 +241,7 @@
         <ng-container matColumnDef="time">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
           <td mat-cell *matCellDef="let row">
-            {{ row.created_at | date: "shortTime" }}
+            {{ row.created_at | date: 'shortTime' }}
           </td>
         </ng-container>
 
@@ -226,7 +249,7 @@
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
           <td mat-cell *matCellDef="let row">
-            {{ row.created_at.split(" ")[0] }}
+            {{ row.created_at.split(' ')[0] }}
           </td>
         </ng-container>
 
@@ -241,7 +264,23 @@
         </tr>
       </table>
 
-      <mat-paginator pageSize="25"></mat-paginator>
+      <div class="mt-5 d-flex justify-content-end">
+        <ngb-pagination
+          [collectionSize]="collectionSize"
+          [(page)]="currentPage"
+          [pageSize]="pageSize"
+          [maxSize]="5"
+          [rotate]="true"
+          [ellipses]="true"
+          (pageChange)="changePage()"
+        >
+          <ng-template ngbPaginationPrevious
+            ><i class="fa fa-caret-left" aria-hidden="true"></i
+          ></ng-template>
+          <ng-template ngbPaginationNext
+            ><i class="fa fa-caret-right" aria-hidden="true"></i></ng-template
+        ></ngb-pagination>
+      </div>
     </div>
   </div>
   <div class="gap-40"></div>
@@ -260,18 +299,18 @@
         </ng-container>
 
         <!-- Progress Column -->
-        <ng-container matColumnDef="producerPhone">
+        <ng-container matColumnDef="producer_id">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Producer ID</th>
-          <td mat-cell *matCellDef="let row">{{ row.producerPhone }}</td>
+          <td mat-cell *matCellDef="let row">{{ row.producer_id }}</td>
         </ng-container>
 
         <!-- Name Column -->
-        <ng-container matColumnDef="collectorID">
+        <ng-container matColumnDef="collector_id">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             Collector ID
           </th>
           <td mat-cell *matCellDef="let row">
-            {{ "0" + row.collectorID.split("+234")[1] }}
+            {{ '0' + row.collector_id.split('+234')[1] }}
           </td>
         </ng-container>
 
@@ -292,12 +331,12 @@
         </ng-container>
 
         <!-- Color Column -->
-        <ng-container matColumnDef="paymentMethod">
+        <ng-container matColumnDef="payment_method">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             Payment Type
           </th>
           <td mat-cell *matCellDef="let row">
-            {{ row.paymentMethod }}
+            {{ row.payment_method }}
           </td>
         </ng-container>
 
@@ -305,7 +344,7 @@
         <ng-container matColumnDef="time">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
           <td mat-cell *matCellDef="let row">
-            {{ row.created_at | date: "shortTime" }}
+            {{ row.created_at | date: 'shortTime' }}
           </td>
         </ng-container>
 
@@ -313,7 +352,7 @@
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
           <td mat-cell *matCellDef="let row">
-            {{ row.created_at.split(" ")[0] }}
+            {{ row.created_at.split(' ')[0] }}
           </td>
         </ng-container>
 
@@ -328,24 +367,50 @@
         </tr>
       </table>
 
-      <mat-paginator pageSize="25"></mat-paginator>
+      <div class="mt-5 d-flex justify-content-end">
+        <ngb-pagination
+          [collectionSize]="collectionSize"
+          [(page)]="currentPage"
+          [pageSize]="pageSize"
+          [rotate]="true"
+          [ellipses]="false"
+          (pageChange)="changePage()"
+        >
+          <ng-template ngbPaginationPrevious
+            ><i class="fa fa-caret-left" aria-hidden="true"></i
+          ></ng-template>
+          <ng-template ngbPaginationNext
+            ><i class="fa fa-caret-right" aria-hidden="true"></i></ng-template
+        ></ngb-pagination>
+      </div>
     </div>
   </div>
 
   <ng-template #collHist let-modal>
     <div class="modal-body pt-1">
-      <div class="row justify-content-between">
-        <div>
-          <span class="badge bg-orange text-white p-2 h-wrap mt-4">
-            Collection Summary
-          </span>
-          <i
-            class="fa fa-circle-o-notch fa-spin fa-lg ml-4"
-            aria-hidden="true"
-            *ngIf="historyLoading"
-          ></i>
+      <div class="d-flex">
+        <div class="d-flex justify-content-between flex-grow-1">
+          <div>
+            <span class="badge bg-orange text-white p-2 h-wrap mt-4">
+              Collection Summary
+            </span>
+            <i
+              class="fa fa-circle-o-notch fa-spin fa-lg ml-4"
+              aria-hidden="true"
+              *ngIf="historyLoading"
+            ></i>
+          </div>
+          <select
+            class="w-auto form-control-sm border-0 mt-4"
+            (change)="selectSort($event)"
+          >
+            <option value="null" disabled selected>Sort By:</option>
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="year">This Year</option>
+          </select>
         </div>
-        <div class="w-wrap text-right">
+        <div class="w-wrap text-right flex-grow-0">
           <span
             aria-hidden="true"
             class="text-danger text-right fake-btn"
@@ -396,14 +461,14 @@
             &nbsp;
             <span class="sc-green"
               >{{
-                matHist.totaltonnage ? matHist.totaltonnage : 0
+                matHist.total_tonnage ? matHist.total_tonnage : 0
               }}
               &nbsp;kg</span
             >
           </div>
           <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
             <div *ngFor="let mat of matHist.materials">
-              {{ mat.name + ": " + mat.weight }} kg <&nbsp;
+              {{ mat.name + ': ' + mat.weight }} kg <&nbsp;
             </div>
             <br />
           </div>
@@ -422,7 +487,7 @@
           </div>
           <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
             <div *ngFor="let mat of matHist.materials">
-              {{ mat.name + ": ₦ " + formatToCurrency(mat.cost) }}&nbsp;<
+              {{ mat.name + ': ₦ ' + formatToCurrency(mat.cost) }}&nbsp;<
             </div>
             <br />
           </div>

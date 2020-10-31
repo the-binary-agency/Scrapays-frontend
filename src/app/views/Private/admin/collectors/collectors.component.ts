@@ -1,47 +1,46 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { ApiService } from "src/app/services/auth/api.service";
-import { AuthService } from "src/app/services/auth/auth.service";
-import { NavService } from "src/app/services/general/nav.service";
-import { TokenService } from "src/app/services/auth/token.service";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
-import { SelectionModel } from "@angular/cdk/collections";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ApiService } from 'src/app/services/auth/api.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { NavService } from 'src/app/services/general/nav.service';
+import { TokenService } from 'src/app/services/auth/token.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
 
 export interface User {
-  avatarImage: string;
+  avatar_image: string;
   id: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   phone: string;
   email: string;
   userable_type: string;
-  totalTonnage: string;
+  total_tonnage: string;
   totalEarnings: string;
   totalWithdrawals: string;
   userable: {};
 }
 
 @Component({
-  selector: "app-collectors",
-  templateUrl: "./collectors.component.html",
-  styleUrls: ["./collectors.component.css"],
+  selector: 'app-collectors',
+  templateUrl: './collectors.component.html',
+  styleUrls: ['./collectors.component.css'],
 })
 export class CollectorsComponent implements OnInit {
   displayedColumns: string[] = [
-    "select",
-    "companyName",
-    "id",
-    "lastLogin",
-    "totalTonnage",
-    "status",
-    "toggle",
-    "created_at",
-    "menu",
+    'select',
+    'name',
+    'id',
+    'last_login',
+    'total_tonnage',
+    'status',
+    'toggle',
+    'created_at',
+    'menu',
   ];
   dataSource: MatTableDataSource<User>;
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   selection = new SelectionModel<User>(true, []);
 
@@ -58,15 +57,17 @@ export class CollectorsComponent implements OnInit {
   subtask: any;
   allComplete: boolean = false;
   deleteLoading: boolean;
+  currentPage = 1;
+  collectionSize = 0;
+  pageSize = 1;
 
   ngOnInit(): void {
     this.getUsers();
   }
 
-  getUsers() {
-    var form = this.processForm();
-    this.Auth.getAllUsers(form).subscribe(
-      (data) => this.handleResponse(data),
+  getUsers(query?) {
+    this.Auth.getAllUsers('collectors', query).subscribe(
+      (res: any) => this.handleResponse(res),
       (error) => this.handleError(error)
     );
   }
@@ -74,44 +75,27 @@ export class CollectorsComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
-  processForm() {
-    var formData = {
-      id: this.token.phone,
-      userType: "Collector",
-      orderBy: "",
-    };
-    return formData;
-  }
-
-  handleResponse(data) {
-    this.Users = data;
-    // this.Users.map((user) => {
-    //   user["checked"] = false;
-    // });
+  handleResponse(res) {
+    this.currentPage = res.current_page;
+    this.collectionSize = res.total;
+    this.pageSize = res.per_page;
+    this.Users = res.data;
     this.dataSource = new MatTableDataSource(this.Users);
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
   handleError(error) {
-    console.log(error);
+    console.log(error.error.error);
   }
 
   gotoSingleUser(user) {
-    this.nav.navigate(
-      "/dashboard/collector/ent_" + user.phone.split("+234")[1],
-      user
-    );
+    this.nav.navigate('/dashboard/collector/ent_' + user.id, user);
   }
 
   gotoSingleAdmin(admin) {
-    this.nav.navigate("/dashboard/users/Admin_" + admin.id, admin);
+    this.nav.navigate('/dashboard/users/Admin_' + admin.id, admin);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -133,35 +117,25 @@ export class CollectorsComponent implements OnInit {
   /** The label for the checkbox on the passed row */
   checkboxLabel(row?: User): string {
     if (!row) {
-      return `${this.isAllSelected() ? "select" : "deselect"} all`;
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? "deselect" : "select"} row ${
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
       row.id + 1
     }`;
   }
 
-  activateCollector(phone) {
+  activateCollector(id) {
     this.deleteLoading = true;
-    let form = {
-      adminPhone: this.token.phone,
-      collectorPhone: phone,
-      approvedAsCollector: true,
-    };
-    this.Auth.toggleCollectorStatus(form).subscribe(
-      (data) => this.handleCollectorToggleResponse(data),
+    this.Auth.toggleCollectorStatus(id).subscribe(
+      (res: any) => this.handleCollectorToggleResponse(res.data),
       (error) => this.handleCollectorToggleError(error)
     );
   }
 
-  deactivateCollector(phone) {
+  deactivateCollector(id) {
     this.deleteLoading = true;
-    let form = {
-      adminPhone: this.token.phone,
-      collectorPhone: phone,
-      approvedAsCollector: false,
-    };
-    this.Auth.toggleCollectorStatus(form).subscribe(
-      (data) => this.handleCollectorToggleResponse(data),
+    this.Auth.toggleCollectorStatus(id).subscribe(
+      (res: any) => this.handleCollectorToggleResponse(res.data),
       (error) => this.handleCollectorToggleError(error)
     );
   }
@@ -169,21 +143,16 @@ export class CollectorsComponent implements OnInit {
   handleCollectorToggleResponse(data) {
     this.deleteLoading = false;
     this.getUsers();
-    console.log(data.success);
+    console.log(data);
   }
 
   handleCollectorToggleError(error) {
     this.deleteLoading = false;
   }
 
-  deleteUser(phone) {
-    this.deleteLoading = true;
-    let form = {
-      adminPhone: this.token.phone,
-      deletePhone: phone,
-    };
-    this.Auth.deleteUser(form).subscribe(
-      (data) => this.handleDeleteResponse(data),
+  deleteUser(id) {
+    this.Auth.deleteUser('collectors', id).subscribe(
+      (res: any) => this.handleDeleteResponse(res.data),
       (error) => this.handleDeleteError(error)
     );
   }
@@ -191,7 +160,7 @@ export class CollectorsComponent implements OnInit {
   handleDeleteResponse(data) {
     this.deleteLoading = false;
     this.getUsers();
-    console.log(data.success);
+    console.log(data);
   }
 
   handleDeleteError(error) {
@@ -212,5 +181,10 @@ export class CollectorsComponent implements OnInit {
       return;
     }
     this.Users.forEach((t) => (t.checked = checked));
+  }
+
+  changePage() {
+    let query = `&page=${this.currentPage}`;
+    this.getUsers(query);
   }
 }
