@@ -80,7 +80,7 @@ export class CollectMaterialsComponent implements OnInit {
   getAssignedRequests() {
     this.Auth.getAssignedRequests(this.token._id).subscribe(
       (res: any) => {
-        this.assignedRequests = res.data;
+        this.assignedRequests[0] = res.data[0];
       },
       (error) => console.log(error)
     );
@@ -98,7 +98,7 @@ export class CollectMaterialsComponent implements OnInit {
   PhoneOnFocusOut(event) {
     if (this.producer_phone != '') {
       this.nameloading = true;
-      this.Auth.getUserName(this.producer_phone).subscribe(
+      this.Auth.getProducerName(this.producer_phone).subscribe(
         (res: any) => {
           this.producer_name = res.data.Name;
           this.producer_id = res.data.producer_id;

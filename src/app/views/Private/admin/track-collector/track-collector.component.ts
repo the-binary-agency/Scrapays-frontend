@@ -229,7 +229,7 @@ export class TrackCollectorComponent implements OnInit {
 
   assignToRequest() {
     this.nav.navigate(
-      '/dashboard/pickup-requests/assign_to_' + this.coll_id,
+      '/dashboard/new-pickups/assign_to_' + this.coll_id,
       this.coll_id
     );
   }

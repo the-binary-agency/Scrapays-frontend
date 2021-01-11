@@ -32,7 +32,7 @@ export class SingleListedScrapComponent implements OnInit {
     email: string;
     material_images: [];
     material_location: string;
-    materialDescription: [];
+    material_description: [];
     created_at: string;
   };
 
@@ -52,19 +52,19 @@ export class SingleListedScrapComponent implements OnInit {
 
   getSingleScrap(id) {
     this.auth.getSingleScrap(id).subscribe(
-      (data: any) => {
-        var images = JSON.parse(data.scrap.material_images);
-        var descriptions = JSON.parse(data.scrap.materialDescription);
+      (res: any) => {
+        var images = JSON.parse(res.data.material_images);
+        var descriptions = JSON.parse(res.data.material_description);
         let lscrap = {
-          id: data.scrap.id,
-          first_name: data.scrap.first_name,
-          last_name: data.scrap.last_name,
-          phone: data.scrap.phone,
-          email: data.scrap.email,
+          id: res.data.id,
+          first_name: res.data.first_name,
+          last_name: res.data.last_name,
+          phone: res.data.phone,
+          email: res.data.email,
           material_images: images,
-          material_location: data.scrap.material_location,
-          materialDescription: descriptions,
-          created_at: data.scrap.created_at,
+          material_location: res.data.material_location,
+          material_description: descriptions,
+          created_at: res.data.created_at,
         };
 
         this.Scrap = lscrap;
@@ -75,7 +75,7 @@ export class SingleListedScrapComponent implements OnInit {
   }
 
   processScrapDescription() {
-    var description = this.Scrap.materialDescription;
+    var description = this.Scrap.material_description;
     var items = this.Items;
     for (let i = 0; i < description.length; i++) {
       let newitem = {
@@ -93,7 +93,7 @@ export class SingleListedScrapComponent implements OnInit {
 
   processScrapImage() {
     var images = this.Scrap.material_images;
-    var description = this.Scrap.materialDescription;
+    var description = this.Scrap.material_description;
     var items = this.Items;
     for (let i = 0; i < images.length; i++) {
       let itemnumber = this.splitName(images[i]);

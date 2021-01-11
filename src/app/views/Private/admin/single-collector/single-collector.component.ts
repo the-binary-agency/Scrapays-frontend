@@ -12,6 +12,8 @@ import {
   NgbDateStruct,
   NgbModal,
 } from '@ng-bootstrap/ng-bootstrap';
+import { WalletHistory } from 'src/app/interfaces/wallet-history';
+import { WithdrawalHistory } from 'src/app/interfaces/withdrawal-history';
 
 export interface Collection {
   id: string;
@@ -41,9 +43,15 @@ export class SingleCollectorComponent implements OnInit {
     'date',
   ];
   dataSource: MatTableDataSource<Collection>;
+  walletColumns: string[] = ['amount', 'narration', 'type', 'date'];
+  walletDebitColumns: string[] = ['amount', 'type', 'date'];
+  walletHistoryDataSource: MatTableDataSource<WalletHistory>;
+  walletDebitHistoryDataSource: MatTableDataSource<WithdrawalHistory>;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) walletHistorySort: MatSort;
+  @ViewChild(MatSort, { static: true }) walletDebitHistorySort: MatSort;
   @ViewChild('collHist') private collHist;
 
   constructor(
@@ -79,9 +87,19 @@ export class SingleCollectorComponent implements OnInit {
   toDate: NgbDate | null = null;
   maxDate: NgbDateStruct;
 
-  currentPage = 1;
-  collectionSize = 0;
-  pageSize = 1;
+  collectionsCurrentPage = 1;
+  collectionsSize = 0;
+  collectionsPageSize = 1;
+
+  walletHistoryCollection = [];
+  walletHistoryCurrentPage = 1;
+  walletHistoryCollectionSize = 0;
+  walletHistoryPageSize = 1;
+
+  walletDebitHistoryCollection = [];
+  walletDebitHistoryCurrentPage = 1;
+  walletDebitHistoryCollectionSize = 0;
+  walletDebitHistoryPageSize = 1;
 
   configureDate() {
     this.fromDate = this.calender.getPrev(this.calender.getToday(), 'd', 6);
@@ -98,6 +116,8 @@ export class SingleCollectorComponent implements OnInit {
       this.User = this.nav.get();
       this.getCollectedTonnage(id);
       this.getCollectedScrap(id);
+      this.getWalletHistory(id);
+      this.getWithdrawalHistory(id);
       this.dataSource = new MatTableDataSource(this.Collections);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -110,6 +130,8 @@ export class SingleCollectorComponent implements OnInit {
         this.User = res.data;
         this.getCollectedTonnage(res.data.id);
         this.getCollectedScrap(id);
+        this.getWalletHistory(res.data.id);
+        this.getWithdrawalHistory(res.data.id);
       },
       (error) => console.log(error)
     );
@@ -136,6 +158,44 @@ export class SingleCollectorComponent implements OnInit {
       (res: any) => (this.Balance = res.balance),
       (err) => console.log(err)
     );
+  }
+
+  getWalletHistory(id, query?) {
+    query = query ? query + '&per_page=10' : '&per_page=10';
+    this.auth.getWalletHistory(id, query).subscribe(
+      (res: any) => this.handleWalletHistoryResponse(res),
+      (err) => console.log(err)
+    );
+  }
+
+  handleWalletHistoryResponse(res) {
+    this.walletHistoryCollection = res.data;
+    this.walletHistoryCurrentPage = res.current_page;
+    this.walletHistoryCollectionSize = res.total;
+    this.walletHistoryPageSize = res.per_page;
+    this.walletHistoryDataSource = new MatTableDataSource(
+      this.walletHistoryCollection
+    );
+    this.walletHistoryDataSource.sort = this.walletHistorySort;
+  }
+
+  getWithdrawalHistory(id, query?) {
+    query = query ? query + '&per_page=10' : '&per_page=10';
+    this.auth.getWithdrawalHistory(id, query).subscribe(
+      (res: any) => this.handleWithdrawalHistoryResponse(res),
+      (err) => console.log(err)
+    );
+  }
+
+  handleWithdrawalHistoryResponse(res) {
+    this.walletDebitHistoryCollection = res.data;
+    this.walletDebitHistoryCurrentPage = res.current_page;
+    this.walletDebitHistoryCollectionSize = res.total;
+    this.walletDebitHistoryPageSize = res.per_page;
+    this.walletDebitHistoryDataSource = new MatTableDataSource(
+      this.walletDebitHistoryCollection
+    );
+    this.walletDebitHistoryDataSource.sort = this.walletDebitHistorySort;
   }
 
   processTonnage() {
@@ -237,9 +297,9 @@ export class SingleCollectorComponent implements OnInit {
 
   handleCollectionResponse(res) {
     this.Collections = res.data;
-    this.currentPage = res.current_page;
-    this.collectionSize = res.total;
-    this.pageSize = res.per_page;
+    this.collectionsCurrentPage = res.current_page;
+    this.collectionsSize = res.total;
+    this.collectionsPageSize = res.per_page;
     this.dataSource = new MatTableDataSource(this.Collections);
     this.dataSource.sort = this.sort;
   }
@@ -336,12 +396,22 @@ export class SingleCollectorComponent implements OnInit {
     this.getHistory(this.fromDate, this.toDate);
   }
 
-  changePage() {
-    let query = `&page=${this.currentPage}`;
+  changeCollectionsPage() {
+    let query = `&page=${this.collectionsCurrentPage}`;
     this.getCollectedScrap(this.User.id, query);
   }
 
-  selectSort(e) {
+  changeWalletHistoryPage() {
+    let query = `&page=${this.walletHistoryCurrentPage}`;
+    this.getWalletHistory(this.User.id, query);
+  }
+
+  changeWalletDebitHistoryPage() {
+    let query = `&page=${this.walletDebitHistoryCurrentPage}`;
+    this.getWithdrawalHistory(this.User.id, query);
+  }
+
+  selectSort(e: any) {
     switch (e.target.value) {
       case 'week':
         this.getWeeklyHistory();

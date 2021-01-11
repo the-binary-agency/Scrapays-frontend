@@ -167,23 +167,23 @@ export class AuthService {
   getMaterialPrices(query?: String) {
     return query
       ? this.http.get(`${this.URL}/materials?${query}`)
-      : this.http.get(`${this.URL}/materials?per_page=5`);
+      : this.http.get(`${this.URL}/materials?per_page=6`);
   }
 
-  editMaterialPrices(id: String, form: any) {
-    return this.http.post(`${this.URL}/materials/${id}?_method=PUT`, form);
+  editMaterialPrices(id: String, body: any) {
+    return this.http.post(`${this.URL}/materials/${id}?_method=PUT`, body);
   }
 
   deleteMaterialPrices(id: String) {
     return this.http.delete(`${this.URL}/materials/${id}`);
   }
 
-  setMaterialPrices(form: any) {
-    return this.http.post(`${this.URL}/materials/`, form);
+  setMaterialPrices(body: any) {
+    return this.http.post(`${this.URL}/materials/`, body);
   }
 
-  requestPickup(form: any) {
-    return this.http.post(`${this.URL}/pickuprequests`, form);
+  requestPickup(body: any) {
+    return this.http.post(`${this.URL}/pickuprequests`, body);
   }
 
   cancelPickup(id: String) {
@@ -218,12 +218,12 @@ export class AuthService {
       : this.http.get(`${this.URL}/collectors/${id}/details`);
   }
 
-  assignToCollector(form: any) {
-    return this.http.put(`${this.URL}/pickuprequests/assign`, form);
+  assignToCollector(body: any) {
+    return this.http.put(`${this.URL}/pickuprequests/assign`, body);
   }
 
-  submitInventory(form: any) {
-    return this.http.post(`${this.URL}/inventories`, form);
+  submitInventory(body: any) {
+    return this.http.post(`${this.URL}/inventories`, body);
   }
 
   deleteNotifications(notifications) {
@@ -234,6 +234,10 @@ export class AuthService {
     return this.http.post(`${this.URL}/toggleNotifications`, notifications);
   }
 
+  getProducerName(phone) {
+    return this.http.get(`${this.URL}/users/${phone}/producer-name`);
+  }
+
   getUserName(phone) {
     return this.http.get(`${this.URL}/users/${phone}/name`);
   }
@@ -242,14 +246,10 @@ export class AuthService {
     return this.http.post(`${this.URL}/locations/ping`, location);
   }
 
-  getCollectorCollections(phone) {
-    return this.http.get(`${this.URL}/getCollectorCollections/${phone}`);
-  }
-
   getProducedScrap(userType: String, id: String, query?: String) {
     return query
-      ? this.http.get(`${this.URL}/${userType}/${id}/producedscraps`)
-      : this.http.get(`${this.URL}/${userType}/${id}/producedscraps?${query}`);
+      ? this.http.get(`${this.URL}/${userType}/${id}/producedscraps?${query}`)
+      : this.http.get(`${this.URL}/${userType}/${id}/producedscraps`);
   }
 
   getCollectedScrap(id: String, query?: String) {
@@ -266,18 +266,13 @@ export class AuthService {
     return this.http.get(`${this.URL}/getCollectionsHistory${users}`);
   }
 
-  getCollectionsHistoryWithQuery(phone, query = '') {
-    return this.http.get(
-      `${this.URL}/getCollectionsHistoryWithQuery/${phone}${query}`
-    );
-  }
   getSingleUserCollectionHistory(id: String, query?: String) {
     return query
       ? this.http.get(`${this.URL}/collectedscraps/${id}/history?${query}`)
       : this.http.get(`${this.URL}/collectedscraps/${id}/history`);
   }
 
-  getCollectorCollectionsHistory(query?: String) {
+  geAllCollectionsHistory(query?: String) {
     return query
       ? this.http.get(`${this.URL}/collectedscraps/history?${query}`)
       : this.http.get(`${this.URL}/collectedscraps/history`);
@@ -288,7 +283,7 @@ export class AuthService {
   }
 
   getSingleScrap(id: String) {
-    return this.http.get(`${this.URL}/getSingleScrap/${id}`);
+    return this.http.get(`${this.URL}/listedscraps/${id}`);
   }
 
   getAllContactMessages(query?: String) {
@@ -297,8 +292,8 @@ export class AuthService {
       : this.http.get(`${this.URL}/contactmessages?${query}`);
   }
 
-  replyContactMessage(form: any, id: String) {
-    return this.http.post(`${this.URL}/contactmessages/${id}/reply`, form);
+  replyContactMessage(body: any, id: String) {
+    return this.http.post(`${this.URL}/contactmessages/${id}/reply`, body);
   }
 
   deleteContactMessage(id: String) {
@@ -307,6 +302,32 @@ export class AuthService {
 
   getwalletbalance(id: String) {
     return this.http.get(`${this.URL}/wallets/${id}/balance`);
+  }
+
+  changeAdminPermissions(id: String, body: any) {
+    return this.http.put(`${this.URL}/admins/${id}/change-permissions`, body);
+  }
+
+  getWalletHistory(id: String, query?: String) {
+    return query
+      ? this.http.get(`${this.URL}/wallets/${id}/history?${query}`)
+      : this.http.get(`${this.URL}/wallets/${id}/history`);
+  }
+
+  getWithdrawalHistory(id: String, query?: String) {
+    return query
+      ? this.http.get(`${this.URL}/wallets/${id}/withdrawal-history?${query}`)
+      : this.http.get(`${this.URL}/wallets/${id}/withdrawal-history`);
+  }
+
+  searchUsers(userType: String, query: String) {
+    return this.http.get(
+      `${this.URL}/users/search?userable_type=${userType}&query=${query}&per_page=10`
+    );
+  }
+
+  setUserWalletPin(data: any) {
+    return this.http.post(`${this.URL}/wallets/set-pin`, data);
   }
 
   getPaginationResult(url) {

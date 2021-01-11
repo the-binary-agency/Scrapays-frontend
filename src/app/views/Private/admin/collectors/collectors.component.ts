@@ -7,6 +7,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
+import Echo from 'laravel-echo';
+import { environment } from 'src/environments/environment';
+
+const PUSHER_API_KEY = environment.PUSHER_API_KEY;
+const PUSHER_CLUSTER = environment.PUSHER_CLUSTER;
 
 export interface User {
   avatar_image: string;
@@ -60,9 +65,25 @@ export class CollectorsComponent implements OnInit {
   currentPage = 1;
   collectionSize = 0;
   pageSize = 1;
+  usersLoading: boolean = false;
+  searchValue: any;
+  timeOutId: any = 0;
 
   ngOnInit(): void {
     this.getUsers();
+    this.subscribeToEcho();
+  }
+
+  subscribeToEcho() {
+    let echo = new Echo({
+      broadcaster: 'pusher',
+      key: PUSHER_API_KEY,
+      cluster: PUSHER_CLUSTER,
+    });
+    echo.channel('search-users').listen('.SEARCH_USERS', (e) => {
+      this.handleResponse(e.users.original);
+      this.usersLoading = false;
+    });
   }
 
   getUsers(query?) {
@@ -73,8 +94,25 @@ export class CollectorsComponent implements OnInit {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    clearTimeout(this.timeOutId);
+    if (this.searchValue) {
+      this.timeOutId = setTimeout(() => {
+        this.usersLoading = true;
+        this.searchUsers(this.searchValue.trim());
+      }, 700);
+    } else {
+      this.timeOutId = setTimeout(() => {
+        this.usersLoading = true;
+        this.getUsers();
+      }, 700);
+    }
+  }
+
+  searchUsers(query) {
+    this.Auth.searchUsers('Collector', query).subscribe(
+      (res) => {},
+      (error) => {}
+    );
   }
 
   handleResponse(res) {
@@ -84,10 +122,12 @@ export class CollectorsComponent implements OnInit {
     this.Users = res.data;
     this.dataSource = new MatTableDataSource(this.Users);
     this.dataSource.sort = this.sort;
+    this.usersLoading = false;
   }
 
   handleError(error) {
     console.log(error.error.error);
+    this.usersLoading = false;
   }
 
   gotoSingleUser(user) {
@@ -185,6 +225,11 @@ export class CollectorsComponent implements OnInit {
 
   changePage() {
     let query = `&page=${this.currentPage}`;
-    this.getUsers(query);
+    if (this.searchValue) {
+      query = query + `&query=${this.searchValue.trim()}`;
+      this.searchUsers(query);
+    } else {
+      this.getUsers(query);
+    }
   }
 }

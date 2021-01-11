@@ -74,6 +74,14 @@
       </a>
       <a
         mat-list-item
+        routerLink="/dashboard/pickup-requests"
+        routerLinkActive="list-item-active"
+        *ngIf="loggedIn && Admin"
+        ><i class="fa fa-cart-plus mr-3 ml-1 fa-lg" aria-hidden="true"></i>
+        Pickup Requests
+      </a>
+      <a
+        mat-list-item
         routerLink="/dashboard/track-collector"
         routerLinkActive="list-item-active"
         *ngIf="loggedIn && Admin"
@@ -101,13 +109,29 @@
       </a>
       <a
         mat-list-item
+        routerLink="/dashboard/admins"
+        routerLinkActive="list-item-active"
+        *ngIf="loggedIn && Admin"
+      >
+        <i class="fa fa-users mr-3 ml-1 fa-lg" aria-hidden="true"></i>
+        Manage Admins
+      </a>
+      <a
+        mat-list-item
         routerLink="/dashboard/create-admin"
         routerLinkActive="list-item-active"
         *ngIf="loggedIn && Admin"
         ><i class="fa fa-user-circle mr-3 ml-1 fa-lg" aria-hidden="true"></i>
         Register New Admin
       </a>
-
+      <a
+        mat-list-item
+        routerLink="/dashboard/set-user-pin"
+        routerLinkActive="list-item-active"
+        *ngIf="loggedIn && Admin"
+        ><i class="fa fa-lock mr-3 ml-1 fa-lg" aria-hidden="true"></i>
+        Set User Pin
+      </a>
       <!-- Producer -->
       <a
         mat-list-item
@@ -143,10 +167,10 @@
         >Household's Profile
       </a>
 
-      <!-- Vendor -->
+      <!-- Host -->
       <a
         mat-list-item
-        routerLink="/dashboard/vendor"
+        routerLink="/dashboard/host"
         routerLinkActive="list-item-active"
         *ngIf="loggedIn && Host"
         ><i class="fa fa-line-chart mr-3 ml-1 fa-lg" aria-hidden="true"></i>
@@ -185,6 +209,14 @@
         *ngIf="loggedIn && Collector"
         ><i class="fa fa-truck mr-3 ml-1 fa-lg" aria-hidden="true"></i>Collect
         Materials
+      </a>
+      <a
+        mat-list-item
+        routerLink="/collector/dashboard/assigned-pickups"
+        routerLinkActive="list-item-active"
+        *ngIf="loggedIn && Collector"
+        ><i class="fa fa-check-circle mr-3 ml-1 fa-lg" aria-hidden="true"></i
+        >Assigned Pickups
       </a>
 
       <!-- Non specific -->

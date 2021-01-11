@@ -4,11 +4,6 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-// import { HomeComponent } from './views/Public/home/home.component';
-// import { ProducersComponent } from './views/Public/producers/producers.component';
-// import { VendorsComponent } from './views/Public/vendors/vendors.component';
-// import { CollectorsComponent } from './views/Public/collectors/collectors.component';
-// import { EnterprisesComponent } from './views/Public/enterprises/enterprises.component';
 import { HeaderComponent } from './Constants/header/header.component';
 import { FooterComponent } from './Constants/footer/footer.component';
 import { ListingComponent } from './views/Public/listing/listing.component';
@@ -68,6 +63,13 @@ import { SingleHouseholdComponent } from './views/Private/admin/single-household
 import { SingleCollectorComponent } from './views/Private/admin/single-collector/single-collector.component';
 import { SingleHostComponent } from './views/Private/admin/single-host/single-host.component';
 import { PickupRequestsComponent } from './views/Private/admin/pickup-requests/pickup-requests.component';
+import { AssignedPickupsComponent } from './views/Private/collector/assigned-pickups/assigned-pickups.component';
+import { NewPickupsComponent } from './views/Private/admin/new-pickups/new-pickups.component';
+import { WebBluetoothModule } from '@manekinekko/angular-web-bluetooth';
+import { BluetoothComponent } from './views/Public/bluetooth/bluetooth.component';
+import { AdminsComponent } from './views/Private/admin/admins/admins.component';
+import { SingleAdminComponent } from './views/Private/admin/single-admin/single-admin.component';
+import { SetUserPasswordComponent } from './views/Private/admin/set-user-password/set-user-password.component';
 
 @NgModule({
   declarations: [
@@ -119,6 +121,12 @@ import { PickupRequestsComponent } from './views/Private/admin/pickup-requests/p
     SingleCollectorComponent,
     SingleHostComponent,
     PickupRequestsComponent,
+    AssignedPickupsComponent,
+    NewPickupsComponent,
+    BluetoothComponent,
+    AdminsComponent,
+    SingleAdminComponent,
+    SetUserPasswordComponent,
   ],
   imports: [
     BrowserModule,
@@ -142,6 +150,9 @@ import { PickupRequestsComponent } from './views/Private/admin/pickup-requests/p
     MatModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
+    }),
+    WebBluetoothModule.forRoot({
+      enableTracing: true, // or false, this will enable logs in the browser's console
     }),
     // NgxDatePickerModule
   ],

@@ -393,8 +393,8 @@
             <span class="sc-green"
               >₦
               {{
-                formatToCurrency(matHist.totalcom)
-                  ? formatToCurrency(matHist.totalcom)
+                formatToCurrency(matHist.total_collector_commission)
+                  ? formatToCurrency(matHist.total_collector_commission)
                   : 0
               }}
               &nbsp;</span
@@ -402,7 +402,9 @@
           </div>
           <div class="mat-hist overflow-auto font-weight-bold flipped pl-4">
             <div *ngFor="let mat of matHist.materials">
-              {{ mat.name + ': ₦ ' + formatToCurrency(mat.colCom) }}&nbsp;<
+              {{
+                mat.name + ': ₦ ' + formatToCurrency(mat.collector_commission)
+              }}&nbsp;<
             </div>
             <br />
           </div>

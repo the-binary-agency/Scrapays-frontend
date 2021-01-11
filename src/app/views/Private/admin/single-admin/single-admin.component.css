@@ -1,0 +1,14 @@
+.thumb {
+  width: 70px;
+  height: auto;
+}
+table {
+  width: 100%;
+  font-weight: 600 !important;
+}
+.mat-table {
+  font-family: 'Poppins', sans-serif !important;
+}
+td {
+  text-align: center !important;
+}

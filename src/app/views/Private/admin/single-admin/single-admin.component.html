@@ -1,0 +1,136 @@
+<div class="dashboard-body pt-5 p-1 p-md-5">
+  <div class="row">
+    <div class="col-6 col-md-auto">
+      <img
+        src="{{ URL }}/storage/profile_pictures/{{ Admin.avatar_image }}"
+        class="thumb"
+        alt="User Icon"
+        *ngIf="Admin.avatar_image"
+      />
+      <img
+        src="assets/images/icons/user-1.png"
+        class="thumb"
+        alt="User Icon"
+        *ngIf="!Admin.avatar_image"
+      />
+    </div>
+    <div class="col-6 col-md pt-2">
+      <div class="row bolder">ID</div>
+      {{ Admin.id }}
+    </div>
+    <div class="col-6 col-md pt-2">
+      <div class="row bolder">First Name</div>
+      {{ Admin.first_name }}
+    </div>
+    <div class="col-6 col-md pt-2">
+      <div class="row bolder">Last Name</div>
+      {{ Admin.last_name }}
+    </div>
+    <div class="col-6 col-md pt-2">
+      <div class="row bolder">Email</div>
+      {{ Admin.email ? Admin.email : 'None' }}
+    </div>
+    <div class="col-6 col-md pt-2">
+      <div class="row bolder">Phone Number</div>
+      {{ Admin.phone }}
+    </div>
+    <div class="col-6 col-md pt-2">
+      <div class="row bolder">Creation Date</div>
+      {{ Admin.created_at | date: 'medium' }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-6 bolder mt-5 mb-3 h4 text-right order-md-2">
+      Wallet Balance: ₦{{ Balance }}
+    </div>
+    <div class="col-12 col-md-6 bolder mt-5 mb-3 h4 order-md-1">
+      Permissions
+    </div>
+    <div class="col-12 col-md-6 order-md-3">
+      <div class="row mt-3">
+        <ng-container *ngIf="!edit">
+          <div class="col-6" *ngFor="let check of permissions; let i = index">
+            <mat-checkbox
+              class="bolder font-weight-bold"
+              (click)="$event.stopPropagation()"
+              aria-label="permission checkbox"
+              [checked]="check.checked"
+              disabled
+            >
+              <span class="bolder h4">{{ splitString(check.permission) }}</span>
+            </mat-checkbox>
+          </div></ng-container
+        >
+        <ng-container *ngIf="edit">
+          <div class="col-6" *ngFor="let check of permissions; let i = index">
+            <mat-checkbox
+              class="bolder font-weight-bold"
+              (click)="$event.stopPropagation()"
+              (change)="permissionChecked($event, check.permission)"
+              aria-label="permission checkbox"
+              [checked]="check.checked"
+            >
+              <span class="bolder h4">{{ splitString(check.permission) }}</span>
+            </mat-checkbox>
+          </div>
+        </ng-container>
+
+        <div class="w-100 text-right mt-5">
+          <button
+            type="button"
+            class="btn btn-success mr-2"
+            *ngIf="edit"
+            (click)="updatePermissions()"
+          >
+            Submit
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="cancelChangePermissions()"
+            *ngIf="edit"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="edit = true"
+            *ngIf="!edit && isPermitted"
+          >
+            Change
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 order-md-4"></div>
+  </div>
+  <div class="gap-40"></div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ modalTitle }}</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{ modalBody }}</p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+<ngx-loading [show]="loading"></ngx-loading>

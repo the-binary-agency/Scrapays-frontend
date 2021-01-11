@@ -87,14 +87,13 @@
 
       <div class="mt-5 d-flex justify-content-end">
         <ngb-pagination
-          [collectionSize]="collectionSize"
-          [(page)]="currentPage"
-          [pageSize]="pageSize"
-          [rotate]="true"
-          [ellipses]="false"
+          [collectionSize]="collectionsSize"
+          [(page)]="collectionsCurrentPage"
+          [pageSize]="collectionsPageSize"
           [maxSize]="5"
           [rotate]="true"
-          (pageChange)="changePage()"
+          [ellipses]="true"
+          (pageChange)="changeCollectionsPage()"
         >
           <ng-template ngbPaginationPrevious
             ><i class="fa fa-caret-left" aria-hidden="true"></i
@@ -253,7 +252,156 @@
         </tr>
       </table>
 
-      <mat-paginator pageSize="25"></mat-paginator>
+      <div class="mt-5 d-flex justify-content-end">
+        <ngb-pagination
+          [collectionSize]="collectionsSize"
+          [(page)]="collectionsCurrentPage"
+          [pageSize]="collectionsPageSize"
+          [maxSize]="5"
+          [rotate]="true"
+          [ellipses]="true"
+          (pageChange)="changeCollectionsPage()"
+        >
+          <ng-template ngbPaginationPrevious
+            ><i class="fa fa-caret-left" aria-hidden="true"></i
+          ></ng-template>
+          <ng-template ngbPaginationNext
+            ><i class="fa fa-caret-right" aria-hidden="true"></i></ng-template
+        ></ngb-pagination>
+      </div>
+    </div>
+  </div>
+
+  <div class="gap-40"></div>
+  <div class="row">
+    <div class="left-b h4">Payment History</div>
+  </div>
+  <div class="row">
+    <div class="w-100">
+      <table mat-table [dataSource]="walletHistoryDataSource" matSort>
+        <!-- ID Column -->
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+          <td mat-cell *matCellDef="let row">
+            {{ formatToCurrency(row.amount) }}
+          </td>
+        </ng-container>
+
+        <!-- Progress Column -->
+        <ng-container matColumnDef="narration">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Narration</th>
+          <td mat-cell *matCellDef="let row">{{ row.narration }}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Payment Type
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.type }}
+          </td>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.date | date: 'short' }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="walletColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: walletColumns"></tr>
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="6">
+            <!-- No data matching the filter "{{ input.value }}" -->
+          </td>
+        </tr>
+      </table>
+
+      <div class="mt-5 d-flex justify-content-end">
+        <ngb-pagination
+          [collectionSize]="walletHistoryCollectionSize"
+          [(page)]="walletHistoryCurrentPage"
+          [pageSize]="walletHistoryPageSize"
+          [maxSize]="5"
+          [rotate]="true"
+          [ellipses]="true"
+          (pageChange)="changeWalletHistoryPage()"
+        >
+          <ng-template ngbPaginationPrevious
+            ><i class="fa fa-caret-left" aria-hidden="true"></i
+          ></ng-template>
+          <ng-template ngbPaginationNext
+            ><i class="fa fa-caret-right" aria-hidden="true"></i></ng-template
+        ></ngb-pagination>
+      </div>
+    </div>
+  </div>
+  <div class="gap-40"></div>
+  <div class="row">
+    <div class="left-b h4">Cash Withdrawal History</div>
+  </div>
+  <div class="row">
+    <div class="w-100">
+      <table mat-table [dataSource]="walletDebitHistoryDataSource" matSort>
+        <!-- ID Column -->
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+          <td mat-cell *matCellDef="let row">
+            {{ formatToCurrency(row.amount) }}
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Payment Type
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.type }}
+          </td>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.date | date: 'short' }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="walletDebitColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: walletDebitColumns"></tr>
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="6">
+            <!-- No data matching the filter "{{ input.value }}" -->
+          </td>
+        </tr>
+      </table>
+
+      <div class="mt-5 d-flex justify-content-end">
+        <ngb-pagination
+          [collectionSize]="walletDebitHistoryCollectionSize"
+          [(page)]="walletDebitHistoryCurrentPage"
+          [pageSize]="walletDebitHistoryPageSize"
+          [maxSize]="5"
+          [rotate]="true"
+          [ellipses]="true"
+          (pageChange)="changeWalletDebitHistoryPage()"
+        >
+          <ng-template ngbPaginationPrevious
+            ><i class="fa fa-caret-left" aria-hidden="true"></i
+          ></ng-template>
+          <ng-template ngbPaginationNext
+            ><i class="fa fa-caret-right" aria-hidden="true"></i></ng-template
+        ></ngb-pagination>
+      </div>
     </div>
   </div>
 
@@ -368,8 +516,8 @@
             <span class="sc-green"
               >₦
               {{
-                formatToCurrency(matHist.totalcom)
-                  ? formatToCurrency(matHist.totalcom)
+                matHist.total_collector_commission
+                  ? formatToCurrency(matHist.total_collector_commission)
                   : 0
               }}
               &nbsp;</span

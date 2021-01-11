@@ -112,7 +112,7 @@
       <div class="col-12 col-md-6 px-md-0">
         <a
           class="btn sc-orange unautomate-alert mt-5"
-          routerLink="/dashboard/pickup-requests"
+          routerLink="/dashboard/new-pickups"
         >
           New Pickup Request
           <span *ngIf="PickupCount > 0">({{ PickupCount }})</span></a
@@ -241,14 +241,16 @@
           <span class="badge bg-orange text-light h5"
             >₦
             {{
-              matHist.total_cost ? formatToCurrency(matHist.total_cost) : 0
+              fullMatHist.total_revenue_commission
+                ? formatToCurrency(fullMatHist.total_revenue_commission)
+                : 0
             }}</span
           ><br /><br />
           Total Tonnage recovered <br /><br />
           <span class="badge bg-orange text-light h5">
             {{
-              matHist.total_tonnage
-                ? formatToCurrency(matHist.total_tonnage)
+              fullMatHist.total_tonnage
+                ? formatToCurrency(fullMatHist.total_tonnage)
                 : 0
             }}
             KG</span

@@ -18,8 +18,8 @@ export class ApiService {
       : this.http.get<Listed_Scrap[]>(`${this.SERVER}/listedscraps`);
   }
 
-  getSingleScrap(id): Observable<Listed_Scrap[]> {
-    return this.http.get<Listed_Scrap[]>(`${this.SERVER}/listedscraps/${id}`);
+  getSingleScrap(id): Observable<Listed_Scrap> {
+    return this.http.get<Listed_Scrap>(`${this.SERVER}/listedscraps/${id}`);
   }
 
   listScrap(Listed_Scrap: any) {

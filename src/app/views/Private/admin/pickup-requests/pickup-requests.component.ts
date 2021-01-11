@@ -7,12 +7,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 export interface Pickup {
   id: string;
-  producer_id: string;
+  producer_phone: string;
   assigned_collector: string;
   address: string;
   materials: string;
@@ -29,7 +29,7 @@ export interface Pickup {
 export class PickupRequestsComponent implements OnInit {
   displayedColumns: string[] = [
     'id',
-    'producer_id',
+    'producer_phone',
     'producer_name',
     'assigned_collector',
     'address',
@@ -51,11 +51,12 @@ export class PickupRequestsComponent implements OnInit {
     private nav: NavService,
     private modal: NgbModal,
     private token: TokenService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   Pickups: any[] = [];
-  Admins: any[] = [];
+  Status = 'All';
   task: any;
   subtask: any;
   allComplete: boolean = false;
@@ -77,8 +78,7 @@ export class PickupRequestsComponent implements OnInit {
   }
 
   getPickups(query?: String) {
-    let completequery = query ? `status=Pending${query}` : 'status=Pending';
-    this.Auth.getAllPickupRequests(completequery).subscribe(
+    this.Auth.getAllPickupRequests(query).subscribe(
       (res) => this.handleResponse(res),
       (error) => this.handleError(error)
     );
@@ -157,7 +157,7 @@ export class PickupRequestsComponent implements OnInit {
 
   handleAssignResponse(data) {
     this.showAssignAlert(data);
-    this.getPickups();
+    this.getPickups('status=Pending');
   }
 
   handleAssignError(err) {
@@ -245,7 +245,14 @@ export class PickupRequestsComponent implements OnInit {
   }
 
   changePage() {
-    let query = `&page=${this.currentPage}`;
+    let query = `status=${this.Status}&page=${this.currentPage}`;
+    if (this.Status == 'All') query = `page=${this.currentPage}`;
+    this.getPickups(query);
+  }
+
+  onSelectSort(e) {
+    let query = `status=${e.target.value}`;
+    if (e.target.value == 'All') query = '';
     this.getPickups(query);
   }
 }

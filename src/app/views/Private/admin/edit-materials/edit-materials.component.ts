@@ -19,7 +19,7 @@ export class EditMaterialsComponent implements OnInit {
     private modal: NgbModal
   ) {}
 
-  URL = this.env.backendUrl;
+  URL = this.env.assetUrl;
   modalTitle: string;
   modalBody: string;
   materialPrices: any[] = [];
@@ -30,6 +30,7 @@ export class EditMaterialsComponent implements OnInit {
     price: 0,
     collector_commission: 0,
     host_commission: 0,
+    revenue_commission: 0,
   };
   newMatImage: any = { name: '', type: 'test' };
   materialLoading = false;
@@ -67,21 +68,21 @@ export class EditMaterialsComponent implements OnInit {
 
   processFormData() {
     const formData = new FormData();
-    formData.append(`id`, this.matForm.id);
-    formData.append(`name`, this.matForm.name);
-    formData.append(`price`, this.matForm.price.toString());
+    formData.append('id', this.matForm.id);
+    formData.append('name', this.matForm.name);
+    formData.append('price', this.matForm.price.toString());
     formData.append(
-      `collector_commission`,
+      'collector_commission',
       this.matForm.collector_commission.toString()
     );
-    formData.append(`host_commission`, this.matForm.host_commission.toString());
-    let isFile = this.newMatImage.type.split('/')[0];
-    if (isFile == 'image') {
-      formData.append(
-        `image`,
-        this.newMatImage,
-        'material-' + this.newMatImage.name
-      );
+    formData.append('host_commission', this.matForm.host_commission.toString());
+    formData.append(
+      'revenue_commission',
+      this.matForm.revenue_commission.toString()
+    );
+    let fileType = this.newMatImage.type.split('/')[0];
+    if (fileType == 'image') {
+      formData.append('mat-image', this.newMatImage);
     }
 
     return formData;
@@ -122,6 +123,7 @@ export class EditMaterialsComponent implements OnInit {
     this.matForm.price = 0;
     this.matForm.collector_commission = 0;
     this.matForm.host_commission = 0;
+    this.matForm.revenue_commission = 0;
     this.newMatImage = { name: '', type: 'test' };
   }
 
@@ -134,6 +136,7 @@ export class EditMaterialsComponent implements OnInit {
       i
     ].collector_commission;
     this.matForm.host_commission = this.materialPrices[i].host_commission;
+    this.matForm.revenue_commission = this.materialPrices[i].revenue_commission;
     this.newMatImage.name = this.materialPrices[i].image;
   }
 
@@ -160,34 +163,27 @@ export class EditMaterialsComponent implements OnInit {
   }
 
   formValid() {
+    if (
+      this.matForm.name == '' ||
+      this.matForm.price < 1 ||
+      this.matForm.collector_commission < 1 ||
+      this.matForm.host_commission < 1 ||
+      this.matForm.revenue_commission < 1 ||
+      this.newMatImage.name == ''
+    ) {
+      return false;
+    }
     if (this.edit == true) {
-      if (
-        this.matForm.id == '' ||
-        this.matForm.name == '' ||
-        this.matForm.price < 1 ||
-        this.matForm.collector_commission < 1 ||
-        this.matForm.host_commission < 1 ||
-        this.newMatImage.name == ''
-      ) {
-        return false;
-      }
-      return true;
-    } else {
-      if (
-        this.matForm.name == '' ||
-        this.matForm.price < 1 ||
-        this.matForm.collector_commission < 1 ||
-        this.matForm.host_commission < 1 ||
-        this.newMatImage.name == ''
-      ) {
+      if (this.matForm.id == '') {
         return false;
       }
       return true;
     }
+    return true;
   }
 
   changePage() {
-    let query = `&page=${this.currentPage}`;
+    let query = `per_page=6&page=${this.currentPage}`;
     this.getPrices(query);
   }
 }

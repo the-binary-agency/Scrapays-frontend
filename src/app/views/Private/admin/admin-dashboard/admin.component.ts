@@ -22,6 +22,7 @@ export class AdminComponent implements OnInit {
     this.getUserCount();
     this.getPickupRequestCounts();
     this.getCollectionshistory('Enterprise');
+    this.getAllCollectionshistory();
   }
 
   public loading = false;
@@ -36,6 +37,7 @@ export class AdminComponent implements OnInit {
   };
   PickupCount = 0;
   matHist: any = { materials: [] };
+  fullMatHist: any = { materials: [] };
   //  lineChart
   public lineChartData: Array<any> = [
     {
@@ -140,7 +142,7 @@ export class AdminComponent implements OnInit {
     let query = 'status=Pending';
     this.Auth.getPickupRequestCounts(query).subscribe(
       (res: any) => {
-        this.PickupCount = res.data.pickupCount;
+        this.PickupCount = res.data.pickupcount;
       },
       (error) => console.log(error)
     );
@@ -156,7 +158,7 @@ export class AdminComponent implements OnInit {
     if (users) {
       queryArg = `producer_type=${users}`;
     }
-    this.Auth.getCollectorCollectionsHistory(queryArg).subscribe(
+    this.Auth.geAllCollectionsHistory(queryArg).subscribe(
       (res: any) => {
         this.matHist = res.data;
         this.historyLoading = false;
@@ -169,14 +171,14 @@ export class AdminComponent implements OnInit {
   }
 
   getAllCollectionshistory() {
-    this.historyLoading = true;
-    this.Auth.getCollectorCollectionsHistory().subscribe(
+    // this.historyLoading = true;
+    this.Auth.geAllCollectionsHistory().subscribe(
       (res: any) => {
-        this.matHist = res.data;
-        this.historyLoading = false;
+        this.fullMatHist = res.data;
+        // this.historyLoading = false;
       },
       (err) => {
-        this.historyLoading = false;
+        // this.historyLoading = false;
         console.log(err);
       }
     );

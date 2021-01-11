@@ -1,7 +1,7 @@
 <div class="dashboard-body pt-5">
   <div class="row px-md-5 px-1 mb-4">
     <div class="col-12 col-md-6 pl-0">
-      <div class="row">
+      <div class="row" #top>
         <div class="col-6 pl-0">
           <div class="form-group">
             <select class="form-control" name="sort">
@@ -18,6 +18,7 @@
               class="form-control w-auto"
               name="search"
               placeholder="Search"
+              [(ngModel)]="searchValue"
               (keyup)="applyFilter($event)"
               #input
             />
@@ -26,6 +27,11 @@
       </div>
     </div>
     <div class="col-12 col-md-6 text-center text-md-right font-weight-bold h4">
+      <i
+        class="fa fa-spinner fa-2x fa-spin mr-2"
+        aria-hidden="true"
+        *ngIf="usersLoading"
+      ></i>
       {{ collectionSize + ' ' }} Users
     </div>
   </div>
@@ -91,7 +97,7 @@
       <ng-container matColumnDef="last_login">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Login</th>
         <td mat-cell *matCellDef="let row" (click)="gotoSingleUser(row)">
-          {{ row.last_login | dateAgo }}
+          {{ (row.last_login | dateAgo) || '-' }}
         </td>
       </ng-container>
 
@@ -101,7 +107,7 @@
           Total Volume Disposed
         </th>
         <td mat-cell *matCellDef="let row" (click)="gotoSingleUser(row)">
-          {{ row.total_tonnage }}
+          {{ row.total_tonnage || '0' }}
         </td>
       </ng-container>
 
@@ -111,7 +117,7 @@
           Total Earnings
         </th>
         <td mat-cell *matCellDef="let row" (click)="gotoSingleUser(row)">
-          {{ row.total_earnings }}
+          {{ row.total_earnings || '0' }}
         </td>
       </ng-container>
 
@@ -121,7 +127,7 @@
           Total Withdrawals
         </th>
         <td mat-cell *matCellDef="let row" (click)="gotoSingleUser(row)">
-          {{ row.total_withdrawals }}
+          {{ row.total_withdrawals || '0' }}
         </td>
       </ng-container>
 

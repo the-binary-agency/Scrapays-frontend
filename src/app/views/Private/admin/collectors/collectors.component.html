@@ -18,6 +18,7 @@
               class="form-control w-auto"
               name="search"
               placeholder="Search"
+              [(ngModel)]="searchValue"
               (keyup)="applyFilter($event)"
               #input
             />
@@ -26,6 +27,11 @@
       </div>
     </div>
     <div class="col-12 col-md-6 text-center text-md-right font-weight-bold h4">
+      <i
+        class="fa fa-spinner fa-2x fa-spin mr-2"
+        aria-hidden="true"
+        *ngIf="usersLoading"
+      ></i>
       {{ collectionSize + ' ' }} Users
     </div>
   </div>
@@ -104,7 +110,7 @@
           (click)="gotoSingleUser(row)"
           class="fake-btn"
         >
-          {{ row.last_login | dateAgo }}
+          {{ (row.last_login | dateAgo) || '-' }}
         </td>
       </ng-container>
 
@@ -119,7 +125,7 @@
           (click)="gotoSingleUser(row)"
           class="fake-btn"
         >
-          {{ row.total_tonnage }}
+          {{ row.total_tonnage || '0' }}
         </td>
       </ng-container>
 
